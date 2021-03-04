@@ -15,8 +15,8 @@ const DelegateAction = () => {
 
   const handleDelegate = (value: string) => {
     delegation
-      .sendTransaction(value, 'delegate')
-      .then()
+      .sendTransaction('0', 'proposeChangeQuorum', value)
+      .then() 
       .catch(e => {
         console.error('handleDelegate ', e);
       });

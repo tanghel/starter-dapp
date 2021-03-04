@@ -26,11 +26,12 @@ export const network: NetworkType = {
   id: 'testnet',
   name: 'Testnet',
   egldLabel: 'xEGLD',
-  walletAddress: 'https://testnet-wallet.elrond.com/dapp/init',
-  apiAddress: 'https://testnet-api.elrond.com',
-  gatewayAddress: 'https://testnet-gateway.elrond.com',
-  explorerAddress: 'http://testnet-explorer.elrond.com/',
-  delegationContract: 'erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqp0llllswfeycs',
+  walletAddress: 'https://devnet-wallet.elrond.com/dapp/init',
+  apiAddress: 'https://devnet-api.elrond.com',
+  gatewayAddress: 'https://devnet-gateway.elrond.com',
+  explorerAddress: 'http://devnet-explorer.elrond.com/',
+  delegationContract: 'erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqq98lllls54qqg7',
+  multisigContract: 'erd1qqqqqqqqqqqqqpgqlh3gnnxcjvr6kecgedcrkc8380ct0vr2erms83ch0v'
 };
 
 const networkSchema = object({
@@ -48,6 +49,7 @@ const networkSchema = object({
   apiAddress: string(),
   gatewayAddress: string(),
   explorerAddress: string(),
+  multisigContract: string()
 }).required();
 
 export type NetworkType = InferType<typeof networkSchema>;
@@ -136,5 +138,60 @@ export const delegationContractData: DelegationContractType[] = [
     name: 'reDelegateRewards',
     gasLimit: 12000000,
     data: 'reDelegateRewards',
+  },
+  {
+    name: 'proposeAddBoardMember',
+    gasLimit: 12000000,
+    data: 'proposeAddBoardMember@',
+  },
+  {
+    name: 'proposeAddProposer',
+    gasLimit: 12000000,
+    data: 'proposeAddProposer@',
+  },
+  {
+    name: 'proposeRemoveUser',
+    gasLimit: 12000000,
+    data: 'proposeRemoveUser@',
+  },
+  {
+    name: 'proposeChangeQuorum',
+    gasLimit: 12000000,
+    data: 'proposeChangeQuorum@',
+  },
+  {
+    name: 'proposeSendEgld',
+    gasLimit: 12000000,
+    data: 'proposeSendEgld@',
+  },
+  {
+    name: 'proposeSCDeploy',
+    gasLimit: 12000000,
+    data: 'proposeSCDeploy@',
+  },
+  {
+    name: 'proposeSCCall',
+    gasLimit: 12000000,
+    data: 'proposeSCCall@',
+  },
+  {
+    name: 'sign',
+    gasLimit: 12000000,
+    data: 'sign@',
+  },
+  {
+    name: 'unsign',
+    gasLimit: 12000000,
+    data: 'unsign@',
+  },
+  {
+    name: 'performAction',
+    gasLimit: 12000000,
+    data: 'performAction@',
+  },
+  {
+    name: 'discardAction',
+    gasLimit: 12000000,
+    data: 'discardAction@',
   },
 ];

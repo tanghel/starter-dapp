@@ -12,6 +12,7 @@ export const defaultNetwork: NetworkType = {
   gatewayAddress: '',
   explorerAddress: '',
   delegationContract: '',
+  multisigContract: '',
 };
 
 export interface DappState {
@@ -32,10 +33,15 @@ export interface StateType {
   account: AccountType;
   explorerAddress: string;
   delegationContract?: string;
+  multisigContract?: string;
   totalActiveStake: string;
   numberOfActiveNodes: string;
   aprPercentage: string;
   contractOverview: ContractOverview;
+  totalBoardMembers: number;
+  totalProposers: number;
+  quorumSize: number;
+  userRole: number;
 }
 export const emptyAccount: AccountType = {
   balance: '...',
@@ -82,10 +88,15 @@ export const initialState = () => {
     egldLabel: sessionNetwork?.egldLabel,
     explorerAddress: sessionNetwork.explorerAddress || 'https://explorer.elrond.com',
     delegationContract: sessionNetwork.delegationContract,
+    multisigContract: sessionNetwork.multisigContract,
     contractOverview: emptyContractOverview,
     numberOfActiveNodes: '...',
     totalActiveStake: '...',
     aprPercentage: '...',
+    totalBoardMembers: 0,
+    totalProposers: 0,
+    quorumSize: 0,
+    userRole: 0,
   };
 };
 

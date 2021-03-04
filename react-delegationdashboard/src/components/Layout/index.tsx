@@ -1,3 +1,4 @@
+import { Address } from '@elrondnetwork/erdjs/out';
 import { QueryResponse } from '@elrondnetwork/erdjs/out/smartcontracts/query';
 import denominate from 'components/Denominate/formatters';
 import { denomination, decimals } from 'config';
@@ -11,8 +12,8 @@ import Navbar from './Navbar';
 
 const Layout = ({ children, page }: { children: React.ReactNode; page: string }) => {
   const dispatch = useDispatch();
-  const { dapp, delegationContract } = useContext();
-  const { getContractConfig, getTotalActiveStake, getBlsKeys } = contractViews;
+  const { dapp, address, multisigContract } = useContext();
+  const { getNumBoardMembers, getNumProposers, getQuorum, userRole } = contractViews;
 
   const getContractOverviewType = (value: QueryResponse) => {
     let delegationCap = denominate({
@@ -41,36 +42,43 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
   };
 
   React.useEffect(() => {
+    console.log({address: address});
+
     Promise.all([
-      getContractConfig(dapp, delegationContract),
-      getTotalActiveStake(dapp, delegationContract),
-      getBlsKeys(dapp, delegationContract),
+      getNumBoardMembers(dapp, multisigContract ?? ''),
+      getNumProposers(dapp, multisigContract ?? ''),
+      getQuorum(dapp, multisigContract ?? ''),
+      userRole(new Address(address).hex(), dapp, multisigContract ?? ''),
       dapp.apiProvider.getNetworkStats(),
       dapp.apiProvider.getNetworkStake(),
       dapp.proxy.getNetworkConfig(),
     ])
       .then(
         ([
-          contractOverview,
-          {
-            returnData: [activeStake],
-          },
-          { returnData: blsKeys },
+          numBoardMembers,
+          numProposers,
+          quorum,
+          userRole,
           networkStats,
           networkStake,
           networkConfig,
         ]) => {
+          console.log({setTotalBoardMembers: numBoardMembers});
           dispatch({
-            type: 'setContractOverview',
-            contractOverview: getContractOverviewType(contractOverview),
+            type: 'setTotalBoardMembers',
+            totalBoardMembers: numBoardMembers.returnData[0].asNumber
           });
           dispatch({
-            type: 'setTotalActiveStake',
-            totalActiveStake: activeStake.asBigInt.toString(),
+            type: 'setTotalProposers',
+            totalProposers: numProposers.returnData[0].asNumber
           });
           dispatch({
-            type: 'setNumberOfActiveNodes',
-            numberOfActiveNodes: (blsKeys.length / 2).toString(),
+            type: 'setQuorumSize',
+            quorumSize: quorum.returnData[0].asNumber
+          });
+          dispatch({
+            type: 'setUserRole',
+            userRole: userRole.returnData[0].asNumber
           });
           dispatch({
             type: 'setAprPercentage',
@@ -86,8 +94,8 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
                 networkStake.QueueSize,
                 networkStake.TotalStaked
               ),
-              blsKeys: blsKeys,
-              totalActiveStake: activeStake.asBigInt.toString(),
+              blsKeys: [],
+              totalActiveStake: '',
             }),
           });
         }

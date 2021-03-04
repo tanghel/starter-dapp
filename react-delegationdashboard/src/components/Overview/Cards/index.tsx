@@ -19,6 +19,10 @@ const Views = () => {
     address,
     contractOverview,
     aprPercentage,
+    totalBoardMembers,
+    totalProposers,
+    quorumSize,
+    userRole
   } = useContext();
   const [networkStake, setNetworkStake] = useState(new NetworkStake());
 
@@ -34,6 +38,19 @@ const Views = () => {
   const isAdmin = () => {
     let loginAddress = new Address(address).hex();
     return loginAddress.localeCompare(contractOverview.ownerAddress) === 0;
+  };
+
+  const userRoleAsString = () => {
+    switch (userRole) {
+      case 0:
+        return 'No rights';
+      case 1:
+        return 'Proposer';
+      case 2:
+        return 'Proposer/Signer';
+      default:
+        return 'Unknown';
+    }
   };
 
   const getNetworkStake = () => {
@@ -54,90 +71,32 @@ const Views = () => {
   return (
     <div className="cards d-flex flex-wrap mr-spacer">
       <StatCard
-        title="Contract Stake"
-        value={denominate({
-          input: totalActiveStake,
-          denomination,
-          decimals,
-          showLastNonZeroDecimal: false,
-        })}
-        valueUnit={egldLabel}
+        title="Board Members"
+        value={totalBoardMembers.toString()}
         color="orange"
         svg="contract.svg"
-        percentage={`${getPercentage(
-          denominate({
-            input: totalActiveStake,
-            denomination,
-            decimals,
-            showLastNonZeroDecimal: false,
-          }),
-          denominate({
-            input: networkStake.TotalStaked.toString(),
-            denomination,
-            decimals,
-            showLastNonZeroDecimal: false,
-          })
-        )}% of total stake`}
       />
       <StatCard
-        title="Number of Nodes"
-        value={numberOfActiveNodes}
+        title="Proposers"
+        value={totalProposers.toString()}
         valueUnit=""
         color="purple"
         svg="nodes.svg"
-        percentage={`${getPercentage(
-          numberOfActiveNodes,
-          networkStake.TotalValidators.toString()
-        )}% of total nodes`}
       />
       <StatCard
-        title="Computed APR"
-        value={aprPercentage}
+        title="Quorum size"
+        value={quorumSize.toString()}
         valueUnit=""
         color="orange"
         svg="leaf-solid.svg"
-        percentage="Annual percentage rate"
-        tooltipText="This is an aproximate APR calculation for this year based on the current epoch"
       />
       <StatCard
-        title="Service Fee"
-        value={contractOverview.serviceFee || ''}
-        valueUnit="%"
-        color="red"
-        svg="service.svg"
-      >
-        {location.pathname === '/owner' && <SetPercentageFeeAction />}
-      </StatCard>
-      {contractOverview.maxDelegationCap !== '0' && (
-        <StatCard
-          title="Delegation Cap"
-          value={contractOverview.maxDelegationCap || ''}
-          valueUnit={egldLabel}
-          color="green"
-          svg="delegation.svg"
-          percentage={`${getPercentage(
-            denominate({
-              input: totalActiveStake,
-              denomination,
-              decimals,
-              showLastNonZeroDecimal: false,
-            }),
-            contractOverview.maxDelegationCap
-          )}% filled`}
-        >
-          {location.pathname === '/owner' && <UpdateDelegationCapAction />}
-        </StatCard>
-      )}
-      {isAdmin() && location.pathname === '/owner' && (
-        <StatCard
-          title="Automatic activation"
-          value={contractOverview.automaticActivation === 'true' ? 'ON' : 'OFF'}
-          color="purple"
-          svg="activation.svg"
-        >
-          <AutomaticActivationAction automaticFlag={contractOverview.automaticActivation} />
-        </StatCard>
-      )}
+        title="User role"
+        value={userRoleAsString()}
+        valueUnit=""
+        color="orange"
+        svg="leaf-solid.svg"
+      />
     </div>
   );
 };

@@ -12,7 +12,11 @@ export type ActionType =
   | { type: 'setContractOverview'; contractOverview: StateType['contractOverview'] }
   | { type: 'setNumberOfActiveNodes'; numberOfActiveNodes: StateType['numberOfActiveNodes'] }
   | { type: 'setTotalActiveStake'; totalActiveStake: StateType['totalActiveStake'] }
-  | { type: 'setAprPercentage'; aprPercentage: StateType['aprPercentage'] };
+  | { type: 'setAprPercentage'; aprPercentage: StateType['aprPercentage'] }
+  | { type: 'setTotalBoardMembers'; totalBoardMembers: StateType['totalBoardMembers'] }
+  | { type: 'setTotalProposers'; totalProposers: StateType['totalProposers'] }
+  | { type: 'setQuorumSize'; quorumSize: StateType['quorumSize'] }
+  | { type: 'setUserRole'; userRole: StateType['userRole'] };
 
 export function reducer(state: StateType, action: ActionType): StateType {
   switch (action.type) {
@@ -87,6 +91,38 @@ export function reducer(state: StateType, action: ActionType): StateType {
       return {
         ...state,
         aprPercentage,
+      };
+    }
+
+    case 'setTotalBoardMembers': {
+      const { totalBoardMembers } = action;
+      return {
+        ...state,
+        totalBoardMembers,
+      };
+    }
+
+    case 'setTotalProposers': {
+      const { totalProposers } = action;
+      return {
+        ...state,
+        totalProposers,
+      };
+    }
+
+    case 'setQuorumSize': {
+      const { quorumSize } = action;
+      return {
+        ...state,
+        quorumSize,
+      };
+    }
+
+    case 'setUserRole': {
+      const { userRole } = action;
+      return {
+        ...state,
+        userRole,
       };
     }
 
