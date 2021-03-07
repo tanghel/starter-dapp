@@ -10,6 +10,7 @@ import State from 'components/State';
 import { denomination, decimals } from 'config';
 import { BinaryCodec } from '@elrondnetwork/erdjs/out/smartcontracts/codec';
 import { TypeDescriptor, VectorType, StructureDefinition, StructureField, U32Value, StructureFieldDefinition, Vector, StructureType } from '@elrondnetwork/erdjs/out/smartcontracts/typesystem';
+import ProposeAction from '../Actions/DelegateAction/ProposeAction';
 
 
 const MyDelegation = () => {
@@ -165,6 +166,10 @@ const MyDelegation = () => {
       });
   };
 
+  const onProposeClicked = () => {
+    console.log('Propose clicked');
+  };
+
   React.useEffect(getAllData, []);
 
   return (
@@ -175,17 +180,14 @@ const MyDelegation = () => {
         <div className="card mt-spacer">
           <div className="card-body p-spacer">
             <div className="d-flex flex-wrap align-items-center justify-content-between">
-              <p className="h6 mb-3">My Stake</p>
-              {userActiveStake !== String(0) && (
-                <div className="d-flex flex-wrap">
-                  <DelegateAction />
-                  {displayUndelegate && <UndelegateAction balance={userActiveNominatedStake}/>}
-                </div>
-              )}
+              <p className="h6 mb-3">My proposals</p>
+              <div className="d-flex flex-wrap">
+                <ProposeAction />
+              </div>
             </div>
             {userActiveStake === String(0) ? (
               <State
-                title="No Stake Yet"
+                title="No pending proposals"
                 description="Welcome to our platform!"
                 action={<DelegateAction />}
               />

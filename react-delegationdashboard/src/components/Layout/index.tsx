@@ -42,13 +42,15 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
   };
 
   React.useEffect(() => {
+
+
     console.log({address: address});
 
     Promise.all([
       getNumBoardMembers(dapp, multisigContract ?? ''),
       getNumProposers(dapp, multisigContract ?? ''),
       getQuorum(dapp, multisigContract ?? ''),
-      userRole(new Address(address).hex(), dapp, multisigContract ?? ''),
+      // userRole(new Address(address).hex(), dapp, multisigContract ?? ''),
       dapp.apiProvider.getNetworkStats(),
       dapp.apiProvider.getNetworkStake(),
       dapp.proxy.getNetworkConfig(),
@@ -58,7 +60,7 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
           numBoardMembers,
           numProposers,
           quorum,
-          userRole,
+          // userRole,
           networkStats,
           networkStake,
           networkConfig,
@@ -76,10 +78,10 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
             type: 'setQuorumSize',
             quorumSize: quorum.returnData[0].asNumber
           });
-          dispatch({
-            type: 'setUserRole',
-            userRole: userRole.returnData[0].asNumber
-          });
+          // dispatch({
+          //   type: 'setUserRole',
+          //   userRole: userRole.returnData[0].asNumber
+          // });
           dispatch({
             type: 'setAprPercentage',
             aprPercentage: calculateAPR({
