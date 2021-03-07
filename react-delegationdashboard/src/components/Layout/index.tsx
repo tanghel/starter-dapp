@@ -70,14 +70,14 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
       getNumProposers(dapp, multisigContract ?? ''),
       getQuorum(dapp, multisigContract ?? ''),
       // userRole(new Address(address).hex(), dapp, multisigContract ?? ''),
-      getMetaData(dapp, delegationContract),
-      getNumUsers(dapp, delegationContract),
-      getContractConfig(dapp, delegationContract),
-      getTotalActiveStake(dapp, delegationContract),
-      getBlsKeys(dapp, delegationContract),
-      dapp.apiProvider.getNetworkStats(),
-      dapp.apiProvider.getNetworkStake(),
-      dapp.proxy.getNetworkConfig(),
+      // getMetaData(dapp, delegationContract),
+      // getNumUsers(dapp, delegationContract),
+      // getContractConfig(dapp, delegationContract),
+      // getTotalActiveStake(dapp, delegationContract),
+      // getBlsKeys(dapp, delegationContract),
+      // dapp.apiProvider.getNetworkStats(),
+      // dapp.apiProvider.getNetworkStake(),
+      // dapp.proxy.getNetworkConfig(),
     ])
       .then(
         ([
@@ -85,16 +85,16 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
           numProposers,
           quorum,
           // userRole,
-          metaData,
-          numUsers,
-          contractOverview,
-          {
-            returnData: [activeStake],
-          },
-          { returnData: blsKeys },
-          networkStats,
-          networkStake,
-          networkConfig,
+          // metaData,
+          // numUsers,
+          // contractOverview,
+          // {
+          //   returnData: [activeStake],
+          // },
+          // { returnData: blsKeys },
+          // networkStats,
+          // networkStake,
+          // networkConfig,
         ]) => {
           console.log({setTotalBoardMembers: numBoardMembers});
           dispatch({
@@ -109,48 +109,48 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
             type: 'setQuorumSize',
             quorumSize: quorum.returnData[0].asNumber
           });
-          dispatch({
-            type: 'setNumUsers',
-            numUsers: numUsers.returnData[0].asNumber,
-          });
-          dispatch({
-            type: 'setContractOverview',
-            contractOverview: getContractOverviewType(contractOverview),
-          });
-          dispatch({
-            type: 'setAgencyMetaData',
-            agencyMetaData: getAgencyMetaDataType(metaData),
-          });
-          dispatch({
-            type: 'setTotalActiveStake',
-            totalActiveStake: activeStake.asBigInt.toString(),
-          });
-          dispatch({
-            type: 'setNumberOfActiveNodes',
-            numberOfActiveNodes: blsKeys.filter(key => key.asString === 'staked').length.toString(),
-          });
+          // dispatch({
+          //   type: 'setNumUsers',
+          //   numUsers: numUsers.returnData[0].asNumber,
+          // });
+          // dispatch({
+          //   type: 'setContractOverview',
+          //   contractOverview: getContractOverviewType(contractOverview),
+          // });
+          // dispatch({
+          //   type: 'setAgencyMetaData',
+          //   agencyMetaData: getAgencyMetaDataType(metaData),
+          // });
+          // dispatch({
+          //   type: 'setTotalActiveStake',
+          //   totalActiveStake: activeStake.asBigInt.toString(),
+          // });
+          // dispatch({
+          //   type: 'setNumberOfActiveNodes',
+          //   numberOfActiveNodes: blsKeys.filter(key => key.asString === 'staked').length.toString(),
+          // });
           // dispatch({
           //   type: 'setUserRole',
           //   userRole: userRole.returnData[0].asNumber
           // });
-          dispatch({
-            type: 'setAprPercentage',
-            aprPercentage: calculateAPR({
-              stats: new Stats(networkStats.Epoch),
-              networkConfig: new NetworkConfig(
-                networkConfig.TopUpFactor,
-                networkConfig.TopUpRewardsGradientPoint
-              ),
-              networkStake: new NetworkStake(
-                networkStake.TotalValidators,
-                networkStake.ActiveValidators,
-                networkStake.QueueSize,
-                networkStake.TotalStaked
-              ),
-              blsKeys: [],
-              totalActiveStake: '',
-            }),
-          });
+          // dispatch({
+          //   type: 'setAprPercentage',
+          //   aprPercentage: calculateAPR({
+          //     stats: new Stats(networkStats.Epoch),
+          //     networkConfig: new NetworkConfig(
+          //       networkConfig.TopUpFactor,
+          //       networkConfig.TopUpRewardsGradientPoint
+          //     ),
+          //     networkStake: new NetworkStake(
+          //       networkStake.TotalValidators,
+          //       networkStake.ActiveValidators,
+          //       networkStake.QueueSize,
+          //       networkStake.TotalStaked
+          //     ),
+          //     blsKeys: [],
+          //     totalActiveStake: '',
+          //   }),
+          // });
         }
       )
       .catch(e => {
