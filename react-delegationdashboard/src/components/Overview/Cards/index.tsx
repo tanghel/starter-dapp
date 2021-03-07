@@ -9,6 +9,7 @@ import { useState } from 'react';
 import SetPercentageFeeAction from './SetPercentageFeeAction';
 import UpdateDelegationCapAction from './UpdateDelegationCapAction';
 import AutomaticActivationAction from './AutomaticActivationAction';
+import ReDelegateCapActivationAction from './ReDelegateCapActivationAction';
 
 const Views = () => {
   const {
@@ -22,7 +23,8 @@ const Views = () => {
     totalBoardMembers,
     totalProposers,
     quorumSize,
-    userRole
+    userRole,
+    numUsers,
   } = useContext();
   const [networkStake, setNetworkStake] = useState(new NetworkStake());
 
@@ -76,6 +78,7 @@ const Views = () => {
         color="orange"
         svg="contract.svg"
       />
+      <StatCard title="Number of Users" value={numUsers.toString()} color="orange" svg="user.svg" />
       <StatCard
         title="Proposers"
         value={totalProposers.toString()}

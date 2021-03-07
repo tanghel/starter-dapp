@@ -154,10 +154,24 @@ export const contractViews = {
     });
     return dapp.proxy.queryContract(query);
   },
+  getNumUsers: (dapp: DappState, delegationContract?: string) => {
+    const query = new Query({
+      address: new Address(delegationContract),
+      func: new ContractFunction('getNumUsers'),
+    });
+    return dapp.proxy.queryContract(query);
+  },
   getContractConfig: (dapp: DappState, delegationContract?: string) => {
     const query = new Query({
       address: new Address(delegationContract),
       func: new ContractFunction('getContractConfig'),
+    });
+    return dapp.proxy.queryContract(query);
+  },
+  getMetaData: (dapp: DappState, delegationContract?: string) => {
+    const query = new Query({
+      address: new Address(delegationContract),
+      func: new ContractFunction('getMetaData'),
     });
     return dapp.proxy.queryContract(query);
   },

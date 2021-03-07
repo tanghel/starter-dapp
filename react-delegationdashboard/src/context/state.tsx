@@ -1,5 +1,5 @@
 import { IDappProvider, ProxyProvider, ApiProvider, WalletProvider } from '@elrondnetwork/erdjs';
-import { ContractOverview } from 'helpers/types';
+import { AgencyMetadata, ContractOverview } from 'helpers/contractDataDefinitions';
 import { denomination, decimals, network, NetworkType } from '../config';
 import { getItem } from '../storage/session';
 
@@ -36,16 +36,24 @@ export interface StateType {
   multisigContract?: string;
   totalActiveStake: string;
   numberOfActiveNodes: string;
+  numUsers: number;
   aprPercentage: string;
   contractOverview: ContractOverview;
   totalBoardMembers: number;
   totalProposers: number;
   quorumSize: number;
   userRole: number;
+  agencyMetaData: AgencyMetadata;
 }
 export const emptyAccount: AccountType = {
   balance: '...',
   nonce: 0,
+};
+
+export const emptyAgencyMetaData: AgencyMetadata = {
+  name: '',
+  website: '',
+  keybase: '',
 };
 
 export const emptyContractOverview: ContractOverview = {
@@ -56,6 +64,7 @@ export const emptyContractOverview: ContractOverview = {
   automaticActivation: 'false',
   withDelegationCap: false,
   changeableServiceFee: false,
+  reDelegationCap: 'false',
   createdNounce: false,
   unBondPeriod: 0,
 };
@@ -90,7 +99,9 @@ export const initialState = () => {
     delegationContract: sessionNetwork.delegationContract,
     multisigContract: sessionNetwork.multisigContract,
     contractOverview: emptyContractOverview,
+    agencyMetaData: emptyAgencyMetaData,
     numberOfActiveNodes: '...',
+    numUsers: 0,
     totalActiveStake: '...',
     aprPercentage: '...',
     totalBoardMembers: 0,

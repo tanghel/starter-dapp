@@ -3,8 +3,15 @@ import { QueryResponse } from '@elrondnetwork/erdjs/out/smartcontracts/query';
 import denominate from 'components/Denominate/formatters';
 import { denomination, decimals } from 'config';
 import { useContext, useDispatch } from 'context';
+import { emptyAgencyMetaData } from 'context/state';
 import { contractViews } from 'contracts/ContractViews';
-import { ContractOverview, NetworkConfig, NetworkStake, Stats } from 'helpers/types';
+import {
+  AgencyMetadata,
+  ContractOverview,
+  NetworkConfig,
+  NetworkStake,
+  Stats,
+} from 'helpers/contractDataDefinitions';
 import React from 'react';
 import { calculateAPR } from './APRCalculation';
 import Footer from './Footer';
@@ -13,15 +20,16 @@ import Navbar from './Navbar';
 const Layout = ({ children, page }: { children: React.ReactNode; page: string }) => {
   const dispatch = useDispatch();
   const { dapp, address, multisigContract } = useContext();
-  const { getNumBoardMembers, getNumProposers, getQuorum, userRole } = contractViews;
+  const {
+    getNumBoardMembers, getNumProposers, getQuorum, userRole,
+    getContractConfig,
+    getTotalActiveStake,
+    getBlsKeys,
+    getNumUsers,
+    getMetaData,
+  } = contractViews;
 
   const getContractOverviewType = (value: QueryResponse) => {
-    let delegationCap = denominate({
-      decimals,
-      denomination,
-      input: value.returnData[2].asBigInt.toString(),
-      showLastNonZeroDecimal: false,
-    });
     let initialOwnerFunds = denominate({
       decimals,
       denomination,
@@ -31,16 +39,27 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
     return new ContractOverview(
       value.returnData[0].asHex.toString(),
       (value.returnData[1].asNumber / 100).toString(),
-      delegationCap,
+      value.returnData[2].asBigInt.toString(),
       initialOwnerFunds,
       value.returnData[4]?.asString,
       value.returnData[5].asBool,
       value.returnData[6].asBool,
-      value.returnData[7].asBool,
-      value.returnData[8]?.asNumber * 6
+      value.returnData[7]?.asString,
+      value.returnData[8].asBool,
+      value.returnData[9]?.asNumber * 6
     );
   };
 
+  const getAgencyMetaDataType = (value: QueryResponse) => {
+    if (value && value.returnData && value.returnData.length === 0) {
+      return emptyAgencyMetaData;
+    }
+    return new AgencyMetadata(
+      value.returnData[0]?.asString,
+      value.returnData[1]?.asString,
+      value.returnData[2]?.asString
+    );
+  };
   React.useEffect(() => {
 
 
@@ -51,6 +70,11 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
       getNumProposers(dapp, multisigContract ?? ''),
       getQuorum(dapp, multisigContract ?? ''),
       // userRole(new Address(address).hex(), dapp, multisigContract ?? ''),
+      getMetaData(dapp, delegationContract),
+      getNumUsers(dapp, delegationContract),
+      getContractConfig(dapp, delegationContract),
+      getTotalActiveStake(dapp, delegationContract),
+      getBlsKeys(dapp, delegationContract),
       dapp.apiProvider.getNetworkStats(),
       dapp.apiProvider.getNetworkStake(),
       dapp.proxy.getNetworkConfig(),
@@ -61,6 +85,13 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
           numProposers,
           quorum,
           // userRole,
+          metaData,
+          numUsers,
+          contractOverview,
+          {
+            returnData: [activeStake],
+          },
+          { returnData: blsKeys },
           networkStats,
           networkStake,
           networkConfig,
@@ -77,6 +108,26 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
           dispatch({
             type: 'setQuorumSize',
             quorumSize: quorum.returnData[0].asNumber
+          });
+          dispatch({
+            type: 'setNumUsers',
+            numUsers: numUsers.returnData[0].asNumber,
+          });
+          dispatch({
+            type: 'setContractOverview',
+            contractOverview: getContractOverviewType(contractOverview),
+          });
+          dispatch({
+            type: 'setAgencyMetaData',
+            agencyMetaData: getAgencyMetaDataType(metaData),
+          });
+          dispatch({
+            type: 'setTotalActiveStake',
+            totalActiveStake: activeStake.asBigInt.toString(),
+          });
+          dispatch({
+            type: 'setNumberOfActiveNodes',
+            numberOfActiveNodes: blsKeys.filter(key => key.asString === 'staked').length.toString(),
           });
           // dispatch({
           //   type: 'setUserRole',
