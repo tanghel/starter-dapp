@@ -30,140 +30,140 @@ const MyDelegation = () => {
     console.log(`Multisig contract: ${multisigContract}`);
     console.log(`Delegation contract: ${delegationContract}`);
 
-    dispatch({ type: 'loading', loading: true });
+    // dispatch({ type: 'loading', loading: true });
 
     // let numNodesResponse = await getNumNodes(dapp, multisigContract);
     // console.log({ numNodesResponse });
-    getNumBoardMembers(dapp, multisigContract ?? '')
-      .then(value => {
-        console.log({numBoardMembers: value.returnData[0].asNumber});
-      });
+    // getNumBoardMembers(dapp, multisigContract ?? '')
+    //   .then(value => {
+    //     console.log({numBoardMembers: value.returnData[0].asNumber});
+    //   });
  
-    getNumProposers(dapp, multisigContract ?? '')
-      .then(value => {
-        console.log({numProposers: value.returnData[0].asNumber});
-      });
+    // getNumProposers(dapp, multisigContract ?? '')
+    //   .then(value => {
+    //     console.log({numProposers: value.returnData[0].asNumber});
+    //   });
 
-    getQuorum(dapp, multisigContract ?? '')
-      .then(value => {
-        console.log({quorum: value.returnData[0].asNumber});
-      });
+    // getQuorum(dapp, multisigContract ?? '')
+    //   .then(value => {
+    //     console.log({quorum: value.returnData[0].asNumber});
+    //   });
 
-    getActionLastIndex(dapp, multisigContract ?? '')
-      .then(value => {
-        console.log({actionLastIndex: value.returnData[0].asNumber});
-      });
+    // getActionLastIndex(dapp, multisigContract ?? '')
+    //   .then(value => {
+    //     console.log({actionLastIndex: value.returnData[0].asNumber});
+    //   });
 
-    getActionData(5, dapp, multisigContract ?? '')
-      .then(value => {
-        console.log({actionData: value});
-      });
+    // getActionData(5, dapp, multisigContract ?? '')
+    //   .then(value => {
+    //     console.log({actionData: value});
+    //   });
 
-    getPendingActionFullInfo(dapp, multisigContract ?? '')
-      .then(value => {
-        // let myDefinition = new StructureDefinition(
-        //   'HelloWorld',
-        //   [
-        //     new StructureFieldDefinition('action_id', '', ['U32']),
-        //     new StructureFieldDefinition('action_data', '', ['BigUInt']),
-        //     new StructureFieldDefinition('signers', '', ['Vector', 'Address'])
-        //   ]
-        // );
+    // getPendingActionFullInfo(dapp, multisigContract ?? '')
+    //   .then(value => {
+    //     // let myDefinition = new StructureDefinition(
+    //     //   'HelloWorld',
+    //     //   [
+    //     //     new StructureFieldDefinition('action_id', '', ['U32']),
+    //     //     new StructureFieldDefinition('action_data', '', ['BigUInt']),
+    //     //     new StructureFieldDefinition('signers', '', ['Vector', 'Address'])
+    //     //   ]
+    //     // );
 
-        // let myType = new StructureType(myDefinition);
+    //     // let myType = new StructureType(myDefinition);
 
-        // let codec = new BinaryCodec(); 
+    //     // let codec = new BinaryCodec(); 
 
-        // let result = codec.decodeNested(value.returnData[0].asBuffer, new TypeDescriptor([myType]));
+    //     // let result = codec.decodeNested(value.returnData[0].asBuffer, new TypeDescriptor([myType]));
 
-        console.log({pendingActionFullInfo: value});
-      });
+    //     console.log({pendingActionFullInfo: value});
+    //   });
 
-    userRole('88c738a5d26c0e3a2b4f9e8110b540ee9c0b71a3be057569a5a7b0fcb482c8f7', dapp, multisigContract ?? '')
-      .then(value => {
-        console.log({userRole: value.returnData[0].asNumber});
-      });
+    // userRole('88c738a5d26c0e3a2b4f9e8110b540ee9c0b71a3be057569a5a7b0fcb482c8f7', dapp, multisigContract ?? '')
+    //   .then(value => {
+    //     console.log({userRole: value.returnData[0].asNumber});
+    //   });
 
-    getAllBoardMembers(dapp, multisigContract ?? '')
-      .then(value => {
-        let allBoardMembers = value.returnData.map(x => x.asHex);
+    // getAllBoardMembers(dapp, multisigContract ?? '')
+    //   .then(value => {
+    //     let allBoardMembers = value.returnData.map(x => x.asHex);
 
-        console.log({allBoardMembers});
-      });
+    //     console.log({allBoardMembers});
+    //   });
 
-    getAllProposers(dapp, multisigContract ?? '')
-      .then(value => {
-        let allProposers = value.returnData.map(x => x.asHex);
+    // getAllProposers(dapp, multisigContract ?? '')
+    //   .then(value => {
+    //     let allProposers = value.returnData.map(x => x.asHex);
 
-        console.log({allProposers});
-      });
+    //     console.log({allProposers});
+    //   });
 
-    getActionSigners(4, dapp, multisigContract ?? '')
-      .then(value => {
-        console.log({actionSigners: value});
-      });
+    // getActionSigners(4, dapp, multisigContract ?? '')
+    //   .then(value => {
+    //     console.log({actionSigners: value});
+    //   });
       
-    getActionSignerCount(4, dapp, multisigContract ?? '')
-      .then(value => {
-        console.log({actionSignerCount: value.returnData[0].asNumber});
-      });
+    // getActionSignerCount(4, dapp, multisigContract ?? '')
+    //   .then(value => {
+    //     console.log({actionSignerCount: value.returnData[0].asNumber});
+    //   });
 
-    getActionValidSignerCount(5, dapp, multisigContract ?? '')
-      .then(value => {
-        console.log({actionValidSignerCount: value.returnData[0].asNumber});
-      });
+    // getActionValidSignerCount(5, dapp, multisigContract ?? '')
+    //   .then(value => {
+    //     console.log({actionValidSignerCount: value.returnData[0].asNumber});
+    //   });
 
-    quorumReached(5, dapp, multisigContract ?? '')
-      .then(value => {
-        console.log({quorumReached: value.returnData[0].asBool});
-      });
+    // quorumReached(5, dapp, multisigContract ?? '')
+    //   .then(value => {
+    //     console.log({quorumReached: value.returnData[0].asBool});
+    //   });
 
-    signed('88c738a5d26c0e3a2b4f9e8110b540ee9c0b71a3be057569a5a7b0fcb482c8f7', 5, dapp, multisigContract ?? '')
-      .then(value => {
-        console.log({signed: value.returnData[0].asBool});
-      });
+    // signed('88c738a5d26c0e3a2b4f9e8110b540ee9c0b71a3be057569a5a7b0fcb482c8f7', 5, dapp, multisigContract ?? '')
+    //   .then(value => {
+    //     console.log({signed: value.returnData[0].asBool});
+    //   });
 
-    getClaimableRewards(dapp, address, delegationContract)
-      .then(value => {
-        console.log(value);
+    // getClaimableRewards(dapp, address, delegationContract)
+    //   .then(value => {
+    //     console.log(value);
 
-        if (value.returnData.length > 0 && value.returnData[0]?.asNumber !== 0) {
-          setDisplayRewards(true);
-        }
-        setClaimableRewards(
-          denominate({
-            denomination,
-            decimals,
-            input: value.returnData[0]?.asBigInt.toString(),
-            showLastNonZeroDecimal: false,
-          }) || ''
-        );
-      })
-      .catch(e => console.error('getClaimableRewards error', e));
-    getUserActiveStake(dapp, address, delegationContract)
-      .then(value => {
-        setUserActiveStake(
-          denominate({
-            denomination,
-            decimals,
-            input: value.returnData[0]?.asBigInt.toString(),
-            showLastNonZeroDecimal: false,
-          }) || ''
-        );
-        setUserActiveNominatedStake(value.returnData[0]?.asBigInt.toString());
-        if (value.returnData.length > 0 && value.returnData[0]?.asNumber !== 0) {
-          setDisplayUndelegate(true);
-        }
+    //     if (value.returnData.length > 0 && value.returnData[0]?.asNumber !== 0) {
+    //       setDisplayRewards(true);
+    //     }
+    //     setClaimableRewards(
+    //       denominate({
+    //         denomination,
+    //         decimals,
+    //         input: value.returnData[0]?.asBigInt.toString(),
+    //         showLastNonZeroDecimal: false,
+    //       }) || ''
+    //     );
+    //   })
+    //   .catch(e => console.error('getClaimableRewards error', e));
+    // getUserActiveStake(dapp, address, delegationContract)
+    //   .then(value => {
+    //     setUserActiveStake(
+    //       denominate({
+    //         denomination,
+    //         decimals,
+    //         input: value.returnData[0]?.asBigInt.toString(),
+    //         showLastNonZeroDecimal: false,
+    //       }) || ''
+    //     );
+    //     setUserActiveNominatedStake(value.returnData[0]?.asBigInt.toString());
+    //     if (value.returnData.length > 0 && value.returnData[0]?.asNumber !== 0) {
+    //       setDisplayUndelegate(true);
+    //     }
 
-        dispatch({ type: 'loading', loading: false });
-      })
-      .catch(e => {
-        console.error('getUserActiveStake error', e);
-        dispatch({
-          type: 'loading',
-          loading: false,
-        });
-      });
+    //     dispatch({ type: 'loading', loading: false });
+    //   })
+    //   .catch(e => {
+    //     console.error('getUserActiveStake error', e);
+    //     dispatch({
+    //       type: 'loading',
+    //       loading: false,
+    //     });
+    //   });
   };
 
   const onProposeClicked = () => {

@@ -78,7 +78,6 @@ const Views = () => {
         color="orange"
         svg="contract.svg"
       />
-      <StatCard title="Number of Users" value={numUsers.toString()} color="orange" svg="user.svg" />
       <StatCard
         title="Proposers"
         value={totalProposers.toString()}

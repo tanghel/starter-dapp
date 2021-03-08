@@ -69,7 +69,7 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
       getNumBoardMembers(dapp, multisigContract ?? ''),
       getNumProposers(dapp, multisigContract ?? ''),
       getQuorum(dapp, multisigContract ?? ''),
-      // userRole(new Address(address).hex(), dapp, multisigContract ?? ''),
+      userRole(new Address(address).hex(), dapp, multisigContract ?? ''),
       // getMetaData(dapp, delegationContract),
       // getNumUsers(dapp, delegationContract),
       // getContractConfig(dapp, delegationContract),
@@ -84,7 +84,7 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
           numBoardMembers,
           numProposers,
           quorum,
-          // userRole,
+          userRole,
           // metaData,
           // numUsers,
           // contractOverview,
@@ -108,7 +108,7 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
           dispatch({
             type: 'setQuorumSize',
             quorumSize: quorum.returnData[0].asNumber
-          });
+          }); 
           // dispatch({
           //   type: 'setNumUsers',
           //   numUsers: numUsers.returnData[0].asNumber,
@@ -129,10 +129,10 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
           //   type: 'setNumberOfActiveNodes',
           //   numberOfActiveNodes: blsKeys.filter(key => key.asString === 'staked').length.toString(),
           // });
-          // dispatch({
-          //   type: 'setUserRole',
-          //   userRole: userRole.returnData[0].asNumber
-          // });
+          dispatch({
+            type: 'setUserRole',
+            userRole: userRole.returnData[0].asNumber
+          });
           // dispatch({
           //   type: 'setAprPercentage',
           //   aprPercentage: calculateAPR({
