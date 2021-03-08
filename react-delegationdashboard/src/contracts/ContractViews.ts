@@ -3,7 +3,127 @@ import { Query } from '@elrondnetwork/erdjs/out/smartcontracts/query';
 import { auctionContract } from 'config';
 import { DappState } from '../context/state';
 
+
+
+enum MultisigActionType {
+  Nothing = 0,
+  AddBoardMember = 1,
+  AddProposer = 2,
+  RemoveUser = 3,
+  ChangeQuorum = 4,
+  SendEgld = 5,
+  SCDeploy = 6,
+  SCCall = 7
+}
+
+class MultisigActionContainer {
+  actionId: number = 0;
+  signers: Address[] = [];
+}
+
+class MultisigAddBoardMember extends MultisigActionContainer {
+  address: Address;
+
+  constructor(address: Address) {
+      super();
+      this.address = address;
+  }
+}
+
+class MultisigAddProposer extends MultisigActionContainer {
+  address: Address;
+
+  constructor(address: Address) {
+      super();
+      this.address = address;
+  }
+}
+
+class MultisigRemoveUser extends MultisigActionContainer {
+  address: Address;
+
+  constructor(address: Address) {
+      super();
+      this.address = address;
+  }
+}
+
+class MultisigChangeQuorum extends MultisigActionContainer {
+  newSize: number;
+
+  constructor(newSize: number) {
+      super();
+      this.newSize = newSize;
+  }
+}
+
 export const contractViews = {
+  getAllActions: async (dapp: DappState, address: string) => {
+    let result = await contractViews.getPendingActionFullInfo(dapp, address);
+
+    let actions = [];
+    for (let returnData of result.returnData) {
+        let buffer = returnData.asBuffer;
+        
+        actions.push(contractViews.parseActionFullDetails(buffer));
+    }
+
+    return actions;
+  },
+
+  parseActionFullDetails: (buffer: Buffer) => {
+    let actionId = contractViews.getIntValueFromBytes(buffer.slice(0, 4));
+    let actionTypeByte = buffer.slice(4, 5)[0];
+
+    let action: MultisigActionContainer;
+    let remainingBytes = buffer.slice(5);
+
+    switch (actionTypeByte) {
+      case MultisigActionType.AddBoardMember:
+          action = new MultisigAddBoardMember(new Address(remainingBytes.slice(0, 32)));
+          remainingBytes = remainingBytes.slice(32);
+          break;
+      case MultisigActionType.AddProposer:
+          action = new MultisigAddProposer(new Address(remainingBytes.slice(0, 32)));
+          remainingBytes = remainingBytes.slice(32);
+          break;
+      case MultisigActionType.RemoveUser:
+          action = new MultisigRemoveUser(new Address(remainingBytes.slice(0, 32)));
+          remainingBytes = remainingBytes.slice(32);
+          break;
+      case MultisigActionType.ChangeQuorum:
+          action = new MultisigChangeQuorum(contractViews.getIntValueFromBytes(remainingBytes.slice(0, 4)));
+          remainingBytes = remainingBytes.slice(4);
+          break;
+      default:
+          return null;
+    }
+
+    let signerCount = contractViews.getIntValueFromBytes(remainingBytes.slice(0, 4));
+    remainingBytes = remainingBytes.slice(4);
+    
+    let signers = [];
+    for (let i = 0; i < signerCount; i++) {
+        let addressBytes = remainingBytes.slice(0, 32);
+        let address = new Address(addressBytes);
+        remainingBytes = remainingBytes.slice(32);
+
+        signers.push(address);
+    }
+
+    action.actionId = actionId;
+    action.signers = signers;
+
+    return action;
+  },
+
+  getIntValueFromBytes: (buffer: Buffer) => {
+    return ((buffer[buffer.length - 1]) | 
+    (buffer[buffer.length - 2] << 8) | 
+    (buffer[buffer.length - 3] << 16) | 
+    (buffer[buffer.length - 4] << 24));
+  },
+
   getNumBoardMembers: (dapp: DappState, address: string) => {
     const query = new Query({
       address: new Address(address),

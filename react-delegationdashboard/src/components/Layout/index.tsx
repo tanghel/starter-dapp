@@ -22,6 +22,10 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
   const { dapp, address, multisigContract } = useContext();
   const {
     getNumBoardMembers, getNumProposers, getQuorum, userRole,
+    getPendingActionFullInfo,
+    getAllActions,
+    getActionData,
+    getActionLastIndex,
     getContractConfig,
     getTotalActiveStake,
     getBlsKeys,
@@ -60,16 +64,22 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
       value.returnData[2]?.asString
     );
   };
+
+  const doStuff = async() => {
+    let allActionDetails = await getAllActions(dapp, multisigContract ?? '');
+
+    console.log({allActionDetails});
+  };
+
   React.useEffect(() => {
-
-
-    console.log({address: address});
+    doStuff();
 
     Promise.all([
       getNumBoardMembers(dapp, multisigContract ?? ''),
       getNumProposers(dapp, multisigContract ?? ''),
       getQuorum(dapp, multisigContract ?? ''),
       userRole(new Address(address).hex(), dapp, multisigContract ?? ''),
+      getPendingActionFullInfo(dapp, multisigContract ?? '')
       // getMetaData(dapp, delegationContract),
       // getNumUsers(dapp, delegationContract),
       // getContractConfig(dapp, delegationContract),
@@ -85,6 +95,7 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
           numProposers,
           quorum,
           userRole,
+          getPendingActionFullInfo
           // metaData,
           // numUsers,
           // contractOverview,
@@ -96,7 +107,6 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
           // networkStake,
           // networkConfig,
         ]) => {
-          console.log({setTotalBoardMembers: numBoardMembers});
           dispatch({
             type: 'setTotalBoardMembers',
             totalBoardMembers: numBoardMembers.returnData[0].asNumber
@@ -109,6 +119,7 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
             type: 'setQuorumSize',
             quorumSize: quorum.returnData[0].asNumber
           }); 
+
           // dispatch({
           //   type: 'setNumUsers',
           //   numUsers: numUsers.returnData[0].asNumber,

@@ -6,7 +6,7 @@ import SetAgencyMetaDataModal from './SetAgencyMetaDataModal';
 
 const Header = () => {
   const { pathname } = useLocation();
-  const { address, delegationContract, contractOverview } = useContext();
+  const { address, delegationContract, multisigContract, contractOverview } = useContext();
 
   const isAdmin = () => {
     let loginAddress = new Address(address).hex();
@@ -17,7 +17,7 @@ const Header = () => {
     <div className="header card-header d-flex align-items-center border-0 justify-content-between px-spacer">
       <div className="py-spacer text-truncate">
         <p className="opacity-6 mb-0">Contract Address</p>
-        <span className="text-truncate">{delegationContract}</span>
+        <span className="text-truncate">{multisigContract}</span>
       </div>
       <div className="d-flex justify-content-center align-items-center justify-content-between">
         {isAdmin() && pathname !== '/owner' ? (
