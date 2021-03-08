@@ -18,7 +18,8 @@ export type ActionType =
   | { type: 'setTotalBoardMembers'; totalBoardMembers: StateType['totalBoardMembers'] }
   | { type: 'setTotalProposers'; totalProposers: StateType['totalProposers'] }
   | { type: 'setQuorumSize'; quorumSize: StateType['quorumSize'] }
-  | { type: 'setUserRole'; userRole: StateType['userRole'] };
+  | { type: 'setUserRole'; userRole: StateType['userRole'] }
+  | { type: 'setAllActions'; allActions: StateType['allActions'] };
 
 export function reducer(state: StateType, action: ActionType): StateType {
   switch (action.type) {
@@ -141,6 +142,14 @@ export function reducer(state: StateType, action: ActionType): StateType {
       return {
         ...state,
         userRole,
+      };
+    }
+
+    case 'setAllActions': {
+      const { allActions } = action;
+      return {
+        ...state,
+        allActions,
       };
     }
 

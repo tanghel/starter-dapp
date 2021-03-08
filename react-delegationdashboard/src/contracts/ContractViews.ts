@@ -1,61 +1,7 @@
 import { Address, ContractFunction, Argument } from '@elrondnetwork/erdjs/out';
 import { Query } from '@elrondnetwork/erdjs/out/smartcontracts/query';
 import { auctionContract } from 'config';
-import { DappState } from '../context/state';
-
-
-
-enum MultisigActionType {
-  Nothing = 0,
-  AddBoardMember = 1,
-  AddProposer = 2,
-  RemoveUser = 3,
-  ChangeQuorum = 4,
-  SendEgld = 5,
-  SCDeploy = 6,
-  SCCall = 7
-}
-
-class MultisigActionContainer {
-  actionId: number = 0;
-  signers: Address[] = [];
-}
-
-class MultisigAddBoardMember extends MultisigActionContainer {
-  address: Address;
-
-  constructor(address: Address) {
-      super();
-      this.address = address;
-  }
-}
-
-class MultisigAddProposer extends MultisigActionContainer {
-  address: Address;
-
-  constructor(address: Address) {
-      super();
-      this.address = address;
-  }
-}
-
-class MultisigRemoveUser extends MultisigActionContainer {
-  address: Address;
-
-  constructor(address: Address) {
-      super();
-      this.address = address;
-  }
-}
-
-class MultisigChangeQuorum extends MultisigActionContainer {
-  newSize: number;
-
-  constructor(newSize: number) {
-      super();
-      this.newSize = newSize;
-  }
-}
+import { DappState, MultisigActionContainer, MultisigActionType, MultisigAddBoardMember, MultisigAddProposer, MultisigChangeQuorum, MultisigRemoveUser } from '../context/state';
 
 export const contractViews = {
   getAllActions: async (dapp: DappState, address: string) => {
@@ -65,7 +11,10 @@ export const contractViews = {
     for (let returnData of result.returnData) {
         let buffer = returnData.asBuffer;
         
-        actions.push(contractViews.parseActionFullDetails(buffer));
+        let action = contractViews.parseActionFullDetails(buffer);
+        if (action !== null) {
+          actions.push(action);
+        }
     }
 
     return actions;

@@ -1,7 +1,94 @@
-import { IDappProvider, ProxyProvider, ApiProvider, WalletProvider } from '@elrondnetwork/erdjs';
+import { IDappProvider, ProxyProvider, ApiProvider, WalletProvider, Address } from '@elrondnetwork/erdjs';
 import { AgencyMetadata, ContractOverview } from 'helpers/contractDataDefinitions';
 import { denomination, decimals, network, NetworkType } from '../config';
 import { getItem } from '../storage/session';
+
+export enum MultisigActionType {
+  Nothing = 0,
+  AddBoardMember = 1,
+  AddProposer = 2,
+  RemoveUser = 3,
+  ChangeQuorum = 4,
+  SendEgld = 5,
+  SCDeploy = 6,
+  SCCall = 7
+}
+
+export abstract class MultisigActionContainer {
+  actionId: number = 0;
+  signers: Address[] = [];
+
+  abstract title(): string;
+  abstract description(): string;
+}
+
+export class MultisigAddBoardMember extends MultisigActionContainer {
+  address: Address;
+
+  constructor(address: Address) {
+      super();
+      this.address = address;
+  }
+
+  title() {
+    return 'Add board member';
+  }
+
+  description() {
+    return this.address.bech32();
+  }
+}
+
+export class MultisigAddProposer extends MultisigActionContainer {
+  address: Address;
+
+  constructor(address: Address) {
+      super();
+      this.address = address;
+  }
+
+  title() {
+    return 'Add proposer';
+  }
+
+  description() {
+    return this.address.bech32();
+  }
+}
+
+export class MultisigRemoveUser extends MultisigActionContainer {
+  address: Address;
+
+  constructor(address: Address) {
+      super();
+      this.address = address;
+  }
+
+  title() {
+    return 'Remove user';
+  }
+
+  description() {
+    return this.address.bech32();
+  }
+}
+
+export class MultisigChangeQuorum extends MultisigActionContainer {
+  newSize: number;
+
+  constructor(newSize: number) { 
+      super();
+      this.newSize = newSize;
+  }
+
+  title() {
+    return 'Change quorum';
+  }
+
+  description() {
+    return this.newSize.toString();
+  }
+}
 
 export const defaultNetwork: NetworkType = {
   id: 'not-configured',
@@ -44,6 +131,7 @@ export interface StateType {
   quorumSize: number;
   userRole: number;
   agencyMetaData: AgencyMetadata;
+  allActions: MultisigActionContainer[];
 }
 export const emptyAccount: AccountType = {
   balance: '...',
@@ -108,6 +196,8 @@ export const initialState = () => {
     totalProposers: 0,
     quorumSize: 0,
     userRole: 0,
+    agencyMetadata: emptyAgencyMetaData,
+    allActions: [], 
   };
 };
 
