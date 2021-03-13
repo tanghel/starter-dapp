@@ -26,4 +26,20 @@ export const nodeTransactions = {
     const delegation = new Delegation(dapp.proxy, delegationContract, dapp.provider);
     return delegation.sendTransaction('0', 'removeNodes', `${blsKey}`);
   },
+  sign: (actionId: number, dapp: DappState, multisigContract?: string) => {
+    const delegation = new Delegation(dapp.proxy, multisigContract, dapp.provider);
+    return delegation.sendTransaction('0', 'sign', `0${actionId}`);
+  },
+  unsign: (actionId: number, dapp: DappState, multisigContract?: string) => {
+    const delegation = new Delegation(dapp.proxy, multisigContract, dapp.provider);
+    return delegation.sendTransaction('0', 'unsign', `0${actionId}`);
+  },
+  performAction: (actionId: number, dapp: DappState, multisigContract?: string) => {
+    const delegation = new Delegation(dapp.proxy, multisigContract, dapp.provider);
+    return delegation.sendTransaction('0', 'performAction', `0${actionId}`);
+  },
+  discardAction: (actionId: number, dapp: DappState, multisigContract?: string) => {
+    const delegation = new Delegation(dapp.proxy, multisigContract, dapp.provider);
+    return delegation.sendTransaction('0', 'discardAction', `0${actionId}`);
+  },
 };

@@ -5,13 +5,44 @@ import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import State from 'components/State';
 import ProposeAction from '../Actions/DelegateAction/ProposeAction';
 import StatCard from 'components/StatCard';
+import ProposalCard from 'components/ProposalCard';
+import { totalmem } from 'node:os';
+import { MultisigActionContainer, MultisigActionType } from 'context/state';
+import { Address } from '@elrondnetwork/erdjs/out';
 
 
 const MyDelegation = () => {
-  const { dapp, address, egldLabel, delegationContract, multisigContract, loading, allActions } = useContext();
+  const { dapp, address, quorumSize, egldLabel, delegationContract, multisigContract, loading, allActions } = useContext();
 
   const onProposeClicked = () => {
     console.log('Propose clicked');
+  };
+
+  const alreadySigned = (action: MultisigActionContainer) => {
+    let typedAddress = new Address(address);
+    for (let signerAddress of action.signers) {
+      if (signerAddress.hex() === typedAddress.hex()) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  const canSign = (action: MultisigActionContainer) => {
+    return !alreadySigned(action);
+  };
+
+  const canUnsign = (action: MultisigActionContainer) => {
+    return alreadySigned(action);
+  };
+
+  const canPerformAction = (action: MultisigActionContainer) => {
+    return alreadySigned(action) && action.signers.length >= quorumSize;
+  };
+
+  const canDiscardAction = (action: MultisigActionContainer) => {
+    return action.signers.length === 0;
   };
 
   return (
@@ -29,7 +60,18 @@ const MyDelegation = () => {
             </div>
 
             {
-              allActions.map(action => <StatCard title={action.title()} value={action.description()} color='red' />)
+              allActions.map(action => 
+                <ProposalCard 
+                  key={action.actionId} 
+                  actionId={action.actionId}
+                  title={action.title()} 
+                  value={action.description()} 
+                  canSign={canSign(action)} 
+                  canUnsign={canUnsign(action)}
+                  canPerformAction={canPerformAction(action)}
+                  canDiscardAction={canDiscardAction(action)}
+                  />
+              )
             }
             
           </div>

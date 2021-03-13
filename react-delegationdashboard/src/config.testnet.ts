@@ -26,12 +26,12 @@ export const network: NetworkType = {
   id: 'testnet',
   name: 'Testnet',
   egldLabel: 'xEGLD',
-  walletAddress: 'https://testnet-wallet.elrond.com/dapp/init',
-  apiAddress: 'https://testnet-api.elrond.com',
-  gatewayAddress: 'https://testnet-gateway.elrond.com',
-  explorerAddress: 'http://testnet-explorer.elrond.com/',
+  walletAddress: 'https://devnet-wallet.elrond.com/dapp/init',
+  apiAddress: 'https://devnet-api.elrond.com',
+  gatewayAddress: 'https://devnet-gateway.elrond.com',
+  explorerAddress: 'http://devnet-explorer.elrond.com/',
   delegationContract: 'erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqq98lllls54qqg7',
-  multisigContract: 'erd1qqqqqqqqqqqqqpgq8x7ha7ukpgcazmlls8k3xqpse20u2h0lerms2ja5gk'
+  multisigContract: 'erd1qqqqqqqqqqqqqpgqx9hnhtv6393ypkdrkk0k0dpu6d4m9x3ferms8lmk3p'
 };
 
 const networkSchema = object({
@@ -151,57 +151,57 @@ export const delegationContractData: DelegationContractType[] = [
   },
   {
     name: 'proposeAddBoardMember',
-    gasLimit: 12000000,
+    gasLimit: 120000000,
     data: 'proposeAddBoardMember@',
   },
   {
     name: 'proposeAddProposer',
-    gasLimit: 12000000,
+    gasLimit: 120000000,
     data: 'proposeAddProposer@',
   },
   {
     name: 'proposeRemoveUser',
-    gasLimit: 12000000,
+    gasLimit: 120000000,
     data: 'proposeRemoveUser@',
   },
   {
     name: 'proposeChangeQuorum',
-    gasLimit: 12000000,
+    gasLimit: 120000000,
     data: 'proposeChangeQuorum@',
   },
   {
     name: 'proposeSendEgld',
-    gasLimit: 12000000,
+    gasLimit: 120000000,
     data: 'proposeSendEgld@',
   },
   {
     name: 'proposeSCDeploy',
-    gasLimit: 12000000,
+    gasLimit: 120000000,
     data: 'proposeSCDeploy@',
   },
   {
     name: 'proposeSCCall',
-    gasLimit: 12000000,
+    gasLimit: 120000000,
     data: 'proposeSCCall@',
   },
   {
     name: 'sign',
-    gasLimit: 12000000,
+    gasLimit: 120000000,
     data: 'sign@',
   },
   {
     name: 'unsign',
-    gasLimit: 12000000,
+    gasLimit: 120000000,
     data: 'unsign@',
   },
   {
     name: 'performAction',
-    gasLimit: 12000000,
+    gasLimit: 120000000,
     data: 'performAction@',
   },
   {
     name: 'discardAction',
-    gasLimit: 12000000,
+    gasLimit: 120000000,
     data: 'discardAction@',
   },
 ];
