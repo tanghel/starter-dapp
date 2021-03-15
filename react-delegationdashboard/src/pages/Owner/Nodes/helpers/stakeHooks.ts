@@ -42,4 +42,8 @@ export const nodeTransactions = {
     const delegation = new Delegation(dapp.proxy, multisigContract, dapp.provider);
     return delegation.sendTransaction('0', 'discardAction', `0${actionId}`);
   },
+  proposeChangeQuorum: (quorumSize: number, dapp: DappState, multisigContract?: string) => {
+    const delegation = new Delegation(dapp.proxy, multisigContract, dapp.provider);
+    return delegation.sendTransaction('0', 'proposeChangeQuorum', `0${quorumSize}`);
+  }
 };
