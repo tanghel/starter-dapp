@@ -11,6 +11,7 @@ import denominate from 'components/Denominate/formatters';
 import Select from 'react-select';
 import ProposeChangeQuorum from './ProposeChangeQuorum';
 import { Delegation } from 'contracts';
+import ProposeInputAddressType from './ProposeInputAddress';
 
 interface ProposeModalType {
   show: boolean;
@@ -69,16 +70,8 @@ const ProposeModal = ({ show, balance, handleClose, handleContinue }: ProposeMod
       <div className="card">
         <div className="card-body p-spacer text-center">
           <p className="h6 mb-spacer" data-testid="delegateTitle">
-            Delegate now
+            Propose
           </p>
-          {isFullDelegationCapContract() ? (
-            <p className="mb-spacer">
-              The maximum delegation cap was reached you can not delegate more
-            </p>
-          ) : (
-            <p className="mb-spacer">{`Select the amount of ${egldLabel} you want to propose.`}</p>
-          )}
-
           <Select 
             options={options} 
             onChange={handleOptionChange}
@@ -87,23 +80,31 @@ const ProposeModal = ({ show, balance, handleClose, handleContinue }: ProposeMod
               borderRadius: 0,
               colors: {
                 ...theme.colors,
-                primary25: 'rgba(255, 255, 255, 0.2)',
-                primary: 'black',
-                neutral0: 'rgba(0, 0, 0, 0.4)'
+                primary25: 'rgba(255, 255, 255, 0.4)',
+                primary: 'rgba(255, 255, 255, 0.8)',
+                neutral0: 'rgba(0, 0, 0, 0.9)'
               },
             })}
           />
 
-          {selectedOption == 'proposeChangeQuorum' ?
-            <ProposeChangeQuorum handleParamsChange={handleParamsChange} /> : <span>no change quorum</span>
+          <div className="p-spacer">
+          { selectedOption == 'proposeChangeQuorum' ?
+            <ProposeChangeQuorum handleParamsChange={handleParamsChange} /> : 
+            (selectedOption == 'proposeAddBoardMember' || selectedOption == 'proposeAddProposer' || selectedOption == 'proposeRemoveUser') ?
+            <ProposeInputAddressType handleParamsChange={handleParamsChange} /> :
+            
+            <span></span>
           }
+          </div>
 
-          <button
-            onClick={onProposeClicked}
-            className="btn btn-primary mb-3"
-          >
-            Propose
-          </button>
+          <div>
+            <button
+              onClick={onProposeClicked}
+              className="btn btn-primary mb-3"
+            >
+              Propose
+            </button>
+          </div>
         </div>
       </div>
     </Modal>
