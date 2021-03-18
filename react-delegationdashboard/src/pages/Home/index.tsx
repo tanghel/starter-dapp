@@ -4,7 +4,6 @@ import { faBan, faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import { ReactComponent as Logo } from '../../assets/images/logo.svg';
 import State from 'components/State';
 import { useContext } from 'context';
-import LedgerLogin from './Login/Ledger';
 import WalletLogin from './Login/Wallet';
 
 const Home = () => {
