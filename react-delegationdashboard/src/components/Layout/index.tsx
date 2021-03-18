@@ -10,52 +10,54 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
   const { address } = useContext();
   const { multisig } = useMultisig();
 
+  const getDashboardInfo = async () => {
+    const [
+      numBoardMembers,
+      numProposers,
+      quorum,
+      userRole,
+      allActions
+    ] = await Promise.all([
+        multisig.getBoardMembersCount(),
+        multisig.getProposersCount(),
+        multisig.getQuorumCount(),
+        multisig.getUserRole(new Address(address).hex()),
+        multisig.getAllActions()
+    ]);
+
+    dispatch({
+      type: 'setTotalBoardMembers',
+      totalBoardMembers: numBoardMembers
+    });
+
+    dispatch({
+      type: 'setTotalProposers',
+      totalProposers: numProposers
+    });
+
+    dispatch({
+      type: 'setQuorumSize',
+      quorumSize: quorum
+    }); 
+
+    dispatch({
+      type: 'setUserRole',
+      userRole: userRole
+    });
+    
+    dispatch({
+      type: 'setAllActions',
+      allActions: allActions
+    });
+  };
+
   React.useEffect(() => {
     if (address === null) {
       dispatch({ type: 'loading', loading: false});
       return;
     }
 
-    Promise.all([
-        multisig.getBoardMembersCount(),
-        multisig.getProposersCount(),
-        multisig.getQuorumCount(),
-        multisig.getUserRole(new Address(address).hex()),
-        multisig.getAllActions()
-    ])
-    .then(
-      ([
-        numBoardMembers,
-        numProposers,
-        quorum,
-        userRole,
-        allActions
-      ]) => {
-        dispatch({
-          type: 'setTotalBoardMembers',
-          totalBoardMembers: numBoardMembers
-        });
-        dispatch({
-          type: 'setTotalProposers',
-          totalProposers: numProposers
-        });
-        dispatch({
-          type: 'setQuorumSize',
-          quorumSize: quorum
-        }); 
-        dispatch({
-          type: 'setUserRole',
-          userRole: userRole
-        });
-        dispatch({
-          type: 'setAllActions',
-          allActions: allActions
-        });
-      }
-    )
-    .catch(e => {
-      console.log('Error occurred while fetching multisig dashboard info', e);
-    });
+    getDashboardInfo();
   }, []);
 
   return (
