@@ -12,15 +12,7 @@ const ProposeAction = () => {
   useEffect(() => {
     dapp.proxy.getAccount(new Address(address)).then(value => setBalance(value.balance.toString()));
   }, [address, dapp.proxy]);
-
-  const handlePropose = (value: string) => {
-    multisig
-      .sendTransaction('0', 'proposeChangeQuorum', value)
-      .then() 
-      .catch(e => {
-        console.error('handlePropose ', e);
-      });
-  };
+  
   return (
     <div>
       <button
@@ -33,11 +25,9 @@ const ProposeAction = () => {
       </button>
       <ProposeModal
         show={showProposeModal}
-        balance={balance}
         handleClose={() => {
             setShowProposeModal(false);
         }}
-        handleContinue={handlePropose}
       />
     </div>
   );

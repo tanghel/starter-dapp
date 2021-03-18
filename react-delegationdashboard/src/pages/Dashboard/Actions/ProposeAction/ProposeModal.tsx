@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
-import { ErrorMessage, Formik } from 'formik';
-import BigNumber from 'bignumber.js';
-import { object, string } from 'yup';
 import { Modal } from 'react-bootstrap';
 import { useContext } from 'context';
-import { denomination, decimals } from 'config';
 import Select from 'react-select';
 import ProposeChangeQuorum from './ProposeChangeQuorum';
 import { Multisig } from 'contracts';
@@ -12,13 +8,11 @@ import ProposeInputAddressType from './ProposeInputAddress';
 
 interface ProposeModalType {
   show: boolean;
-  balance: string;
   handleClose: () => void;
-  handleContinue: (value: string) => void;
 }
 
-const ProposeModal = ({ show, balance, handleClose, handleContinue }: ProposeModalType) => {
-  const { egldLabel, contractOverview, quorumSize, dapp, multisigContract } = useContext();
+const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
+  const { dapp, multisigContract } = useContext();
 
   const [selectedOption, setSelectedOption] = useState('');
   const [selectedParams, setSelectedParams] = useState('');
