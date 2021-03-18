@@ -1,5 +1,5 @@
 import { Address } from '@elrondnetwork/erdjs/out';
-import { MultisigActionContainer, MultisigActionType, MultisigAddBoardMember, MultisigAddProposer, MultisigChangeQuorum, MultisigRemoveUser } from 'context/state';
+import { MultisigAction, MultisigActionDetailed, MultisigActionType, MultisigAddBoardMember, MultisigAddProposerDetailed, MultisigChangeQuorumDetailed, MultisigRemoveUserDetailed } from 'context/state';
 
 export default function numberToRequestData(value: number) {
     if (value < 16) {
@@ -9,32 +9,43 @@ export default function numberToRequestData(value: number) {
     return value.toString(16);
 };
 
-export function parseActionFullDetails(buffer: Buffer) {
-    let actionId = getIntValueFromBytes(buffer.slice(0, 4));
-    let actionTypeByte = buffer.slice(4, 5)[0];
+export function parseAction(buffer: Buffer): [MultisigAction | null, Buffer] {
+    let actionTypeByte = buffer.slice(0, 1)[0];
 
-    let action: MultisigActionContainer;
-    let remainingBytes = buffer.slice(5);
+    let action: MultisigAction;
+    let remainingBytes = buffer.slice(1);
 
     switch (actionTypeByte) {
       case MultisigActionType.AddBoardMember:
-          action = new MultisigAddBoardMember(new Address(remainingBytes.slice(0, 32)));
+          action = new MultisigAddBoardMember(actionTypeByte, new Address(remainingBytes.slice(0, 32)));
           remainingBytes = remainingBytes.slice(32);
           break;
       case MultisigActionType.AddProposer:
-          action = new MultisigAddProposer(new Address(remainingBytes.slice(0, 32)));
+          action = new MultisigAddProposerDetailed(actionTypeByte, new Address(remainingBytes.slice(0, 32)));
           remainingBytes = remainingBytes.slice(32);
           break;
       case MultisigActionType.RemoveUser:
-          action = new MultisigRemoveUser(new Address(remainingBytes.slice(0, 32)));
+          action = new MultisigRemoveUserDetailed(actionTypeByte, new Address(remainingBytes.slice(0, 32)));
           remainingBytes = remainingBytes.slice(32);
           break;
       case MultisigActionType.ChangeQuorum:
-          action = new MultisigChangeQuorum(getIntValueFromBytes(remainingBytes.slice(0, 4)));
+          action = new MultisigChangeQuorumDetailed(actionTypeByte, getIntValueFromBytes(remainingBytes.slice(0, 4)));
           remainingBytes = remainingBytes.slice(4);
           break;
       default:
-          return null;
+          return [null, remainingBytes];
+    }
+
+    return [action, remainingBytes];
+}
+
+export function parseActionDetailed(buffer: Buffer): MultisigActionDetailed | null {
+    let actionId = getIntValueFromBytes(buffer.slice(0, 4));
+    let actionBytes = buffer.slice(4);
+
+    let [action, remainingBytes] = parseAction(actionBytes);
+    if (action === null) {
+        return null;
     }
 
     let signerCount = getIntValueFromBytes(remainingBytes.slice(0, 4));
@@ -49,10 +60,7 @@ export function parseActionFullDetails(buffer: Buffer) {
         signers.push(address);
     }
 
-    action.actionId = actionId;
-    action.signers = signers;
-
-    return action;
+    return new MultisigActionDetailed(action, actionId, signers);
   }
 
   export function getIntValueFromBytes(buffer: Buffer) {

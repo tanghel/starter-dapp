@@ -14,9 +14,9 @@ import {
 } from '@elrondnetwork/erdjs';
 import { setItem } from '../storage/session';
 import { contractData } from '../config';
-import numberToRequestData, { parseActionFullDetails } from 'helpers/converters';
+import numberToRequestData, { parseAction, parseActionDetailed } from 'helpers/converters';
 import { Query } from '@elrondnetwork/erdjs/out/smartcontracts/query';
-import { DappState } from '../context/state';
+import { DappState, MultisigAction, MultisigActionDetailed, MultisigActionType } from '../context/state';
 
 export default class Multisig {
   private dapp: DappState;
@@ -62,82 +62,105 @@ export default class Multisig {
     return this.sendTransaction('0', 'proposeRemoveUser', address.hex());
   }
 
-  queryAllActions() {
-    return this.queryActionArray('getPendingActionFullInfo');
+  queryAllActions(): Promise<MultisigActionDetailed[]> {
+    return this.queryActionContainerArray('getPendingActionFullInfo');
   }
 
-  queryBoardMembersCount() {
+  queryBoardMembersCount(): Promise<number> {
     return this.queryNumber('getNumBoardMembers');
   }
 
-  queryProposersCount() {
+  queryProposersCount(): Promise<number> {
     return this.queryNumber('getNumProposers');
   }
 
-  queryQuorumCount() {
+  queryQuorumCount(): Promise<number> {
     return this.queryNumber('getQuorum');
   }
 
-  queryActionLastId() {
+  queryActionLastId(): Promise<number> {
     return this.queryNumber('getActionLastIndex');
   }
 
-  queryActionData(actionId: number) {
-    return this.query('getActionData', [Argument.fromNumber(actionId)]);
+  queryActionData(actionId: number): Promise<MultisigAction | null> {
+    return this.queryActionContainer('getActionData', [Argument.fromNumber(actionId)]);
   }
 
-  queryUserRole(userAddress: string) {
+  queryUserRole(userAddress: string): Promise<number> {
     return this.queryNumber('userRole', [Argument.fromHex(userAddress)]);
   }
 
-  queryBoardMemberAddresses() {
-    return this.query('getAllBoardMembers');
+  queryBoardMemberAddresses(): Promise<Address[]> {
+    return this.queryAddressArray('getAllBoardMembers');
   }
 
-  queryProposerAddresses() {
-    return this.query('getAllProposers');
+  queryProposerAddresses(): Promise<Address[]> {
+    return this.queryAddressArray('getAllProposers');
   }
 
-  queryActionSignerAddresses(actionId: number) {
-    return this.query('getActionSigners', [Argument.fromNumber(actionId)]);
+  queryActionSignerAddresses(actionId: number): Promise<Address[]> {
+    return this.queryAddressArray('getActionSigners', [Argument.fromNumber(actionId)]);
   }
 
-  queryActionSignerCount(actionId: number) {
+  queryActionSignerCount(actionId: number): Promise<number> {
     return this.queryNumber('getActionSignerCount', [Argument.fromNumber(actionId)]);
   }
 
-  queryActionValidSignerCount(actionId: number) {
+  queryActionValidSignerCount(actionId: number): Promise<number> {
     return this.queryNumber('getActionValidSignerCount', [Argument.fromNumber(actionId)]);
   }
 
-  queryActionIsQuorumReached(actionId: number) {
-    return this.query('quorumReached', [Argument.fromNumber(actionId)]);
+  queryActionIsQuorumReached(actionId: number): Promise<boolean> {
+    return this.queryBoolean('quorumReached', [Argument.fromNumber(actionId)]);
   }
 
-  queryActionIsSignedByAddress(userAddress: string, actionId: number) {
-    return this.query('signed', [Argument.fromHex(userAddress), Argument.fromNumber(actionId)]);
+  queryActionIsSignedByAddress(userAddress: Address, actionId: number): Promise<boolean> {
+    return this.queryBoolean('signed', [Argument.fromHex(userAddress.hex()), Argument.fromNumber(actionId)]);
   }
 
-  private async queryNumber(functionName: string, args: Array<any> = []) {
+  private async queryNumber(functionName: string, args: Array<any> = []): Promise<number> {
     let result = await this.query(functionName, args);
 
     return result.returnData[0].asNumber;
   }
 
-  private async queryActionArray(functionName: string, args: Array<any> = []) {
+  private async queryBoolean(functionName: string, args: Array<any> = []): Promise<boolean> {
+    let result = await this.query(functionName, args);
+
+    return result.returnData[0].asBool;
+  }
+
+  private async queryActionContainer(functionName: string, args: Array<any> = []): Promise<MultisigAction | null> {
+    let result = await this.query(functionName, args);
+
+    if (result.returnData.length === 0) {
+      return null;
+    }
+
+    let [action, _] = parseAction(result.returnData[0].asBuffer);
+    return action;
+  }
+
+  private async queryActionContainerArray(functionName: string, args: Array<any> = []): Promise<MultisigActionDetailed[]> {
     let result = await this.query(functionName, args);
 
     let actions = [];
     for (let returnData of result.returnData) {
         let buffer = returnData.asBuffer;
         
-        let action = parseActionFullDetails(buffer);
+        let action = parseActionDetailed(buffer);
         if (action !== null) {
           actions.push(action);
         }
     }
 
     return actions;
+  }
+
+  private async queryAddressArray(functionName: string, args: Array<any> = []): Promise<Address[]> {
+    let result = await this.query(functionName, args);
+
+    return result.returnData.map(x => new Address(x.asHex));
   }
 
   private async query(functionName: string, args: Array<any> = []) {

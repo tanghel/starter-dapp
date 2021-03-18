@@ -4,14 +4,14 @@ import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import State from 'components/State';
 import ProposeAction from '../Actions/ProposeAction/ProposeAction';
 import ProposalCard from 'components/ProposalCard';
-import { MultisigActionContainer, MultisigActionType } from 'context/state';
+import { MultisigActionDetailed, MultisigActionType } from 'context/state';
 import { Address } from '@elrondnetwork/erdjs/out';
 
 
 const MyMultisig = () => {
   const { address, quorumSize, loading, allActions } = useContext();
 
-  const alreadySigned = (action: MultisigActionContainer) => {
+  const alreadySigned = (action: MultisigActionDetailed) => {
     let typedAddress = new Address(address);
     for (let signerAddress of action.signers) {
       if (signerAddress.hex() === typedAddress.hex()) {
@@ -22,19 +22,19 @@ const MyMultisig = () => {
     return false;
   };
 
-  const canSign = (action: MultisigActionContainer) => {
+  const canSign = (action: MultisigActionDetailed) => {
     return !alreadySigned(action);
   };
 
-  const canUnsign = (action: MultisigActionContainer) => {
+  const canUnsign = (action: MultisigActionDetailed) => {
     return alreadySigned(action);
   };
 
-  const canPerformAction = (action: MultisigActionContainer) => {
+  const canPerformAction = (action: MultisigActionDetailed) => {
     return alreadySigned(action) && action.signers.length >= quorumSize;
   };
 
-  const canDiscardAction = (action: MultisigActionContainer) => {
+  const canDiscardAction = (action: MultisigActionDetailed) => {
     return action.signers.length === 0;
   };
 

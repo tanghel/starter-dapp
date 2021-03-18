@@ -83,9 +83,7 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
           { selectedOption == 'change_quorum' ?
             <ProposeChangeQuorum handleParamsChange={handleNumericParamChange} /> : 
             (selectedOption == 'add_proposer' || selectedOption == 'add_board_member' || selectedOption == 'remove_user') ?
-            <ProposeInputAddressType handleParamsChange={handleAddressParamChange} /> :
-            
-            <span></span>
+            <ProposeInputAddressType handleParamsChange={handleAddressParamChange} /> : null
           }
           </div>
 

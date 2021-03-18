@@ -14,19 +14,42 @@ export enum MultisigActionType {
   SCCall = 7
 }
 
-export abstract class MultisigActionContainer {
-  actionId: number = 0;
-  signers: Address[] = [];
+export abstract class MultisigAction {
+  type: MultisigActionType = MultisigActionType.Nothing;
+
+  constructor(type: MultisigActionType) {
+    this.type = type;
+  }
 
   abstract title(): string;
   abstract description(): string;
 }
 
-export class MultisigAddBoardMember extends MultisigActionContainer {
+export class MultisigActionDetailed {
+  actionId: number;
+  signers: Address[];
+  action: MultisigAction;
+
+  constructor(action: MultisigAction, actionId: number, signers: Address[]) {
+    this.action = action;
+    this.actionId = actionId;
+    this.signers = signers;
+  }
+
+  title(): string {
+    return this.action.title();
+  }
+
+  description(): string {
+    return this.action.description();
+  }
+}
+
+export class MultisigAddBoardMember extends MultisigAction {
   address: Address;
 
-  constructor(address: Address) {
-      super();
+  constructor(type: MultisigActionType, address: Address) {
+      super(type);
       this.address = address;
   }
 
@@ -39,11 +62,11 @@ export class MultisigAddBoardMember extends MultisigActionContainer {
   }
 }
 
-export class MultisigAddProposer extends MultisigActionContainer {
+export class MultisigAddProposerDetailed extends MultisigAction {
   address: Address;
 
-  constructor(address: Address) {
-      super();
+  constructor(type: MultisigActionType, address: Address) {
+      super(type);
       this.address = address;
   }
 
@@ -56,11 +79,11 @@ export class MultisigAddProposer extends MultisigActionContainer {
   }
 }
 
-export class MultisigRemoveUser extends MultisigActionContainer {
+export class MultisigRemoveUserDetailed extends MultisigAction {
   address: Address;
 
-  constructor(address: Address) {
-      super();
+  constructor(type: MultisigActionType, address: Address) {
+      super(type);
       this.address = address;
   }
 
@@ -73,11 +96,11 @@ export class MultisigRemoveUser extends MultisigActionContainer {
   }
 }
 
-export class MultisigChangeQuorum extends MultisigActionContainer {
+export class MultisigChangeQuorumDetailed extends MultisigAction {
   newSize: number;
 
-  constructor(newSize: number) { 
-      super();
+  constructor(type: MultisigActionType, newSize: number) { 
+      super(type);
       this.newSize = newSize;
   }
 
@@ -124,7 +147,7 @@ export interface StateType {
   totalProposers: number;
   quorumSize: number;
   userRole: number;
-  allActions: MultisigActionContainer[];
+  allActions: MultisigActionDetailed[];
 }
 export const emptyAccount: AccountType = {
   balance: '...',
