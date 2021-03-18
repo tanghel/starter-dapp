@@ -1,22 +1,15 @@
 import * as React from 'react';
 import { useContext, useDispatch } from 'context';
-import { contractViews } from 'contracts/ContractViews';
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import State from 'components/State';
-import ProposeAction from '../Actions/DelegateAction/ProposeAction';
-import StatCard from 'components/StatCard';
+import ProposeAction from '../Actions/ProposeAction/ProposeAction';
 import ProposalCard from 'components/ProposalCard';
-import { totalmem } from 'node:os';
 import { MultisigActionContainer, MultisigActionType } from 'context/state';
 import { Address } from '@elrondnetwork/erdjs/out';
 
 
 const MyDelegation = () => {
   const { dapp, address, quorumSize, egldLabel, delegationContract, multisigContract, loading, allActions } = useContext();
-
-  const onProposeClicked = () => {
-    console.log('Propose clicked');
-  };
 
   const alreadySigned = (action: MultisigActionContainer) => {
     let typedAddress = new Address(address);
