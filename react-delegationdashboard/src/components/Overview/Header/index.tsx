@@ -5,7 +5,7 @@ import { useContext } from 'context';
 
 const Header = () => {
   const { pathname } = useLocation();
-  const { address, delegationContract, multisigContract, contractOverview } = useContext();
+  const { address, multisigContract, contractOverview } = useContext();
 
   const isAdmin = () => {
     let loginAddress = new Address(address).hex();

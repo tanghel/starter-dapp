@@ -19,8 +19,8 @@ export default class Multisig {
   proxyProvider: ProxyProvider;
   signerProvider?: IDappProvider;
 
-  constructor(provider: ProxyProvider, delegationContract?: string, signer?: IDappProvider) {
-    const address = new Address(delegationContract);
+  constructor(provider: ProxyProvider, contract?: string, signer?: IDappProvider) {
+    const address = new Address(contract);
     this.contract = new SmartContract({ address });
     this.proxyProvider = provider;
     this.signerProvider = signer;

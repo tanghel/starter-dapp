@@ -98,7 +98,6 @@ export const defaultNetwork: NetworkType = {
   apiAddress: '',
   gatewayAddress: '',
   explorerAddress: '',
-  delegationContract: '',
   multisigContract: '',
 };
 
@@ -119,7 +118,6 @@ export interface StateType {
   decimals: number;
   account: AccountType;
   explorerAddress: string;
-  delegationContract?: string;
   multisigContract?: string;
   totalActiveStake: string;
   numberOfActiveNodes: string;
@@ -184,7 +182,6 @@ export const initialState = () => {
     account: emptyAccount,
     egldLabel: sessionNetwork?.egldLabel,
     explorerAddress: sessionNetwork.explorerAddress || 'https://explorer.elrond.com',
-    delegationContract: sessionNetwork.delegationContract,
     multisigContract: sessionNetwork.multisigContract,
     contractOverview: emptyContractOverview,
     agencyMetaData: emptyAgencyMetaData,

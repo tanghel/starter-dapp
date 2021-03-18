@@ -30,7 +30,6 @@ export const network: NetworkType = {
   apiAddress: 'https://devnet-api.elrond.com',
   gatewayAddress: 'https://devnet-gateway.elrond.com',
   explorerAddress: 'http://devnet-explorer.elrond.com/',
-  delegationContract: 'erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqq98lllls54qqg7',
   multisigContract: 'erd1qqqqqqqqqqqqqpgqx9hnhtv6393ypkdrkk0k0dpu6d4m9x3ferms8lmk3p'
 };
 
@@ -44,7 +43,6 @@ const networkSchema = object({
   name: string()
     .defined()
     .required(),
-  delegationContract: string(),
   walletAddress: string(),
   apiAddress: string(),
   gatewayAddress: string(),
@@ -59,96 +57,6 @@ networkSchema.validate(network, { strict: true }).catch(({ errors }) => {
 });
 
 export const contractData: ContractType[] = [
-  {
-    name: 'createNewDelegationContract',
-    gasLimit: 6000000,
-    data: 'createNewDelegationContract@',
-  },
-  {
-    name: 'setAutomaticActivation',
-    gasLimit: 6000000,
-    data: 'setAutomaticActivation@',
-  },
-  {
-    name: 'setMetaData',
-    gasLimit: 6000000,
-    data: 'setMetaData@',
-  },
-  {
-    name: 'setReDelegateCapActivation',
-    gasLimit: 6000000,
-    data: 'setCheckCapOnReDelegateRewards@',
-  },
-  {
-    name: 'changeServiceFee',
-    gasLimit: 6000000,
-    data: 'changeServiceFee@',
-  },
-  {
-    name: 'modifyTotalDelegationCap',
-    gasLimit: 6000000,
-    data: 'modifyTotalDelegationCap@',
-  },
-  {
-    name: 'addNodes',
-    gasLimit: 12000000,
-    data: 'addNodes',
-  },
-  {
-    name: 'removeNodes',
-    gasLimit: 12000000,
-    data: 'removeNodes@',
-  },
-  {
-    name: 'stakeNodes',
-    gasLimit: 12000000,
-    data: 'stakeNodes@',
-  },
-  {
-    name: 'reStakeUnStakedNodes',
-    gasLimit: 120000000,
-    data: 'reStakeUnStakedNodes@',
-  },
-  {
-    name: 'unStakeNodes',
-    gasLimit: 12000000,
-    data: 'unStakeNodes@',
-  },
-  {
-    name: 'unBondNodes',
-    gasLimit: 12000000,
-    data: 'unBondNodes@',
-  },
-  {
-    name: 'unJailNodes',
-    gasLimit: 12000000,
-    data: 'unJailNodes@',
-  },
-  {
-    name: 'delegate',
-    gasLimit: 12000000,
-    data: 'delegate',
-  },
-  {
-    name: 'unDelegate',
-    gasLimit: 12000000,
-    data: 'unDelegate@',
-  },
-  {
-    name: 'withdraw',
-    gasLimit: 12000000,
-    data: 'withdraw',
-  },
-  {
-    name: 'claimRewards',
-    gasLimit: 6000000,
-    data: 'claimRewards',
-  },
-  {
-    name: 'reDelegateRewards',
-    gasLimit: 12000000,
-    data: 'reDelegateRewards',
-  },
   {
     name: 'proposeAddBoardMember',
     gasLimit: 120000000,

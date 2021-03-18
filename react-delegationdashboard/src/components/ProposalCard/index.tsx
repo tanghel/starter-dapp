@@ -12,7 +12,7 @@ const ProposalCard = ({
   canPerformAction = false,
   canDiscardAction = false
 }: ProposalCardType) => {
-  const { dapp, address, quorumSize, egldLabel, delegationContract, multisigContract, loading, allActions } = useContext();
+  const { dapp, multisigContract } = useContext();
 
   let sign = () => {
     nodeTransactions.sign(actionId, dapp, multisigContract);
