@@ -7,9 +7,6 @@ export type ActionType =
   | { type: 'login'; address: StateType['address'] }
   | { type: 'logout'; provider: StateType['dapp']['provider'] }
   | { type: 'loading'; loading: StateType['loading'] }
-  | { type: 'setProvider'; provider: StateType['dapp']['provider'] }
-  | { type: 'setBalance'; balance: StateType['account']['balance'] }
-  | { type: 'setContractOverview'; contractOverview: StateType['contractOverview'] }
   | { type: 'setTotalBoardMembers'; totalBoardMembers: StateType['totalBoardMembers'] }
   | { type: 'setTotalProposers'; totalProposers: StateType['totalProposers'] }
   | { type: 'setQuorumSize'; quorumSize: StateType['quorumSize'] }
@@ -35,36 +32,6 @@ export function reducer(state: StateType, action: ActionType): StateType {
       return {
         ...state,
         loading,
-      };
-    }
-
-    case 'setProvider': {
-      const { provider } = action;
-      return {
-        ...state,
-        dapp: {
-          ...state.dapp,
-          provider: provider,
-        },
-      };
-    }
-
-    case 'setBalance': {
-      const { balance } = action;
-      return {
-        ...state,
-        account: {
-          ...state.account,
-          balance: balance,
-        },
-      };
-    }
-
-    case 'setContractOverview': {
-      const { contractOverview } = action;
-      return {
-        ...state,
-        contractOverview,
       };
     }
 

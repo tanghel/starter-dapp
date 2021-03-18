@@ -5,13 +5,7 @@ import { useMultisig } from 'helpers';
 import ProposeModal from './ProposeModal';
 
 const ProposeAction = () => {
-  const { dapp, address } = useContext();
-  const { multisig } = useMultisig();
-  const [balance, setBalance] = useState('');
   const [showProposeModal, setShowProposeModal] = useState(false);
-  useEffect(() => {
-    dapp.proxy.getAccount(new Address(address)).then(value => setBalance(value.balance.toString()));
-  }, [address, dapp.proxy]);
   
   return (
     <div>

@@ -47,7 +47,7 @@ const WalletLogin = () => {
             dapp.proxy
               .getAccount(new Address(getItem('address')))
               .then(account =>
-                dispatch({ type: 'setBalance', balance: account.balance.toString() })
+                console.log({account})
               )
           )
           .catch(err => {
