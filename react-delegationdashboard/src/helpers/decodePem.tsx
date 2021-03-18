@@ -20,10 +20,10 @@ function getPubKey(file: string, indices: any[]) {
   return headerParts[4] ? headerParts[4] : '';
 }
 
-export default async function decodePem(file: string, delegationContract?: string) {
+export default async function decodePem(file: string, contract?: string) {
   await BLS.initIfNecessary();
   let myKey = ValidatorSecretKey.fromPem(file);
-  let dsc = new Address(delegationContract);
+  let dsc = new Address(contract);
   let signature = myKey.sign(Buffer.from(dsc.pubkey())).toString('hex');
 
   const regex = /-----/gi;

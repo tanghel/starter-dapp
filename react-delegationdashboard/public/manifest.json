@@ -1,6 +1,6 @@
 {
-  "short_name": "Delegation Manager",
-  "name": "Delegation Manager",
+  "short_name": "Multisig Manager",
+  "name": "Multisig Manager",
   "icons": [],
   "start_url": ".",
   "display": "standalone",

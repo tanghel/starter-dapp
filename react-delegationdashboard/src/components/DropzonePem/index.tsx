@@ -93,7 +93,7 @@ const DropzonePem = ({
     return updated;
   };
 
-  const { delegationContract } = useContext();
+  const { multisigContract } = useContext();
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: '.pem',
     multiple,
@@ -102,7 +102,7 @@ const DropzonePem = ({
         try {
           let { value, pubKey, signature } = await decodePem(
             fileReader.result!,
-            delegationContract
+            multisigContract
           );
           setFiles(existing => {
             return getUpdatedFiles({ existing, value, pubKey, name, signature });

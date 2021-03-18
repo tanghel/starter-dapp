@@ -10,15 +10,11 @@ export type ActionType =
   | { type: 'setProvider'; provider: StateType['dapp']['provider'] }
   | { type: 'setBalance'; balance: StateType['account']['balance'] }
   | { type: 'setContractOverview'; contractOverview: StateType['contractOverview'] }
-  | { type: 'setAgencyMetaData'; agencyMetaData: StateType['agencyMetaData'] }
-  | { type: 'setNumberOfActiveNodes'; numberOfActiveNodes: StateType['numberOfActiveNodes'] }
-  | { type: 'setNumUsers'; numUsers: StateType['numUsers'] }
-  | { type: 'setTotalActiveStake'; totalActiveStake: StateType['totalActiveStake'] }
-  | { type: 'setAprPercentage'; aprPercentage: StateType['aprPercentage'] }
   | { type: 'setTotalBoardMembers'; totalBoardMembers: StateType['totalBoardMembers'] }
   | { type: 'setTotalProposers'; totalProposers: StateType['totalProposers'] }
   | { type: 'setQuorumSize'; quorumSize: StateType['quorumSize'] }
-  | { type: 'setUserRole'; userRole: StateType['userRole'] };
+  | { type: 'setUserRole'; userRole: StateType['userRole'] }
+  | { type: 'setAllActions'; allActions: StateType['allActions'] };
 
 export function reducer(state: StateType, action: ActionType): StateType {
   switch (action.type) {
@@ -72,46 +68,6 @@ export function reducer(state: StateType, action: ActionType): StateType {
       };
     }
 
-    case 'setAgencyMetaData': {
-      const { agencyMetaData } = action;
-      return {
-        ...state,
-        agencyMetaData,
-      };
-    }
-
-    case 'setNumberOfActiveNodes': {
-      const { numberOfActiveNodes } = action;
-      return {
-        ...state,
-        numberOfActiveNodes,
-      };
-    }
-
-    case 'setNumUsers': {
-      const { numUsers } = action;
-      return {
-        ...state,
-        numUsers,
-      };
-    }
-
-    case 'setTotalActiveStake': {
-      const { totalActiveStake } = action;
-      return {
-        ...state,
-        totalActiveStake,
-      };
-    }
-
-    case 'setAprPercentage': {
-      const { aprPercentage } = action;
-      return {
-        ...state,
-        aprPercentage,
-      };
-    }
-
     case 'setTotalBoardMembers': {
       const { totalBoardMembers } = action;
       return {
@@ -141,6 +97,14 @@ export function reducer(state: StateType, action: ActionType): StateType {
       return {
         ...state,
         userRole,
+      };
+    }
+
+    case 'setAllActions': {
+      const { allActions } = action;
+      return {
+        ...state,
+        allActions,
       };
     }
 

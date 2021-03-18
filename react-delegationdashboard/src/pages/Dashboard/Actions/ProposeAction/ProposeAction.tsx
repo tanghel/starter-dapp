@@ -1,46 +1,46 @@
 import React, { useEffect, useState } from 'react';
 import { Address } from '@elrondnetwork/erdjs/out';
 import { useContext } from 'context';
-import DelegateModal from './DelegateModal';
-import { useDelegation } from 'helpers';
+import { useMultisig } from 'helpers';
+import ProposeModal from './ProposeModal';
 
-const DelegateAction = () => {
+const ProposeAction = () => {
   const { dapp, address } = useContext();
-  const { delegation } = useDelegation();
+  const { multisig } = useMultisig();
   const [balance, setBalance] = useState('');
-  const [showDelegateModal, setShowDelegateModal] = useState(false);
+  const [showProposeModal, setShowProposeModal] = useState(false);
   useEffect(() => {
     dapp.proxy.getAccount(new Address(address)).then(value => setBalance(value.balance.toString()));
   }, [address, dapp.proxy]);
 
-  const handleDelegate = (value: string) => {
-    delegation
+  const handlePropose = (value: string) => {
+    multisig
       .sendTransaction('0', 'proposeChangeQuorum', value)
       .then() 
       .catch(e => {
-        console.error('handleDelegate ', e);
+        console.error('handlePropose ', e);
       });
   };
   return (
     <div>
       <button
         onClick={() => {
-          setShowDelegateModal(true);
+            setShowProposeModal(true);
         }}
         className="btn btn-primary mb-3"
       >
-        Delegate
+        Propose
       </button>
-      <DelegateModal
-        show={showDelegateModal}
+      <ProposeModal
+        show={showProposeModal}
         balance={balance}
         handleClose={() => {
-          setShowDelegateModal(false);
+            setShowProposeModal(false);
         }}
-        handleContinue={handleDelegate}
+        handleContinue={handlePropose}
       />
     </div>
   );
 };
 
-export default DelegateAction;
+export default ProposeAction;

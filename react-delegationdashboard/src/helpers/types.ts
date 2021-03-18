@@ -5,7 +5,7 @@ export interface AccountType {
   code?: string;
 }
 
-export interface DelegationContractType {
+export interface ContractType {
   name: string;
   gasLimit: number;
   data: string;
@@ -29,4 +29,15 @@ export interface ActionModalType {
   description: string;
   handleClose: () => void;
   handleContinue: (value: string) => void;
+}
+
+
+export interface ProposalCardType {
+  actionId?: number;
+  title?: string;
+  value?: string;
+  canSign?: boolean;
+  canUnsign?: boolean;
+  canPerformAction?: boolean;
+  canDiscardAction?: boolean;
 }

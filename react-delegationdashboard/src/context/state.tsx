@@ -1,7 +1,94 @@
-import { IDappProvider, ProxyProvider, ApiProvider, WalletProvider } from '@elrondnetwork/erdjs';
-import { AgencyMetadata, ContractOverview } from 'helpers/contractDataDefinitions';
+import { IDappProvider, ProxyProvider, ApiProvider, WalletProvider, Address } from '@elrondnetwork/erdjs';
+import { ContractOverview } from 'helpers/contractDataDefinitions';
 import { denomination, decimals, network, NetworkType } from '../config';
 import { getItem } from '../storage/session';
+
+export enum MultisigActionType {
+  Nothing = 0,
+  AddBoardMember = 1,
+  AddProposer = 2,
+  RemoveUser = 3,
+  ChangeQuorum = 4,
+  SendEgld = 5,
+  SCDeploy = 6,
+  SCCall = 7
+}
+
+export abstract class MultisigActionContainer {
+  actionId: number = 0;
+  signers: Address[] = [];
+
+  abstract title(): string;
+  abstract description(): string;
+}
+
+export class MultisigAddBoardMember extends MultisigActionContainer {
+  address: Address;
+
+  constructor(address: Address) {
+      super();
+      this.address = address;
+  }
+
+  title() {
+    return 'Add board member';
+  }
+
+  description() {
+    return this.address.bech32();
+  }
+}
+
+export class MultisigAddProposer extends MultisigActionContainer {
+  address: Address;
+
+  constructor(address: Address) {
+      super();
+      this.address = address;
+  }
+
+  title() {
+    return 'Add proposer';
+  }
+
+  description() {
+    return this.address.bech32();
+  }
+}
+
+export class MultisigRemoveUser extends MultisigActionContainer {
+  address: Address;
+
+  constructor(address: Address) {
+      super();
+      this.address = address;
+  }
+
+  title() {
+    return 'Remove user';
+  }
+
+  description() {
+    return this.address.bech32();
+  }
+}
+
+export class MultisigChangeQuorum extends MultisigActionContainer {
+  newSize: number;
+
+  constructor(newSize: number) { 
+      super();
+      this.newSize = newSize;
+  }
+
+  title() {
+    return 'Change quorum';
+  }
+
+  description() {
+    return this.newSize.toString();
+  }
+}
 
 export const defaultNetwork: NetworkType = {
   id: 'not-configured',
@@ -11,7 +98,6 @@ export const defaultNetwork: NetworkType = {
   apiAddress: '',
   gatewayAddress: '',
   explorerAddress: '',
-  delegationContract: '',
   multisigContract: '',
 };
 
@@ -32,41 +118,21 @@ export interface StateType {
   decimals: number;
   account: AccountType;
   explorerAddress: string;
-  delegationContract?: string;
   multisigContract?: string;
-  totalActiveStake: string;
-  numberOfActiveNodes: string;
-  numUsers: number;
-  aprPercentage: string;
   contractOverview: ContractOverview;
   totalBoardMembers: number;
   totalProposers: number;
   quorumSize: number;
   userRole: number;
-  agencyMetaData: AgencyMetadata;
+  allActions: MultisigActionContainer[];
 }
 export const emptyAccount: AccountType = {
   balance: '...',
   nonce: 0,
 };
 
-export const emptyAgencyMetaData: AgencyMetadata = {
-  name: '',
-  website: '',
-  keybase: '',
-};
-
 export const emptyContractOverview: ContractOverview = {
-  ownerAddress: '',
-  serviceFee: '',
-  maxDelegationCap: '',
-  initialOwnerFunds: '',
-  automaticActivation: 'false',
-  withDelegationCap: false,
-  changeableServiceFee: false,
-  reDelegationCap: 'false',
-  createdNounce: false,
-  unBondPeriod: 0,
+  ownerAddress: ''
 };
 
 export const initialState = () => {
@@ -96,18 +162,13 @@ export const initialState = () => {
     account: emptyAccount,
     egldLabel: sessionNetwork?.egldLabel,
     explorerAddress: sessionNetwork.explorerAddress || 'https://explorer.elrond.com',
-    delegationContract: sessionNetwork.delegationContract,
     multisigContract: sessionNetwork.multisigContract,
     contractOverview: emptyContractOverview,
-    agencyMetaData: emptyAgencyMetaData,
-    numberOfActiveNodes: '...',
-    numUsers: 0,
-    totalActiveStake: '...',
-    aprPercentage: '...',
     totalBoardMembers: 0,
     totalProposers: 0,
     quorumSize: 0,
     userRole: 0,
+    allActions: [], 
   };
 };
 
