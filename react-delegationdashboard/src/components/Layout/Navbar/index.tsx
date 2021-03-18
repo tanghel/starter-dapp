@@ -15,7 +15,7 @@ const Navbar = () => {
       <div className="container-fluid flex-nowrap">
         <div className="d-flex align-items-center mr-3">
           <Logo className="logo mr-2 flex-shrink-0" />
-          <span className="h5 text-nowrap mb-0 p-0">Delegation Manager</span>
+          <span className="h5 text-nowrap mb-0 p-0">Multisig Manager</span>
         </div>
         {loggedIn && (
           <div className="d-flex align-items-center" style={{ minWidth: 0 }}>
