@@ -1,3 +1,3 @@
-import * as stakeHooks from './stakeHooks';
+import * as contractAction from './contractAction';
 
-export { stakeHooks };
+export { contractAction };

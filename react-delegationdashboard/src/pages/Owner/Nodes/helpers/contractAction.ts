@@ -2,7 +2,7 @@ import { DappState } from 'context/state';
 import { Multisig } from 'contracts';
 import numberToRequestData from 'helpers/converters';
 
-export const nodeTransactions = {
+export const contractAction = {
   sign: (actionId: number, dapp: DappState, multisigContract?: string) => {
     const multisig = new Multisig(dapp.proxy, multisigContract, dapp.provider);
     return multisig.sendTransaction('0', 'sign', numberToRequestData(actionId));

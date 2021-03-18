@@ -1,6 +1,6 @@
 import { ProposalCardType, StatCardType } from 'helpers/types';
 import React from 'react';
-import { nodeTransactions } from '../../pages/Owner/Nodes/helpers/stakeHooks';
+import { contractAction } from '../../pages/Owner/Nodes/helpers/contractAction';
 import { useContext, useDispatch } from 'context';
 
 const ProposalCard = ({
@@ -15,19 +15,19 @@ const ProposalCard = ({
   const { dapp, multisigContract } = useContext();
 
   let sign = () => {
-    nodeTransactions.sign(actionId, dapp, multisigContract);
+    contractAction.sign(actionId, dapp, multisigContract);
   };
 
   let unsign = () => {
-    nodeTransactions.unsign(actionId, dapp, multisigContract);
+    contractAction.unsign(actionId, dapp, multisigContract);
   };
 
   let performAction = () => {
-    nodeTransactions.performAction(actionId, dapp, multisigContract);
+    contractAction.performAction(actionId, dapp, multisigContract);
   };
 
   let discardAction = () => {
-    nodeTransactions.discardAction(actionId, dapp, multisigContract);
+    contractAction.discardAction(actionId, dapp, multisigContract);
   };
 
   return (
