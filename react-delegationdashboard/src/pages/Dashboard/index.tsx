@@ -1,7 +1,6 @@
 import React from 'react';
 import { useContext } from 'context';
 import Delegation from './Delegation';
-import PendingUndelegated from './PendingUndelegated';
 import { Redirect } from 'react-router-dom';
 import Overview from 'components/Overview';
 
@@ -17,7 +16,6 @@ const Dashboard = () => {
         <Overview />
         <div className="card-body pt-0 px-spacer pb-spacer">
           <Delegation />
-          <PendingUndelegated />
         </div>
       </div>
     </div>

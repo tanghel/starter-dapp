@@ -1,15 +1,9 @@
 import * as React from 'react';
 import { decimals, denomination } from 'config';
 import { useContext } from 'context';
-import denominate from 'components/Denominate/formatters';
 import StatCard from 'components/StatCard';
 import { Address, NetworkStake } from '@elrondnetwork/erdjs/out';
 import { useState } from 'react';
-
-import SetPercentageFeeAction from './SetPercentageFeeAction';
-import UpdateDelegationCapAction from './UpdateDelegationCapAction';
-import AutomaticActivationAction from './AutomaticActivationAction';
-import ReDelegateCapActivationAction from './ReDelegateCapActivationAction';
 
 const Views = () => {
   const {

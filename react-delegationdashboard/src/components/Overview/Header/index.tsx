@@ -2,7 +2,6 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Address } from '@elrondnetwork/erdjs/out';
 import { useContext } from 'context';
-import SetAgencyMetaDataModal from './SetAgencyMetaDataModal';
 
 const Header = () => {
   const { pathname } = useLocation();
@@ -20,18 +19,10 @@ const Header = () => {
         <span className="text-truncate">{multisigContract}</span>
       </div>
       <div className="d-flex justify-content-center align-items-center justify-content-between">
-        {isAdmin() && pathname !== '/owner' ? (
-          <Link to="/owner" className="btn btn-primary btn-sm">
-            Admin
-          </Link>
-        ) : null}
         {pathname !== '/dashboard' ? (
           <Link to="/dashboard" className="btn btn-primary btn-sm">
             Dashboard
           </Link>
-        ) : null}
-        {isAdmin() && pathname == '/owner' ? (
-          <SetAgencyMetaDataModal />
         ) : null}
       </div>
     </div>

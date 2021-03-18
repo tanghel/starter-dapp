@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Address } from '@elrondnetwork/erdjs/out';
 import { useContext } from 'context';
-import DelegateModal from './DelegateModal';
 import { useDelegation } from 'helpers';
 
 const DelegateAction = () => {
@@ -23,22 +22,6 @@ const DelegateAction = () => {
   };
   return (
     <div>
-      <button
-        onClick={() => {
-          setShowDelegateModal(true);
-        }}
-        className="btn btn-primary mb-3"
-      >
-        Delegate
-      </button>
-      <DelegateModal
-        show={showDelegateModal}
-        balance={balance}
-        handleClose={() => {
-          setShowDelegateModal(false);
-        }}
-        handleContinue={handleDelegate}
-      />
     </div>
   );
 };

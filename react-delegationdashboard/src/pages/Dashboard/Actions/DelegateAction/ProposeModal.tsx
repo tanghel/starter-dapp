@@ -4,10 +4,7 @@ import BigNumber from 'bignumber.js';
 import { object, string } from 'yup';
 import { Modal } from 'react-bootstrap';
 import { useContext } from 'context';
-import Denominate from 'components/Denominate';
-import { entireBalance } from 'helpers';
 import { denomination, decimals } from 'config';
-import denominate from 'components/Denominate/formatters';
 import Select from 'react-select';
 import ProposeChangeQuorum from './ProposeChangeQuorum';
 import { Delegation } from 'contracts';
@@ -25,25 +22,6 @@ const ProposeModal = ({ show, balance, handleClose, handleContinue }: ProposeMod
 
   const [selectedOption, setSelectedOption] = useState('');
   const [selectedParams, setSelectedParams] = useState('');
-
-  const available = entireBalance({
-    balance: balance,
-    gasPrice: '12000000',
-    gasLimit: '12000000',
-    denomination,
-    decimals,
-  });
-
-  const isFullDelegationCapContract = () => {
-    return (
-      denominate({
-        input: totalActiveStake,
-        denomination,
-        decimals,
-        showLastNonZeroDecimal: false,
-      }) === contractOverview.maxDelegationCap
-    );
-  };
 
   const options = [
     { value: 'proposeChangeQuorum', label: 'Change quorum' },
