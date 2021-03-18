@@ -1,8 +1,6 @@
 import { ProposalCardType, StatCardType } from 'helpers/types';
 import React from 'react';
-import { useContext } from 'context';
 import { useMultisig } from 'helpers';
-import { MultisigRemoveUser } from 'context/state';
 
 const ProposalCard = ({
   actionId = 0,
@@ -13,7 +11,6 @@ const ProposalCard = ({
   canPerformAction = false,
   canDiscardAction = false
 }: ProposalCardType) => {
-  const { dapp, multisigContract } = useContext();
   const { multisig } = useMultisig();
 
   let sign = () => {
