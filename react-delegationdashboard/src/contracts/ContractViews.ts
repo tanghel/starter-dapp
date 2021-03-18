@@ -1,7 +1,7 @@
 import { Address, ContractFunction, Argument } from '@elrondnetwork/erdjs/out';
 import { Query } from '@elrondnetwork/erdjs/out/smartcontracts/query';
 import { parseActionFullDetails } from '../helpers/converters';
-import { DappState, MultisigActionContainer, MultisigActionType, MultisigAddBoardMember, MultisigAddProposer, MultisigChangeQuorum, MultisigRemoveUser } from '../context/state';
+import { DappState } from '../context/state';
 
 export const contractViews = {
   getAllActions: async (dapp: DappState, address: string) => {
