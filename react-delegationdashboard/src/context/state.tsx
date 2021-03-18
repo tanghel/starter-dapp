@@ -1,5 +1,5 @@
 import { IDappProvider, ProxyProvider, ApiProvider, WalletProvider, Address } from '@elrondnetwork/erdjs';
-import { AgencyMetadata, ContractOverview } from 'helpers/contractDataDefinitions';
+import { ContractOverview } from 'helpers/contractDataDefinitions';
 import { denomination, decimals, network, NetworkType } from '../config';
 import { getItem } from '../storage/session';
 
@@ -119,16 +119,11 @@ export interface StateType {
   account: AccountType;
   explorerAddress: string;
   multisigContract?: string;
-  totalActiveStake: string;
-  numberOfActiveNodes: string;
-  numUsers: number;
-  aprPercentage: string;
   contractOverview: ContractOverview;
   totalBoardMembers: number;
   totalProposers: number;
   quorumSize: number;
   userRole: number;
-  agencyMetaData: AgencyMetadata;
   allActions: MultisigActionContainer[];
 }
 export const emptyAccount: AccountType = {
@@ -136,23 +131,8 @@ export const emptyAccount: AccountType = {
   nonce: 0,
 };
 
-export const emptyAgencyMetaData: AgencyMetadata = {
-  name: '',
-  website: '',
-  keybase: '',
-};
-
 export const emptyContractOverview: ContractOverview = {
-  ownerAddress: '',
-  serviceFee: '',
-  maxDelegationCap: '',
-  initialOwnerFunds: '',
-  automaticActivation: 'false',
-  withDelegationCap: false,
-  changeableServiceFee: false,
-  reDelegationCap: 'false',
-  createdNounce: false,
-  unBondPeriod: 0,
+  ownerAddress: ''
 };
 
 export const initialState = () => {
@@ -184,16 +164,10 @@ export const initialState = () => {
     explorerAddress: sessionNetwork.explorerAddress || 'https://explorer.elrond.com',
     multisigContract: sessionNetwork.multisigContract,
     contractOverview: emptyContractOverview,
-    agencyMetaData: emptyAgencyMetaData,
-    numberOfActiveNodes: '...',
-    numUsers: 0,
-    totalActiveStake: '...',
-    aprPercentage: '...',
     totalBoardMembers: 0,
     totalProposers: 0,
     quorumSize: 0,
     userRole: 0,
-    agencyMetadata: emptyAgencyMetaData,
     allActions: [], 
   };
 };

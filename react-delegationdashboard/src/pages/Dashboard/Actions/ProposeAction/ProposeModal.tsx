@@ -18,7 +18,7 @@ interface ProposeModalType {
 }
 
 const ProposeModal = ({ show, balance, handleClose, handleContinue }: ProposeModalType) => {
-  const { egldLabel, contractOverview, totalActiveStake, quorumSize, dapp, multisigContract } = useContext();
+  const { egldLabel, contractOverview, quorumSize, dapp, multisigContract } = useContext();
 
   const [selectedOption, setSelectedOption] = useState('');
   const [selectedParams, setSelectedParams] = useState('');
