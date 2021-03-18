@@ -43,7 +43,6 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
             type: 'setUserRole',
             userRole: userRole.returnData[0].asNumber
           });
-          console.log({allActions});
           dispatch({
             type: 'setAllActions',
             allActions: allActions
