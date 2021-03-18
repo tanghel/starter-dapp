@@ -10,10 +10,10 @@
 <br />
 <p align="center">
 
- <h3 align="center">Dapp boilerplate for Delegation </h3>
+ <h3 align="center">Dapp boilerplate for Multisig </h3>
 
   <p align="center">
-The react implementation for Dashboard Delegation
+The react implementation for Dashboard Multisig
     <br />
     <br />
     <br />
@@ -77,7 +77,7 @@ From a terminal, navigate to the project folder and run ```npm install```
 In the application's src folder there are 3 config files (config.internal.ts, config.testnet.ts, config.mainnet.ts).
 
 Based on the environment used the configs will need to be updated:
-- delegationContract : should contain the address of the Delegation Smart Contract received after the creation of Delegation Smart Contract
+- multisigContract : should contain the address of the Multisig Smart Contract received after the creation of Multisig Smart Contract
 - also check the walletAddress, apiAddress and explorerAddress
 
 ### Step 3. Run locally
