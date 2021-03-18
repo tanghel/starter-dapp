@@ -5,7 +5,7 @@ export interface AccountType {
   code?: string;
 }
 
-export interface DelegationContractType {
+export interface ContractType {
   name: string;
   gasLimit: number;
   data: string;

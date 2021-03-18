@@ -12,7 +12,7 @@ import {
   SmartContract,
 } from '@elrondnetwork/erdjs';
 import { setItem } from '../storage/session';
-import { delegationContractData } from '../config';
+import { contractData } from '../config';
 
 export default class Multisig {
   contract: SmartContract;
@@ -56,13 +56,13 @@ export default class Multisig {
     transcationType: string,
     args: string = ''
   ): Promise<boolean> {
-    let delegationContract = delegationContractData.find(d => d.name === transcationType);
-    if (!delegationContract) {
+    let contract = contractData.find(d => d.name === transcationType);
+    if (!contract) {
       throw new Error('The contract for this action in not defined');
     } else {
-      let funcName = delegationContract.data;
+      let funcName = contract.data;
       if (args !== '') {
-        funcName = `${delegationContract.data}${args}`;
+        funcName = `${contract.data}${args}`;
       }
       const func = new ContractFunction(funcName);
       let payload = TransactionPayload.contractCall()
@@ -71,7 +71,7 @@ export default class Multisig {
       let transaction = new Transaction({
         receiver: this.contract.getAddress(),
         value: Balance.eGLD(value),
-        gasLimit: new GasLimit(delegationContract.gasLimit),
+        gasLimit: new GasLimit(contract.gasLimit),
         data: payload,
       });
 

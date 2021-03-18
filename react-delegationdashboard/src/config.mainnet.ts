@@ -1,5 +1,5 @@
 import { object, string, boolean, InferType } from 'yup';
-import { DelegationContractType } from './helpers/types';
+import { ContractType } from './helpers/types';
 
 export const decimals: number = 2;
 export const denomination: number = 18;
@@ -60,7 +60,7 @@ networks.forEach(network => {
   });
 });
 
-export const delegationContractData: DelegationContractType[] = [
+export const ContractData: ContractType[] = [
   {
     name: 'createNewDelegationContract',
     gasLimit: 6000000,

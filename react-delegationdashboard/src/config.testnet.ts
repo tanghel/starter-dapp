@@ -1,5 +1,5 @@
 import { object, string, boolean, InferType } from 'yup';
-import { DelegationContractType } from './helpers/types';
+import { ContractType } from './helpers/types';
 
 export const decimals: number = 2;
 export const denomination: number = 18;
@@ -58,7 +58,7 @@ networkSchema.validate(network, { strict: true }).catch(({ errors }) => {
   console.error(`Config invalid format for ${network.id}`, errors);
 });
 
-export const delegationContractData: DelegationContractType[] = [
+export const contractData: ContractType[] = [
   {
     name: 'createNewDelegationContract',
     gasLimit: 6000000,
