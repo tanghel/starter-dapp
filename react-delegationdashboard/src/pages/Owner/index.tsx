@@ -3,7 +3,6 @@ import { Address } from '@elrondnetwork/erdjs/out';
 import React from 'react';
 import { useContext } from 'context';
 import Overview from 'components/Overview';
-import Nodes from './Nodes';
 
 const Owner = () => {
   const { address, contractOverview, loggedIn } = useContext();
@@ -23,7 +22,6 @@ const Owner = () => {
           <div className="card border-0">
             <Overview />
             <div className="card-body pt-0 px-spacer pb-spacer">
-              <Nodes />
             </div>
           </div>
         </div>
