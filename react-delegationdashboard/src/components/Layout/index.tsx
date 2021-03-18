@@ -11,48 +11,51 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
   const { getNumBoardMembers, getNumProposers, getQuorum, userRole, getAllActions } = contractViews;
 
   React.useEffect(() => {
-    if (address !== null) {
-      Promise.all([
-          getNumBoardMembers(dapp, multisigContract ?? ''),
-          getNumProposers(dapp, multisigContract ?? ''),
-          getQuorum(dapp, multisigContract ?? ''),
-          userRole(new Address(address).hex(), dapp, multisigContract ?? ''),
-          getAllActions(dapp, multisigContract ?? '')
-      ])
-      .then(
-        ([
-          numBoardMembers,
-          numProposers,
-          quorum,
-          userRole,
-          allActions
-        ]) => {
-          dispatch({
-            type: 'setTotalBoardMembers',
-            totalBoardMembers: numBoardMembers.returnData[0].asNumber
-          });
-          dispatch({
-            type: 'setTotalProposers',
-            totalProposers: numProposers.returnData[0].asNumber
-          });
-          dispatch({
-            type: 'setQuorumSize',
-            quorumSize: quorum.returnData[0].asNumber
-          }); 
-          dispatch({
-            type: 'setUserRole',
-            userRole: userRole.returnData[0].asNumber
-          });
-          dispatch({
-            type: 'setAllActions',
-            allActions: allActions
-          });
-        }
-      )
-      .catch(e => {
-        console.log('To do ', e);
-      });
+    if (address === null) {
+      dispatch({ type: 'loading', loading: false});
+      return;
     }
+
+    Promise.all([
+        getNumBoardMembers(dapp, multisigContract ?? ''),
+        getNumProposers(dapp, multisigContract ?? ''),
+        getQuorum(dapp, multisigContract ?? ''),
+        userRole(new Address(address).hex(), dapp, multisigContract ?? ''),
+        getAllActions(dapp, multisigContract ?? '')
+    ])
+    .then(
+      ([
+        numBoardMembers,
+        numProposers,
+        quorum,
+        userRole,
+        allActions
+      ]) => {
+        dispatch({
+          type: 'setTotalBoardMembers',
+          totalBoardMembers: numBoardMembers.returnData[0].asNumber
+        });
+        dispatch({
+          type: 'setTotalProposers',
+          totalProposers: numProposers.returnData[0].asNumber
+        });
+        dispatch({
+          type: 'setQuorumSize',
+          quorumSize: quorum.returnData[0].asNumber
+        }); 
+        dispatch({
+          type: 'setUserRole',
+          userRole: userRole.returnData[0].asNumber
+        });
+        dispatch({
+          type: 'setAllActions',
+          allActions: allActions
+        });
+      }
+    )
+    .catch(e => {
+      console.log('Error occurred while fetching multisig dashboard info', e);
+    });
   }, []);
 
   return (
