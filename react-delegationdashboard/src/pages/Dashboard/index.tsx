@@ -1,6 +1,6 @@
 import React from 'react';
 import { useContext } from 'context';
-import Delegation from './Delegation';
+import Multisig from './Multisig';
 import { Redirect } from 'react-router-dom';
 import Overview from 'components/Overview';
 
@@ -15,7 +15,7 @@ const Dashboard = () => {
       <div className="card border-0">
         <Overview />
         <div className="card-body pt-0 px-spacer pb-spacer">
-          <Delegation />
+          <Multisig />
         </div>
       </div>
     </div>

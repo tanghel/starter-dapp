@@ -1,1 +1,1 @@
-export { default as Delegation } from './Delegation';
+export { default as Multisig } from './Multisig';

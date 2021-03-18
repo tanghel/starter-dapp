@@ -8,8 +8,8 @@ import { MultisigActionContainer, MultisigActionType } from 'context/state';
 import { Address } from '@elrondnetwork/erdjs/out';
 
 
-const MyDelegation = () => {
-  const { dapp, address, quorumSize, egldLabel, delegationContract, multisigContract, loading, allActions } = useContext();
+const MyMultisig = () => {
+  const { address, quorumSize, loading, allActions } = useContext();
 
   const alreadySigned = (action: MultisigActionContainer) => {
     let typedAddress = new Address(address);
@@ -74,4 +74,4 @@ const MyDelegation = () => {
   );
 };
 
-export default MyDelegation;
+export default MyMultisig;

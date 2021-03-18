@@ -7,7 +7,7 @@ import { useContext } from 'context';
 import { denomination, decimals } from 'config';
 import Select from 'react-select';
 import ProposeChangeQuorum from './ProposeChangeQuorum';
-import { Delegation } from 'contracts';
+import { Multisig } from 'contracts';
 import ProposeInputAddressType from './ProposeInputAddress';
 
 interface ProposeModalType {
@@ -35,8 +35,8 @@ const ProposeModal = ({ show, balance, handleClose, handleContinue }: ProposeMod
   };
 
   const onProposeClicked = () => {
-    const delegation = new Delegation(dapp.proxy, multisigContract, dapp.provider);
-    delegation.sendTransaction('0', selectedOption, selectedParams);
+    const multisig = new Multisig(dapp.proxy, multisigContract, dapp.provider);
+    multisig.sendTransaction('0', selectedOption, selectedParams);
   };
 
   const handleParamsChange = (value: string) => {

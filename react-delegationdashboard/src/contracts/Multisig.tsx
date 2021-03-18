@@ -14,7 +14,7 @@ import {
 import { setItem } from '../storage/session';
 import { delegationContractData } from '../config';
 
-export default class Delegation {
+export default class Multisig {
   contract: SmartContract;
   proxyProvider: ProxyProvider;
   signerProvider?: IDappProvider;

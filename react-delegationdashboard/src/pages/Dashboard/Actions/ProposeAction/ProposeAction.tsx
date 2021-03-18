@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Address } from '@elrondnetwork/erdjs/out';
 import { useContext } from 'context';
-import { useDelegation } from 'helpers';
+import { useMultisig } from 'helpers';
 import ProposeModal from './ProposeModal';
 
 const ProposeAction = () => {
   const { dapp, address } = useContext();
-  const { delegation } = useDelegation();
+  const { multisig } = useMultisig();
   const [balance, setBalance] = useState('');
   const [showProposeModal, setShowProposeModal] = useState(false);
   useEffect(() => {
@@ -14,7 +14,7 @@ const ProposeAction = () => {
   }, [address, dapp.proxy]);
 
   const handlePropose = (value: string) => {
-    delegation
+    multisig
       .sendTransaction('0', 'proposeChangeQuorum', value)
       .then() 
       .catch(e => {
