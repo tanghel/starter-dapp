@@ -8,7 +8,7 @@ import Navbar from './Navbar';
 const Layout = ({ children, page }: { children: React.ReactNode; page: string }) => {
   const dispatch = useDispatch();
   const { dapp, address, multisigContract } = useContext();
-  const { getBoardMembersCount: getNumBoardMembers, getProposersCount: getNumProposers, getQuorumCount: getQuorum, getUserRole: userRole, getAllActions } = contractViews;
+  const { getBoardMembersCount, getProposersCount, getQuorumCount, getUserRole, getAllActions } = contractViews;
 
   React.useEffect(() => {
     if (address === null) {
@@ -17,10 +17,10 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
     }
 
     Promise.all([
-        getNumBoardMembers(dapp, multisigContract ?? ''),
-        getNumProposers(dapp, multisigContract ?? ''),
-        getQuorum(dapp, multisigContract ?? ''),
-        userRole(new Address(address).hex(), dapp, multisigContract ?? ''),
+        getBoardMembersCount(dapp, multisigContract ?? ''),
+        getProposersCount(dapp, multisigContract ?? ''),
+        getQuorumCount(dapp, multisigContract ?? ''),
+        getUserRole(new Address(address).hex(), dapp, multisigContract ?? ''),
         getAllActions(dapp, multisigContract ?? '')
     ])
     .then(
