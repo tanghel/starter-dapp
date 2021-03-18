@@ -8,7 +8,7 @@ import Navbar from './Navbar';
 const Layout = ({ children, page }: { children: React.ReactNode; page: string }) => {
   const dispatch = useDispatch();
   const { dapp, address, multisigContract } = useContext();
-  const { getNumBoardMembers, getNumProposers, getQuorum, userRole, getAllActions } = contractViews;
+  const { getBoardMembersCount: getNumBoardMembers, getProposersCount: getNumProposers, getQuorumCount: getQuorum, getUserRole: userRole, getAllActions } = contractViews;
 
   React.useEffect(() => {
     if (address === null) {

@@ -5,7 +5,7 @@ import { DappState } from '../context/state';
 
 export const contractViews = {
   getAllActions: async (dapp: DappState, address: string) => {
-    let result = await contractViews.getPendingActionFullInfo(dapp, address);
+    let result = await contractViews.getPendingActionData(dapp, address);
 
     let actions = [];
     for (let returnData of result.returnData) {
@@ -20,7 +20,7 @@ export const contractViews = {
     return actions;
   },
 
-  getNumBoardMembers: (dapp: DappState, address: string) => {
+  getBoardMembersCount: (dapp: DappState, address: string) => {
     const query = new Query({
       address: new Address(address),
       func: new ContractFunction('getNumBoardMembers'),
@@ -28,7 +28,7 @@ export const contractViews = {
     });
     return dapp.proxy.queryContract(query);
   },
-  getNumProposers: (dapp: DappState, address: string) => {
+  getProposersCount: (dapp: DappState, address: string) => {
     const query = new Query({
       address: new Address(address),
       func: new ContractFunction('getNumProposers'),
@@ -36,7 +36,7 @@ export const contractViews = {
     });
     return dapp.proxy.queryContract(query);
   },
-  getQuorum: (dapp: DappState, address: string) => {
+  getQuorumCount: (dapp: DappState, address: string) => {
     const query = new Query({
       address: new Address(address),
       func: new ContractFunction('getQuorum'),
@@ -44,7 +44,7 @@ export const contractViews = {
     });
     return dapp.proxy.queryContract(query);
   },
-  getActionLastIndex: (dapp: DappState, address: string) => {
+  getActionLastId: (dapp: DappState, address: string) => {
     const query = new Query({
       address: new Address(address),
       func: new ContractFunction('getActionLastIndex'),
@@ -60,7 +60,7 @@ export const contractViews = {
     });
     return dapp.proxy.queryContract(query);
   },
-  getPendingActionFullInfo: (dapp: DappState, address: string) => {
+  getPendingActionData: (dapp: DappState, address: string) => {
     const query = new Query({
       address: new Address(address),
       func: new ContractFunction('getPendingActionFullInfo'),
@@ -68,7 +68,7 @@ export const contractViews = {
     });
     return dapp.proxy.queryContract(query);
   },
-  userRole: (userAddress: string, dapp: DappState, address: string) => {
+  getUserRole: (userAddress: string, dapp: DappState, address: string) => {
     const query = new Query({
       address: new Address(address),
       func: new ContractFunction('userRole'),
@@ -76,7 +76,7 @@ export const contractViews = {
     });
     return dapp.proxy.queryContract(query);
   },
-  getAllBoardMembers: (dapp: DappState, address: string) => {
+  getBoardMemberAddresses: (dapp: DappState, address: string) => {
     const query = new Query({
       address: new Address(address),
       func: new ContractFunction('getAllBoardMembers'),
@@ -84,7 +84,7 @@ export const contractViews = {
     });
     return dapp.proxy.queryContract(query);
   },
-  getAllProposers: (dapp: DappState, address: string) => {
+  getProposerAddresses: (dapp: DappState, address: string) => {
     const query = new Query({
       address: new Address(address),
       func: new ContractFunction('getAllProposers'),
@@ -92,7 +92,7 @@ export const contractViews = {
     });
     return dapp.proxy.queryContract(query);
   },
-  getActionSigners: (actionId: number, dapp: DappState, address: string) => {
+  getActionSignerAddresses: (actionId: number, dapp: DappState, address: string) => {
     const query = new Query({
       address: new Address(address),
       func: new ContractFunction('getActionSigners'),
@@ -116,7 +116,7 @@ export const contractViews = {
     });
     return dapp.proxy.queryContract(query);
   },
-  quorumReached: (actionId: number, dapp: DappState, address: string) => {
+  getActionIsQuorumReached: (actionId: number, dapp: DappState, address: string) => {
     const query = new Query({
       address: new Address(address),
       func: new ContractFunction('quorumReached'),
@@ -124,7 +124,7 @@ export const contractViews = {
     });
     return dapp.proxy.queryContract(query);
   },
-  signed: (userAddress: string, actionId: number, dapp: DappState, address: string) => {
+  getActionIsSignedByAddress: (userAddress: string, actionId: number, dapp: DappState, address: string) => {
     const query = new Query({
       address: new Address(address),
       func: new ContractFunction('signed'),
