@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Modal } from 'react-bootstrap';
-import { useContext } from 'context';
 import Select from 'react-select';
 import ProposeChangeQuorum from './ProposeChangeQuorum';
 import ProposeInputAddressType from './ProposeInputAddress';
 import { useMultisig } from 'helpers';
 import { Address } from '@elrondnetwork/erdjs/out';
-import { MultisigRemoveUser } from 'context/state';
 
 interface ProposeModalType {
   show: boolean;
