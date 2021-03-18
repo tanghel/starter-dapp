@@ -1,14 +1,14 @@
 import { Address } from '@elrondnetwork/erdjs/out';
 import { useContext, useDispatch } from 'context';
-import { contractViews } from 'contracts/ContractViews';
+import { useMultisig } from 'helpers';
 import React from 'react';
 import Footer from './Footer';
 import Navbar from './Navbar';
 
 const Layout = ({ children, page }: { children: React.ReactNode; page: string }) => {
   const dispatch = useDispatch();
-  const { dapp, address, multisigContract } = useContext();
-  const { getBoardMembersCount, getProposersCount, getQuorumCount, getUserRole, getAllActions } = contractViews;
+  const { address } = useContext();
+  const { multisig } = useMultisig();
 
   React.useEffect(() => {
     if (address === null) {
@@ -17,11 +17,11 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
     }
 
     Promise.all([
-        getBoardMembersCount(dapp, multisigContract ?? ''),
-        getProposersCount(dapp, multisigContract ?? ''),
-        getQuorumCount(dapp, multisigContract ?? ''),
-        getUserRole(new Address(address).hex(), dapp, multisigContract ?? ''),
-        getAllActions(dapp, multisigContract ?? '')
+        multisig.getBoardMembersCount(),
+        multisig.getProposersCount(),
+        multisig.getQuorumCount(),
+        multisig.getUserRole(new Address(address).hex()),
+        multisig.getAllActions()
     ])
     .then(
       ([

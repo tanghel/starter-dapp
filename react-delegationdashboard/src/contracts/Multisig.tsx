@@ -10,20 +10,23 @@ import {
   HWProvider,
   Address,
   SmartContract,
+  Argument,
 } from '@elrondnetwork/erdjs';
 import { setItem } from '../storage/session';
 import { contractData } from '../config';
-import numberToRequestData from 'helpers/converters';
+import numberToRequestData, { parseActionFullDetails } from 'helpers/converters';
+import { Query } from '@elrondnetwork/erdjs/out/smartcontracts/query';
+import { DappState } from '../context/state';
 
 export default class Multisig {
+  dapp: DappState;
   contract: SmartContract;
-  proxyProvider: ProxyProvider;
   signerProvider?: IDappProvider;
 
-  constructor(provider: ProxyProvider, contract?: string, signer?: IDappProvider) {
+  constructor(dapp: DappState, contract?: string, signer?: IDappProvider) {
+    this.dapp = dapp;
     const address = new Address(contract);
     this.contract = new SmartContract({ address });
-    this.proxyProvider = provider;
     this.signerProvider = signer;
   }
 
@@ -45,6 +48,161 @@ export default class Multisig {
 
   proposeChangeQuorum(quorumSize: number) {
     return this.sendTransaction('0', 'proposeChangeQuorum', numberToRequestData(quorumSize));
+  }
+
+  async getAllActions() {
+    let result = await this.getPendingActionData();
+
+    let actions = [];
+    for (let returnData of result.returnData) {
+        let buffer = returnData.asBuffer;
+        
+        let action = parseActionFullDetails(buffer);
+        if (action !== null) {
+          actions.push(action);
+        }
+    }
+
+    return actions;
+  }
+
+  getBoardMembersCount() {
+    const query = new Query({
+      address: this.contract.getAddress(),
+      func: new ContractFunction('getNumBoardMembers'),
+      args: [],
+    });
+
+    return this.dapp.proxy.queryContract(query);
+  }
+
+  getProposersCount() {
+    const query = new Query({
+      address: this.contract.getAddress(),
+      func: new ContractFunction('getNumProposers'),
+      args: [],
+    });
+
+    return this.dapp.proxy.queryContract(query);
+  }
+
+  getQuorumCount() {
+    const query = new Query({
+      address: this.contract.getAddress(),
+      func: new ContractFunction('getQuorum'),
+      args: [],
+    });
+
+    return this.dapp.proxy.queryContract(query);
+  }
+
+  getActionLastId() {
+    const query = new Query({
+      address: this.contract.getAddress(),
+      func: new ContractFunction('getActionLastIndex'),
+      args: [],
+    });
+
+    return this.dapp.proxy.queryContract(query);
+  }
+
+  getActionData(actionId: number) {
+    const query = new Query({
+      address: this.contract.getAddress(),
+      func: new ContractFunction('getActionData'),
+      args: [Argument.fromNumber(actionId)],
+    });
+
+    return this.dapp.proxy.queryContract(query);
+  }
+
+  getPendingActionData() {
+    const query = new Query({
+      address: this.contract.getAddress(),
+      func: new ContractFunction('getPendingActionFullInfo'),
+      args: [],
+    });
+
+    return this.dapp.proxy.queryContract(query);
+  }
+
+  getUserRole(userAddress: string) {
+    const query = new Query({
+      address: this.contract.getAddress(),
+      func: new ContractFunction('userRole'),
+      args: [Argument.fromHex(userAddress)],
+    });
+
+    return this.dapp.proxy.queryContract(query);
+  }
+
+  getBoardMemberAddresses() {
+    const query = new Query({
+      address: this.contract.getAddress(),
+      func: new ContractFunction('getAllBoardMembers'),
+      args: [],
+    });
+
+    return this.dapp.proxy.queryContract(query);
+  }
+
+  getProposerAddresses() {
+    const query = new Query({
+      address: this.contract.getAddress(),
+      func: new ContractFunction('getAllProposers'),
+      args: [],
+    });
+
+    return this.dapp.proxy.queryContract(query);
+  }
+
+  getActionSignerAddresses(actionId: number) {
+    const query = new Query({
+      address: this.contract.getAddress(),
+      func: new ContractFunction('getActionSigners'),
+      args: [Argument.fromNumber(actionId)],
+    });
+
+    return this.dapp.proxy.queryContract(query);
+  }
+
+  getActionSignerCount(actionId: number) {
+    const query = new Query({
+      address: this.contract.getAddress(),
+      func: new ContractFunction('getActionSignerCount'),
+      args: [Argument.fromNumber(actionId)],
+    });
+    return this.dapp.proxy.queryContract(query);
+  }
+
+  getActionValidSignerCount(actionId: number) {
+    const query = new Query({
+      address: this.contract.getAddress(),
+      func: new ContractFunction('getActionValidSignerCount'),
+      args: [Argument.fromNumber(actionId)],
+    });
+
+    return this.dapp.proxy.queryContract(query);
+  }
+
+  getActionIsQuorumReached(actionId: number) {
+    const query = new Query({
+      address: this.contract.getAddress(),
+      func: new ContractFunction('quorumReached'),
+      args: [Argument.fromNumber(actionId)],
+    });
+
+    return this.dapp.proxy.queryContract(query);
+  }
+
+  getActionIsSignedByAddress(userAddress: string, actionId: number) {
+    const query = new Query({
+      address: this.contract.getAddress(),
+      func: new ContractFunction('signed'),
+      args: [Argument.fromHex(userAddress), Argument.fromNumber(actionId)],
+    });
+
+    return this.dapp.proxy.queryContract(query);
   }
 
   async sendTransaction(
