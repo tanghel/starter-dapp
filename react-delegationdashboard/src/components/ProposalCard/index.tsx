@@ -2,6 +2,7 @@ import { ProposalCardType, StatCardType } from 'helpers/types';
 import React from 'react';
 import { useContext } from 'context';
 import { useMultisig } from 'helpers';
+import { MultisigRemoveUser } from 'context/state';
 
 const ProposalCard = ({
   actionId = 0,
@@ -16,19 +17,19 @@ const ProposalCard = ({
   const { multisig } = useMultisig();
 
   let sign = () => {
-    multisig.sign(actionId);
+    multisig.mutateSign(actionId);
   };
 
   let unsign = () => {
-    multisig.unsign(actionId);
+    multisig.mutateUnsign(actionId);
   };
 
   let performAction = () => {
-    multisig.performAction(actionId);
+    multisig.mutatePerformAction(actionId);
   };
 
   let discardAction = () => {
-    multisig.discardAction(actionId);
+    multisig.mutateDiscardAction(actionId);
   };
 
   return (

@@ -18,11 +18,11 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
       userRole,
       allActions
     ] = await Promise.all([
-        multisig.getBoardMembersCount(),
-        multisig.getProposersCount(),
-        multisig.getQuorumCount(),
-        multisig.getUserRole(new Address(address).hex()),
-        multisig.getAllActions()
+        multisig.queryBoardMembersCount(),
+        multisig.queryProposersCount(),
+        multisig.queryQuorumCount(),
+        multisig.queryUserRole(new Address(address).hex()),
+        multisig.queryAllActions()
     ]);
 
     dispatch({
@@ -44,7 +44,7 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
       type: 'setUserRole',
       userRole: userRole
     });
-    
+
     dispatch({
       type: 'setAllActions',
       allActions: allActions

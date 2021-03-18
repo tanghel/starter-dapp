@@ -5,6 +5,8 @@ import Select from 'react-select';
 import ProposeChangeQuorum from './ProposeChangeQuorum';
 import ProposeInputAddressType from './ProposeInputAddress';
 import { useMultisig } from 'helpers';
+import { Address } from '@elrondnetwork/erdjs/out';
+import { MultisigRemoveUser } from 'context/state';
 
 interface ProposeModalType {
   show: boolean;
@@ -15,13 +17,14 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
   const { multisig } = useMultisig();
 
   const [selectedOption, setSelectedOption] = useState('');
-  const [selectedParams, setSelectedParams] = useState('');
+  const [selectedNumericParam, setSelectedNumericParam] = useState(0);
+  const [selectedAddressParam, setSelectedAddressParam] = useState(new Address());
 
   const options = [
-    { value: 'proposeChangeQuorum', label: 'Change quorum' },
-    { value: 'proposeAddProposer', label: 'Add proposer' },
-    { value: 'proposeAddBoardMember', label: 'Add board member' },
-    { value: 'proposeRemoveUser', label: 'Remove user' },
+    { value: 'change_quorum', label: 'Change quorum' },
+    { value: 'add_proposer', label: 'Add proposer' },
+    { value: 'add_board_member', label: 'Add board member' },
+    { value: 'remove_user', label: 'Remove user' },
   ];
 
   const handleOptionChange = (option: any, label: any) => {
@@ -29,11 +32,31 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
   };
 
   const onProposeClicked = () => {
-    multisig.sendTransaction('0', selectedOption, selectedParams);
+    switch (selectedOption) {
+      case 'change_quorum':
+        multisig.mutateProposeChangeQuorum(selectedNumericParam);
+        break;
+      case 'add_proposer':
+        multisig.mutateProposeAddProposer(selectedAddressParam);
+        break;
+      case 'add_board_member':
+        multisig.mutateProposeAddBoardMember(selectedAddressParam);
+        break;
+      case 'remove_user':
+        multisig.mutateProposeRemoveUser(selectedAddressParam);
+        break;
+      default:
+        console.error(`Unrecognized option ${selectedOption}`);
+        break;
+    }
   };
 
-  const handleParamsChange = (value: string) => {
-    setSelectedParams(value);
+  const handleNumericParamChange = (value: number) => {
+    setSelectedNumericParam(value);
+  };
+
+  const handleAddressParamChange = (value: Address) => {
+    setSelectedAddressParam(value);
   };
 
   return (
@@ -59,10 +82,10 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
           />
 
           <div className="p-spacer">
-          { selectedOption == 'proposeChangeQuorum' ?
-            <ProposeChangeQuorum handleParamsChange={handleParamsChange} /> : 
-            (selectedOption == 'proposeAddBoardMember' || selectedOption == 'proposeAddProposer' || selectedOption == 'proposeRemoveUser') ?
-            <ProposeInputAddressType handleParamsChange={handleParamsChange} /> :
+          { selectedOption == 'change_quorum' ?
+            <ProposeChangeQuorum handleParamsChange={handleNumericParamChange} /> : 
+            (selectedOption == 'add_proposer' || selectedOption == 'add_board_member' || selectedOption == 'remove_user') ?
+            <ProposeInputAddressType handleParamsChange={handleAddressParamChange} /> :
             
             <span></span>
           }

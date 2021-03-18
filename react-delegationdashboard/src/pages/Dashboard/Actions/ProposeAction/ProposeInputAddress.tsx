@@ -3,7 +3,7 @@ import { useContext } from 'context';
 import { Address } from '@elrondnetwork/erdjs/out';
 
 interface ProposeInputAddressType {
-  handleParamsChange: (params: string) => void;
+  handleParamsChange: (params: Address) => void;
 }
 
 const ProposeInputAddress = ({ handleParamsChange } : ProposeInputAddressType) => {
@@ -12,9 +12,7 @@ const ProposeInputAddress = ({ handleParamsChange } : ProposeInputAddressType) =
   const handleAddressChanged = (event: any) => {
     setAddress(event.target.value);
 
-    let address = new Address(event.target.value);
-
-    handleParamsChange(address.hex());
+    handleParamsChange(new Address(event.target.value));
   };
 
   return (

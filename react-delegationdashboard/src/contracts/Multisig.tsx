@@ -19,9 +19,9 @@ import { Query } from '@elrondnetwork/erdjs/out/smartcontracts/query';
 import { DappState } from '../context/state';
 
 export default class Multisig {
-  dapp: DappState;
-  contract: SmartContract;
-  signerProvider?: IDappProvider;
+  private dapp: DappState;
+  private contract: SmartContract;
+  private signerProvider?: IDappProvider;
 
   constructor(dapp: DappState, contract?: string, signer?: IDappProvider) {
     this.dapp = dapp;
@@ -30,89 +30,101 @@ export default class Multisig {
     this.signerProvider = signer;
   }
 
-  sign(actionId: number) {
+  mutateSign(actionId: number) {
     return this.sendTransaction('0', 'sign', numberToRequestData(actionId));
   }
 
-  unsign(actionId: number) {
+  mutateUnsign(actionId: number) {
     return this.sendTransaction('0', 'unsign', numberToRequestData(actionId));
   }
 
-  performAction(actionId: number) {
+  mutatePerformAction(actionId: number) {
     return this.sendTransaction('0', 'performAction', numberToRequestData(actionId));
   }
 
-  discardAction(actionId: number) {
+  mutateDiscardAction(actionId: number) {
     return this.sendTransaction('0', 'discardAction', numberToRequestData(actionId));
   }
 
-  proposeChangeQuorum(quorumSize: number) {
+  mutateProposeChangeQuorum(quorumSize: number) {
     return this.sendTransaction('0', 'proposeChangeQuorum', numberToRequestData(quorumSize));
   }
 
-  getAllActions() {
+  mutateProposeAddProposer(address: Address) {
+    return this.sendTransaction('0', 'proposeAddProposer', address.hex());
+  }
+
+  mutateProposeAddBoardMember(address: Address) {
+    return this.sendTransaction('0', 'proposeAddBoardMember', address.hex());
+  }
+
+  mutateProposeRemoveUser(address: Address) {
+    return this.sendTransaction('0', 'proposeRemoveUser', address.hex());
+  }
+
+  queryAllActions() {
     return this.queryActionArray('getPendingActionFullInfo');
   }
 
-  getBoardMembersCount() {
+  queryBoardMembersCount() {
     return this.queryNumber('getNumBoardMembers');
   }
 
-  getProposersCount() {
+  queryProposersCount() {
     return this.queryNumber('getNumProposers');
   }
 
-  getQuorumCount() {
+  queryQuorumCount() {
     return this.queryNumber('getQuorum');
   }
 
-  getActionLastId() {
+  queryActionLastId() {
     return this.queryNumber('getActionLastIndex');
   }
 
-  getActionData(actionId: number) {
+  queryActionData(actionId: number) {
     return this.query('getActionData', [Argument.fromNumber(actionId)]);
   }
 
-  getUserRole(userAddress: string) {
+  queryUserRole(userAddress: string) {
     return this.queryNumber('userRole', [Argument.fromHex(userAddress)]);
   }
 
-  getBoardMemberAddresses() {
+  queryBoardMemberAddresses() {
     return this.query('getAllBoardMembers');
   }
 
-  getProposerAddresses() {
+  queryProposerAddresses() {
     return this.query('getAllProposers');
   }
 
-  getActionSignerAddresses(actionId: number) {
+  queryActionSignerAddresses(actionId: number) {
     return this.query('getActionSigners', [Argument.fromNumber(actionId)]);
   }
 
-  getActionSignerCount(actionId: number) {
+  queryActionSignerCount(actionId: number) {
     return this.queryNumber('getActionSignerCount', [Argument.fromNumber(actionId)]);
   }
 
-  getActionValidSignerCount(actionId: number) {
+  queryActionValidSignerCount(actionId: number) {
     return this.queryNumber('getActionValidSignerCount', [Argument.fromNumber(actionId)]);
   }
 
-  getActionIsQuorumReached(actionId: number) {
+  queryActionIsQuorumReached(actionId: number) {
     return this.query('quorumReached', [Argument.fromNumber(actionId)]);
   }
 
-  getActionIsSignedByAddress(userAddress: string, actionId: number) {
+  queryActionIsSignedByAddress(userAddress: string, actionId: number) {
     return this.query('signed', [Argument.fromHex(userAddress), Argument.fromNumber(actionId)]);
   }
 
-  async queryNumber(functionName: string, args: Array<any> = []) {
+  private async queryNumber(functionName: string, args: Array<any> = []) {
     let result = await this.query(functionName, args);
 
     return result.returnData[0].asNumber;
   }
 
-  async queryActionArray(functionName: string, args: Array<any> = []) {
+  private async queryActionArray(functionName: string, args: Array<any> = []) {
     let result = await this.query(functionName, args);
 
     let actions = [];
@@ -128,7 +140,7 @@ export default class Multisig {
     return actions;
   }
 
-  async query(functionName: string, args: Array<any> = []) {
+  private async query(functionName: string, args: Array<any> = []) {
     const query = new Query({
       address: this.contract.getAddress(),
       func: new ContractFunction(functionName),
@@ -138,7 +150,7 @@ export default class Multisig {
     return await this.dapp.proxy.queryContract(query);
   }
 
-  async sendTransaction(
+  private async sendTransaction(
     value: string,
     transactionType: string,
     args: string = ''

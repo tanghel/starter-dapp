@@ -3,7 +3,7 @@ import { useContext } from 'context';
 import numberToRequestData from 'helpers/converters';
 
 interface ProposeChangeQuorumType {
-  handleParamsChange: (params: string) => void;
+  handleParamsChange: (params: number) => void;
 }
 
 const ProposeChangeQuorum = ({ handleParamsChange } : ProposeChangeQuorumType) => {
@@ -14,7 +14,7 @@ const ProposeChangeQuorum = ({ handleParamsChange } : ProposeChangeQuorumType) =
   const handleNewQuorumSizeChanged = (event: any) => {
     setNewQuorumSize(event.target.value);
 
-    handleParamsChange(numberToRequestData(event.target.value));
+    handleParamsChange(event.target.value);
   };
 
   useEffect(() => {
