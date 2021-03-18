@@ -28,7 +28,7 @@ export default class Multisig {
 
   async sendTransaction(
     value: string,
-    transcationType: string,
+    transactionType: string,
     args: string = ''
   ): Promise<boolean> {
     if (!this.signerProvider) {
@@ -41,9 +41,9 @@ export default class Multisig {
       case WalletProvider:
         // Can use something like this to handle callback redirect
         setItem('transaction_identifier', true, 120);
-        return this.sendTransactionBasedOnType(value, transcationType, args);
+        return this.sendTransactionBasedOnType(value, transactionType, args);
       case HWProvider:
-        return this.sendTransactionBasedOnType(value, transcationType, args);
+        return this.sendTransactionBasedOnType(value, transactionType, args);
       default:
         console.warn('invalid signerProvider');
     }
@@ -53,10 +53,10 @@ export default class Multisig {
 
   private async sendTransactionBasedOnType(
     value: string,
-    transcationType: string,
+    transactionType: string,
     args: string = ''
   ): Promise<boolean> {
-    let contract = contractData.find(d => d.name === transcationType);
+    let contract = contractData.find(d => d.name === transactionType);
     if (!contract) {
       throw new Error('The contract for this action in not defined');
     } else {
