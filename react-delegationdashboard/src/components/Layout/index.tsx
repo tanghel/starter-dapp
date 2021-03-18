@@ -33,19 +33,19 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
       ]) => {
         dispatch({
           type: 'setTotalBoardMembers',
-          totalBoardMembers: numBoardMembers.returnData[0].asNumber
+          totalBoardMembers: numBoardMembers
         });
         dispatch({
           type: 'setTotalProposers',
-          totalProposers: numProposers.returnData[0].asNumber
+          totalProposers: numProposers
         });
         dispatch({
           type: 'setQuorumSize',
-          quorumSize: quorum.returnData[0].asNumber
+          quorumSize: quorum
         }); 
         dispatch({
           type: 'setUserRole',
-          userRole: userRole.returnData[0].asNumber
+          userRole: userRole
         });
         dispatch({
           type: 'setAllActions',

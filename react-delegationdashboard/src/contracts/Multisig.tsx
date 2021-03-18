@@ -50,8 +50,70 @@ export default class Multisig {
     return this.sendTransaction('0', 'proposeChangeQuorum', numberToRequestData(quorumSize));
   }
 
-  async getAllActions() {
-    let result = await this.getPendingActionData();
+  getAllActions() {
+    return this.queryActionArray('getPendingActionFullInfo');
+  }
+
+  getBoardMembersCount() {
+    return this.queryNumber('getNumBoardMembers');
+  }
+
+  getProposersCount() {
+    return this.queryNumber('getNumProposers');
+  }
+
+  getQuorumCount() {
+    return this.queryNumber('getQuorum');
+  }
+
+  getActionLastId() {
+    return this.queryNumber('getActionLastIndex');
+  }
+
+  getActionData(actionId: number) {
+    return this.query('getActionData', [Argument.fromNumber(actionId)]);
+  }
+
+  getUserRole(userAddress: string) {
+    return this.queryNumber('userRole', [Argument.fromHex(userAddress)]);
+  }
+
+  getBoardMemberAddresses() {
+    return this.query('getAllBoardMembers');
+  }
+
+  getProposerAddresses() {
+    return this.query('getAllProposers');
+  }
+
+  getActionSignerAddresses(actionId: number) {
+    return this.query('getActionSigners', [Argument.fromNumber(actionId)]);
+  }
+
+  getActionSignerCount(actionId: number) {
+    return this.queryNumber('getActionSignerCount', [Argument.fromNumber(actionId)]);
+  }
+
+  getActionValidSignerCount(actionId: number) {
+    return this.queryNumber('getActionValidSignerCount', [Argument.fromNumber(actionId)]);
+  }
+
+  getActionIsQuorumReached(actionId: number) {
+    return this.query('quorumReached', [Argument.fromNumber(actionId)]);
+  }
+
+  getActionIsSignedByAddress(userAddress: string, actionId: number) {
+    return this.query('signed', [Argument.fromHex(userAddress), Argument.fromNumber(actionId)]);
+  }
+
+  async queryNumber(functionName: string, args: Array<any> = []) {
+    let result = await this.query(functionName, args);
+
+    return result.returnData[0].asNumber;
+  }
+
+  async queryActionArray(functionName: string, args: Array<any> = []) {
+    let result = await this.query(functionName, args);
 
     let actions = [];
     for (let returnData of result.returnData) {
@@ -66,143 +128,14 @@ export default class Multisig {
     return actions;
   }
 
-  getBoardMembersCount() {
+  async query(functionName: string, args: Array<any> = []) {
     const query = new Query({
       address: this.contract.getAddress(),
-      func: new ContractFunction('getNumBoardMembers'),
-      args: [],
+      func: new ContractFunction(functionName),
+      args: args,
     });
 
-    return this.dapp.proxy.queryContract(query);
-  }
-
-  getProposersCount() {
-    const query = new Query({
-      address: this.contract.getAddress(),
-      func: new ContractFunction('getNumProposers'),
-      args: [],
-    });
-
-    return this.dapp.proxy.queryContract(query);
-  }
-
-  getQuorumCount() {
-    const query = new Query({
-      address: this.contract.getAddress(),
-      func: new ContractFunction('getQuorum'),
-      args: [],
-    });
-
-    return this.dapp.proxy.queryContract(query);
-  }
-
-  getActionLastId() {
-    const query = new Query({
-      address: this.contract.getAddress(),
-      func: new ContractFunction('getActionLastIndex'),
-      args: [],
-    });
-
-    return this.dapp.proxy.queryContract(query);
-  }
-
-  getActionData(actionId: number) {
-    const query = new Query({
-      address: this.contract.getAddress(),
-      func: new ContractFunction('getActionData'),
-      args: [Argument.fromNumber(actionId)],
-    });
-
-    return this.dapp.proxy.queryContract(query);
-  }
-
-  getPendingActionData() {
-    const query = new Query({
-      address: this.contract.getAddress(),
-      func: new ContractFunction('getPendingActionFullInfo'),
-      args: [],
-    });
-
-    return this.dapp.proxy.queryContract(query);
-  }
-
-  getUserRole(userAddress: string) {
-    const query = new Query({
-      address: this.contract.getAddress(),
-      func: new ContractFunction('userRole'),
-      args: [Argument.fromHex(userAddress)],
-    });
-
-    return this.dapp.proxy.queryContract(query);
-  }
-
-  getBoardMemberAddresses() {
-    const query = new Query({
-      address: this.contract.getAddress(),
-      func: new ContractFunction('getAllBoardMembers'),
-      args: [],
-    });
-
-    return this.dapp.proxy.queryContract(query);
-  }
-
-  getProposerAddresses() {
-    const query = new Query({
-      address: this.contract.getAddress(),
-      func: new ContractFunction('getAllProposers'),
-      args: [],
-    });
-
-    return this.dapp.proxy.queryContract(query);
-  }
-
-  getActionSignerAddresses(actionId: number) {
-    const query = new Query({
-      address: this.contract.getAddress(),
-      func: new ContractFunction('getActionSigners'),
-      args: [Argument.fromNumber(actionId)],
-    });
-
-    return this.dapp.proxy.queryContract(query);
-  }
-
-  getActionSignerCount(actionId: number) {
-    const query = new Query({
-      address: this.contract.getAddress(),
-      func: new ContractFunction('getActionSignerCount'),
-      args: [Argument.fromNumber(actionId)],
-    });
-    return this.dapp.proxy.queryContract(query);
-  }
-
-  getActionValidSignerCount(actionId: number) {
-    const query = new Query({
-      address: this.contract.getAddress(),
-      func: new ContractFunction('getActionValidSignerCount'),
-      args: [Argument.fromNumber(actionId)],
-    });
-
-    return this.dapp.proxy.queryContract(query);
-  }
-
-  getActionIsQuorumReached(actionId: number) {
-    const query = new Query({
-      address: this.contract.getAddress(),
-      func: new ContractFunction('quorumReached'),
-      args: [Argument.fromNumber(actionId)],
-    });
-
-    return this.dapp.proxy.queryContract(query);
-  }
-
-  getActionIsSignedByAddress(userAddress: string, actionId: number) {
-    const query = new Query({
-      address: this.contract.getAddress(),
-      func: new ContractFunction('signed'),
-      args: [Argument.fromHex(userAddress), Argument.fromNumber(actionId)],
-    });
-
-    return this.dapp.proxy.queryContract(query);
+    return await this.dapp.proxy.queryContract(query);
   }
 
   async sendTransaction(
