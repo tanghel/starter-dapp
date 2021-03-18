@@ -14,7 +14,6 @@ const ProposeChangeQuorum = ({ handleParamsChange } : ProposeChangeQuorumType) =
   const handleNewQuorumSizeChanged = (event: any) => {
     setNewQuorumSize(event.target.value);
 
-    // handleParamsChange(`0${event.target.value.toString(16)}`);
     handleParamsChange(numberToRequestData(event.target.value));
   };
 

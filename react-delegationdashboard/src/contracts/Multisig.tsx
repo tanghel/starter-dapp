@@ -13,6 +13,7 @@ import {
 } from '@elrondnetwork/erdjs';
 import { setItem } from '../storage/session';
 import { contractData } from '../config';
+import numberToRequestData from 'helpers/converters';
 
 export default class Multisig {
   contract: SmartContract;
@@ -24,6 +25,26 @@ export default class Multisig {
     this.contract = new SmartContract({ address });
     this.proxyProvider = provider;
     this.signerProvider = signer;
+  }
+
+  sign(actionId: number) {
+    return this.sendTransaction('0', 'sign', numberToRequestData(actionId));
+  }
+
+  unsign(actionId: number) {
+    return this.sendTransaction('0', 'unsign', numberToRequestData(actionId));
+  }
+
+  performAction(actionId: number) {
+    return this.sendTransaction('0', 'performAction', numberToRequestData(actionId));
+  }
+
+  discardAction(actionId: number) {
+    return this.sendTransaction('0', 'discardAction', numberToRequestData(actionId));
+  }
+
+  proposeChangeQuorum(quorumSize: number) {
+    return this.sendTransaction('0', 'proposeChangeQuorum', numberToRequestData(quorumSize));
   }
 
   async sendTransaction(

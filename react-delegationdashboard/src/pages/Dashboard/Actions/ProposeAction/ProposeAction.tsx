@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Address } from '@elrondnetwork/erdjs/out';
-import { useContext } from 'context';
-import { useMultisig } from 'helpers';
 import ProposeModal from './ProposeModal';
 
 const ProposeAction = () => {

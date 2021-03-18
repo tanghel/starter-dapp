@@ -1,7 +1,7 @@
 import { ProposalCardType, StatCardType } from 'helpers/types';
 import React from 'react';
-import { contractAction } from '../../pages/Owner/Nodes/helpers/contractAction';
-import { useContext, useDispatch } from 'context';
+import { useContext } from 'context';
+import { useMultisig } from 'helpers';
 
 const ProposalCard = ({
   actionId = 0,
@@ -13,21 +13,22 @@ const ProposalCard = ({
   canDiscardAction = false
 }: ProposalCardType) => {
   const { dapp, multisigContract } = useContext();
+  const { multisig } = useMultisig();
 
   let sign = () => {
-    contractAction.sign(actionId, dapp, multisigContract);
+    multisig.sign(actionId);
   };
 
   let unsign = () => {
-    contractAction.unsign(actionId, dapp, multisigContract);
+    multisig.unsign(actionId);
   };
 
   let performAction = () => {
-    contractAction.performAction(actionId, dapp, multisigContract);
+    multisig.performAction(actionId);
   };
 
   let discardAction = () => {
-    contractAction.discardAction(actionId, dapp, multisigContract);
+    multisig.discardAction(actionId);
   };
 
   return (

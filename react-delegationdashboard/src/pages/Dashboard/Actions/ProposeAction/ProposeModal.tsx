@@ -3,8 +3,8 @@ import { Modal } from 'react-bootstrap';
 import { useContext } from 'context';
 import Select from 'react-select';
 import ProposeChangeQuorum from './ProposeChangeQuorum';
-import { Multisig } from 'contracts';
 import ProposeInputAddressType from './ProposeInputAddress';
+import { useMultisig } from 'helpers';
 
 interface ProposeModalType {
   show: boolean;
@@ -12,7 +12,7 @@ interface ProposeModalType {
 }
 
 const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
-  const { dapp, multisigContract } = useContext();
+  const { multisig } = useMultisig();
 
   const [selectedOption, setSelectedOption] = useState('');
   const [selectedParams, setSelectedParams] = useState('');
@@ -29,7 +29,6 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
   };
 
   const onProposeClicked = () => {
-    const multisig = new Multisig(dapp.proxy, multisigContract, dapp.provider);
     multisig.sendTransaction('0', selectedOption, selectedParams);
   };
 
