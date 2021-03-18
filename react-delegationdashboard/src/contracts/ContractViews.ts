@@ -1,6 +1,5 @@
 import { Address, ContractFunction, Argument } from '@elrondnetwork/erdjs/out';
 import { Query } from '@elrondnetwork/erdjs/out/smartcontracts/query';
-import { auctionContract } from 'config';
 import { DappState, MultisigActionContainer, MultisigActionType, MultisigAddBoardMember, MultisigAddProposer, MultisigChangeQuorum, MultisigRemoveUser } from '../context/state';
 
 export const contractViews = {
