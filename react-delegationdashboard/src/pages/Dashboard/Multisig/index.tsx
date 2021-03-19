@@ -4,8 +4,8 @@ import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import State from 'components/State';
 import ProposeAction from '../Actions/ProposeAction/ProposeAction';
 import ProposalCard from 'components/ProposalCard';
-import { MultisigActionDetailed, MultisigActionType } from 'context/state';
 import { Address } from '@elrondnetwork/erdjs/out';
+import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
 
 
 const MyMultisig = () => {

@@ -16,8 +16,10 @@ import { setItem } from '../storage/session';
 import { contractData } from '../config';
 import { parseAction, parseActionDetailed } from 'helpers/converters';
 import { Query } from '@elrondnetwork/erdjs/out/smartcontracts/query';
-import { DappState, MultisigAction, MultisigActionDetailed, MultisigActionType } from '../context/state';
+import { DappState } from '../context/state';
 import { BigUIntValue } from '@elrondnetwork/erdjs/out/smartcontracts/typesystem';
+import { MultisigAction } from 'types/MultisigAction';
+import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
 
 export default class Multisig {
   private dapp: DappState;

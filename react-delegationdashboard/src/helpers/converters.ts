@@ -1,8 +1,14 @@
 import { Address } from '@elrondnetwork/erdjs/out';
 import { NumericalBinaryCodec } from '@elrondnetwork/erdjs/out/smartcontracts/codec/numerical';
 import { BigUIntType, NumericalType, NumericalValue, U32Type } from '@elrondnetwork/erdjs/out/smartcontracts/typesystem';
-import { MultisigAction, MultisigActionDetailed, MultisigActionType, MultisigAddBoardMember, MultisigAddProposerDetailed, MultisigChangeQuorumDetailed, MultisigRemoveUserDetailed, MultisigSendEgldDetailed } from 'context/state';
-
+import { MultisigAction } from 'types/MultisigAction';
+import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
+import { MultisigActionType } from 'types/MultisigActionType';
+import { MultisigAddBoardMember } from 'types/MultisigAddBoardMember';
+import { MultisigAddProposerDetailed } from 'types/MultisigAddProposerDetailed';
+import { MultisigChangeQuorumDetailed } from 'types/MultisigChangeQuorumDetailed';
+import { MultisigRemoveUserDetailed } from 'types/MultisigRemoveUserDetailed';
+import { MultisigSendEgldDetailed } from 'types/MultisigSendEgldDetailed';
 
 export function parseAction(buffer: Buffer): [MultisigAction | null, Buffer] {
     let actionTypeByte = buffer.slice(0, 1)[0];
