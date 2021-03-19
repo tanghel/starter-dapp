@@ -5,8 +5,8 @@ import { MultisigActionType } from './MultisigActionType';
 export class MultisigAddProposer extends MultisigAction {
   address: Address;
 
-  constructor(type: MultisigActionType, address: Address) {
-      super(type);
+  constructor(address: Address) {
+      super(MultisigActionType.AddProposer);
       this.address = address;
   }
 

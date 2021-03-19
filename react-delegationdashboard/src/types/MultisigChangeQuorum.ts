@@ -4,8 +4,8 @@ import { MultisigActionType } from './MultisigActionType';
 export class MultisigChangeQuorum extends MultisigAction {
     newSize: number;
   
-    constructor(type: MultisigActionType, newSize: number) { 
-        super(type);
+    constructor(newSize: number) { 
+        super(MultisigActionType.ChangeQuorum);
         this.newSize = newSize;
     }
   

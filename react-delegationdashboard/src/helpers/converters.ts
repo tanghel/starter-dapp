@@ -18,19 +18,19 @@ export function parseAction(buffer: Buffer): [MultisigAction | null, Buffer] {
 
     switch (actionTypeByte) {
       case MultisigActionType.AddBoardMember:
-        action = new MultisigAddBoardMember(actionTypeByte, new Address(remainingBytes.slice(0, 32)));
+        action = new MultisigAddBoardMember(new Address(remainingBytes.slice(0, 32)));
         remainingBytes = remainingBytes.slice(32);
         break;
       case MultisigActionType.AddProposer:
-        action = new MultisigAddProposer(actionTypeByte, new Address(remainingBytes.slice(0, 32)));
+        action = new MultisigAddProposer(new Address(remainingBytes.slice(0, 32)));
         remainingBytes = remainingBytes.slice(32);
         break;
       case MultisigActionType.RemoveUser:
-        action = new MultisigRemoveUser(actionTypeByte, new Address(remainingBytes.slice(0, 32)));
+        action = new MultisigRemoveUser(new Address(remainingBytes.slice(0, 32)));
         remainingBytes = remainingBytes.slice(32);
         break;
       case MultisigActionType.ChangeQuorum:
-        action = new MultisigChangeQuorum(actionTypeByte, getIntValueFromBytes(remainingBytes.slice(0, 4)));
+        action = new MultisigChangeQuorum(getIntValueFromBytes(remainingBytes.slice(0, 4)));
         remainingBytes = remainingBytes.slice(4);
         break;
       case MultisigActionType.SendEgld:
@@ -54,7 +54,7 @@ export function parseAction(buffer: Buffer): [MultisigAction | null, Buffer] {
         
         let data = dataBytes.toString();
 
-        action = new MultisigSendEgld(actionTypeByte, targetAddress, amount, data);
+        action = new MultisigSendEgld(targetAddress, amount, data);
         break;
       default:
         action = null;
