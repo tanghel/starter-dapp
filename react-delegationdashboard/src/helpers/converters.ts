@@ -5,10 +5,10 @@ import { MultisigAction } from 'types/MultisigAction';
 import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
 import { MultisigActionType } from 'types/MultisigActionType';
 import { MultisigAddBoardMember } from 'types/MultisigAddBoardMember';
-import { MultisigAddProposerDetailed } from 'types/MultisigAddProposerDetailed';
-import { MultisigChangeQuorumDetailed } from 'types/MultisigChangeQuorumDetailed';
-import { MultisigRemoveUserDetailed } from 'types/MultisigRemoveUserDetailed';
-import { MultisigSendEgldDetailed } from 'types/MultisigSendEgldDetailed';
+import { MultisigAddProposer } from 'types/MultisigAddProposer';
+import { MultisigChangeQuorum } from 'types/MultisigChangeQuorum';
+import { MultisigRemoveUser } from 'types/MultisigRemoveUser';
+import { MultisigSendEgld } from 'types/MultisigSendEgld';
 
 export function parseAction(buffer: Buffer): [MultisigAction | null, Buffer] {
     let actionTypeByte = buffer.slice(0, 1)[0];
@@ -22,15 +22,15 @@ export function parseAction(buffer: Buffer): [MultisigAction | null, Buffer] {
         remainingBytes = remainingBytes.slice(32);
         break;
       case MultisigActionType.AddProposer:
-        action = new MultisigAddProposerDetailed(actionTypeByte, new Address(remainingBytes.slice(0, 32)));
+        action = new MultisigAddProposer(actionTypeByte, new Address(remainingBytes.slice(0, 32)));
         remainingBytes = remainingBytes.slice(32);
         break;
       case MultisigActionType.RemoveUser:
-        action = new MultisigRemoveUserDetailed(actionTypeByte, new Address(remainingBytes.slice(0, 32)));
+        action = new MultisigRemoveUser(actionTypeByte, new Address(remainingBytes.slice(0, 32)));
         remainingBytes = remainingBytes.slice(32);
         break;
       case MultisigActionType.ChangeQuorum:
-        action = new MultisigChangeQuorumDetailed(actionTypeByte, getIntValueFromBytes(remainingBytes.slice(0, 4)));
+        action = new MultisigChangeQuorum(actionTypeByte, getIntValueFromBytes(remainingBytes.slice(0, 4)));
         remainingBytes = remainingBytes.slice(4);
         break;
       case MultisigActionType.SendEgld:
@@ -54,7 +54,7 @@ export function parseAction(buffer: Buffer): [MultisigAction | null, Buffer] {
         
         let data = dataBytes.toString();
 
-        action = new MultisigSendEgldDetailed(actionTypeByte, targetAddress, amount, data);
+        action = new MultisigSendEgld(actionTypeByte, targetAddress, amount, data);
         break;
       default:
         action = null;

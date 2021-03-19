@@ -3,7 +3,7 @@ import { BigUIntValue } from '@elrondnetwork/erdjs/out/smartcontracts/typesystem
 import { MultisigAction } from './MultisigAction';
 import { MultisigActionType } from './MultisigActionType';
 
-export class MultisigSendEgldDetailed extends MultisigAction {
+export class MultisigSendEgld extends MultisigAction {
     address: Address;
     amount: BigUIntValue;
     data: string;

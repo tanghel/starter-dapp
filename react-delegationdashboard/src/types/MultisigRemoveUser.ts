@@ -2,7 +2,7 @@ import { Address } from '@elrondnetwork/erdjs/out';
 import { MultisigAction } from './MultisigAction';
 import { MultisigActionType } from './MultisigActionType';
 
-export class MultisigRemoveUserDetailed extends MultisigAction {
+export class MultisigRemoveUser extends MultisigAction {
     address: Address;
   
     constructor(type: MultisigActionType, address: Address) {

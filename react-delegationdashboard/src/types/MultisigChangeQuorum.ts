@@ -1,7 +1,7 @@
 import { MultisigAction } from './MultisigAction';
 import { MultisigActionType } from './MultisigActionType';
 
-export class MultisigChangeQuorumDetailed extends MultisigAction {
+export class MultisigChangeQuorum extends MultisigAction {
     newSize: number;
   
     constructor(type: MultisigActionType, newSize: number) { 
