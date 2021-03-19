@@ -30,14 +30,3 @@ export interface ActionModalType {
   handleClose: () => void;
   handleContinue: (value: string) => void;
 }
-
-
-export interface ProposalCardType {
-  actionId?: number;
-  title?: string;
-  value?: string;
-  canSign?: boolean;
-  canUnsign?: boolean;
-  canPerformAction?: boolean;
-  canDiscardAction?: boolean;
-}

@@ -9,7 +9,7 @@ import { Address } from '@elrondnetwork/erdjs/out';
 
 
 const MyMultisig = () => {
-  const { address, quorumSize, loading, allActions } = useContext();
+  const { address, quorumSize, loading, allActions, userRole } = useContext();
 
   const alreadySigned = (action: MultisigActionDetailed) => {
     let typedAddress = new Address(address);
@@ -22,20 +22,28 @@ const MyMultisig = () => {
     return false;
   };
 
+  const isProposer = () => {
+    return userRole !== 0;
+  };
+
+  const isBoardMember = () => {
+    return userRole === 2;
+  };
+
   const canSign = (action: MultisigActionDetailed) => {
-    return !alreadySigned(action);
+    return isBoardMember() && !alreadySigned(action);
   };
 
   const canUnsign = (action: MultisigActionDetailed) => {
-    return alreadySigned(action);
+    return isBoardMember() && alreadySigned(action);
   };
 
   const canPerformAction = (action: MultisigActionDetailed) => {
-    return alreadySigned(action) && action.signers.length >= quorumSize;
+    return isBoardMember() && alreadySigned(action) && action.signers.length >= quorumSize;
   };
 
   const canDiscardAction = (action: MultisigActionDetailed) => {
-    return action.signers.length === 0;
+    return isBoardMember() && action.signers.length === 0;
   };
 
   return (
@@ -46,9 +54,11 @@ const MyMultisig = () => {
         <div className="card mt-spacer">
           <div className="card-body p-spacer">
             <div className="d-flex flex-wrap align-items-center justify-content-between">
-              <p className="h6 mb-3">My proposals</p>
+              <p className="h6 mb-3">Proposals</p>
               <div className="d-flex flex-wrap">
-                <ProposeAction />
+                { isProposer() ? 
+                  <ProposeAction /> : null
+              }
               </div>
             </div>
 
@@ -63,7 +73,8 @@ const MyMultisig = () => {
                   canUnsign={canUnsign(action)}
                   canPerformAction={canPerformAction(action)}
                   canDiscardAction={canDiscardAction(action)}
-                  />
+                  signers={action.signers}
+                />
               )
             }
             

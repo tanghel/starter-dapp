@@ -1,31 +1,58 @@
 import { Address } from '@elrondnetwork/erdjs/out';
-import { MultisigAction, MultisigActionDetailed, MultisigActionType, MultisigAddBoardMember, MultisigAddProposerDetailed, MultisigChangeQuorumDetailed, MultisigRemoveUserDetailed } from 'context/state';
+import { NumericalBinaryCodec } from '@elrondnetwork/erdjs/out/smartcontracts/codec/numerical';
+import { BigUIntType, NumericalType, NumericalValue, U32Type } from '@elrondnetwork/erdjs/out/smartcontracts/typesystem';
+import { MultisigAction, MultisigActionDetailed, MultisigActionType, MultisigAddBoardMember, MultisigAddProposerDetailed, MultisigChangeQuorumDetailed, MultisigRemoveUserDetailed, MultisigSendEgldDetailed } from 'context/state';
+
 
 export function parseAction(buffer: Buffer): [MultisigAction | null, Buffer] {
     let actionTypeByte = buffer.slice(0, 1)[0];
 
-    let action: MultisigAction;
+    let action: MultisigAction | null;
     let remainingBytes = buffer.slice(1);
 
     switch (actionTypeByte) {
       case MultisigActionType.AddBoardMember:
-          action = new MultisigAddBoardMember(actionTypeByte, new Address(remainingBytes.slice(0, 32)));
-          remainingBytes = remainingBytes.slice(32);
-          break;
+        action = new MultisigAddBoardMember(actionTypeByte, new Address(remainingBytes.slice(0, 32)));
+        remainingBytes = remainingBytes.slice(32);
+        break;
       case MultisigActionType.AddProposer:
-          action = new MultisigAddProposerDetailed(actionTypeByte, new Address(remainingBytes.slice(0, 32)));
-          remainingBytes = remainingBytes.slice(32);
-          break;
+        action = new MultisigAddProposerDetailed(actionTypeByte, new Address(remainingBytes.slice(0, 32)));
+        remainingBytes = remainingBytes.slice(32);
+        break;
       case MultisigActionType.RemoveUser:
-          action = new MultisigRemoveUserDetailed(actionTypeByte, new Address(remainingBytes.slice(0, 32)));
-          remainingBytes = remainingBytes.slice(32);
-          break;
+        action = new MultisigRemoveUserDetailed(actionTypeByte, new Address(remainingBytes.slice(0, 32)));
+        remainingBytes = remainingBytes.slice(32);
+        break;
       case MultisigActionType.ChangeQuorum:
-          action = new MultisigChangeQuorumDetailed(actionTypeByte, getIntValueFromBytes(remainingBytes.slice(0, 4)));
-          remainingBytes = remainingBytes.slice(4);
-          break;
+        action = new MultisigChangeQuorumDetailed(actionTypeByte, getIntValueFromBytes(remainingBytes.slice(0, 4)));
+        remainingBytes = remainingBytes.slice(4);
+        break;
+      case MultisigActionType.SendEgld:
+        let targetAddress = new Address(remainingBytes.slice(0, 32));
+        remainingBytes = remainingBytes.slice(32);
+
+        let amountSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
+        remainingBytes = remainingBytes.slice(4);
+
+        let amountBytes = remainingBytes.slice(0, amountSize);
+        remainingBytes = remainingBytes.slice(amountSize);
+
+        let codec = new NumericalBinaryCodec();
+        let amount = codec.decodeTopLevel(amountBytes, BigUIntType.One);
+
+        let dataSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
+        remainingBytes = remainingBytes.slice(4);
+
+        let dataBytes = remainingBytes.slice(0, dataSize);
+        remainingBytes = remainingBytes.slice(dataSize);
+        
+        let data = dataBytes.toString();
+
+        action = new MultisigSendEgldDetailed(actionTypeByte, targetAddress, amount, data);
+        break;
       default:
-          return [null, remainingBytes];
+        action = null;
+        break;
     }
 
     return [action, remainingBytes];

@@ -1,6 +1,19 @@
-import { ProposalCardType, StatCardType } from 'helpers/types';
+import { StatCardType } from 'helpers/types';
 import React from 'react';
 import { useMultisig } from 'helpers';
+import { useContext } from 'context';
+import { Address } from '@elrondnetwork/erdjs/out';
+
+export interface ProposalCardType {
+  actionId?: number;
+  title?: string;
+  value?: string;
+  canSign?: boolean;
+  canUnsign?: boolean;
+  canPerformAction?: boolean;
+  canDiscardAction?: boolean;
+  signers: Address[];
+}
 
 const ProposalCard = ({
   actionId = 0,
@@ -9,9 +22,11 @@ const ProposalCard = ({
   canSign = false,
   canUnsign = false,
   canPerformAction = false,
-  canDiscardAction = false
+  canDiscardAction = false,
+  signers = []
 }: ProposalCardType) => {
   const { multisig } = useMultisig();
+  const { quorumSize } = useContext();
 
   let sign = () => {
     multisig.mutateSign(actionId);
@@ -38,7 +53,7 @@ const ProposalCard = ({
       </div>
       <div className="d-flex flex-wrap align-items-center justify-content-between">
           <div>
-            <span className="opacity-6">{title}</span>
+            <span className="opacity-6">{title} ({signers.length} / {quorumSize})</span>
             <p className="h5 mb-0">
                 {value}
             </p>
