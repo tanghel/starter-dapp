@@ -1,14 +1,6 @@
 import { Address } from '@elrondnetwork/erdjs/out';
 import { MultisigAction, MultisigActionDetailed, MultisigActionType, MultisigAddBoardMember, MultisigAddProposerDetailed, MultisigChangeQuorumDetailed, MultisigRemoveUserDetailed } from 'context/state';
 
-export default function numberToRequestData(value: number) {
-    if (value < 16) {
-        return '0' + value.toString(16);
-    }
-
-    return value.toString(16);
-};
-
 export function parseAction(buffer: Buffer): [MultisigAction | null, Buffer] {
     let actionTypeByte = buffer.slice(0, 1)[0];
 

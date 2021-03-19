@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useContext } from 'context';
-import numberToRequestData from 'helpers/converters';
 
 interface ProposeChangeQuorumType {
   handleParamsChange: (params: number) => void;

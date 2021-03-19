@@ -14,7 +14,7 @@ import {
 } from '@elrondnetwork/erdjs';
 import { setItem } from '../storage/session';
 import { contractData } from '../config';
-import numberToRequestData, { parseAction, parseActionDetailed } from 'helpers/converters';
+import { parseAction, parseActionDetailed } from 'helpers/converters';
 import { Query } from '@elrondnetwork/erdjs/out/smartcontracts/query';
 import { DappState, MultisigAction, MultisigActionDetailed, MultisigActionType } from '../context/state';
 
@@ -31,35 +31,35 @@ export default class Multisig {
   }
 
   mutateSign(actionId: number) {
-    return this.sendTransaction('0', 'sign', numberToRequestData(actionId));
+    return this.sendTransaction('0', 'sign', Argument.fromNumber(actionId).valueOf());
   }
 
   mutateUnsign(actionId: number) {
-    return this.sendTransaction('0', 'unsign', numberToRequestData(actionId));
+    return this.sendTransaction('0', 'unsign', Argument.fromNumber(actionId).valueOf());
   }
 
   mutatePerformAction(actionId: number) {
-    return this.sendTransaction('0', 'performAction', numberToRequestData(actionId));
+    return this.sendTransaction('0', 'performAction', Argument.fromNumber(actionId).valueOf());
   }
 
   mutateDiscardAction(actionId: number) {
-    return this.sendTransaction('0', 'discardAction', numberToRequestData(actionId));
+    return this.sendTransaction('0', 'discardAction', Argument.fromNumber(actionId).valueOf());
   }
 
   mutateProposeChangeQuorum(quorumSize: number) {
-    return this.sendTransaction('0', 'proposeChangeQuorum', numberToRequestData(quorumSize));
+    return this.sendTransaction('0', 'proposeChangeQuorum', Argument.fromNumber(quorumSize).valueOf());
   }
 
   mutateProposeAddProposer(address: Address) {
-    return this.sendTransaction('0', 'proposeAddProposer', address.hex());
+    return this.sendTransaction('0', 'proposeAddProposer', Argument.fromHex(address.hex()).valueOf());
   }
 
   mutateProposeAddBoardMember(address: Address) {
-    return this.sendTransaction('0', 'proposeAddBoardMember', address.hex());
+    return this.sendTransaction('0', 'proposeAddBoardMember', Argument.fromHex(address.hex()).valueOf());
   }
 
   mutateProposeRemoveUser(address: Address) {
-    return this.sendTransaction('0', 'proposeRemoveUser', address.hex());
+    return this.sendTransaction('0', 'proposeRemoveUser', Argument.fromHex(address.hex()).valueOf());
   }
 
   queryAllActions(): Promise<MultisigActionDetailed[]> {
