@@ -6,7 +6,8 @@ import ProposeInputAddressType from './ProposeInputAddress';
 import { useMultisig } from 'helpers';
 import { Address, Balance } from '@elrondnetwork/erdjs/out';
 import ProposeSendEgld from './ProposeSendEgld';
-import { BigUIntValue } from '@elrondnetwork/erdjs/out/smartcontracts/typesystem';
+import { MultisigSendEgld } from 'types/MultisigSendEgld';
+import { MultisigAction } from 'types/MultisigAction';
 
 interface ProposeModalType {
   show: boolean;
@@ -19,7 +20,7 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
   const [selectedOption, setSelectedOption] = useState('');
   const [selectedNumericParam, setSelectedNumericParam] = useState(0);
   const [selectedAddressParam, setSelectedAddressParam] = useState(new Address());
-  const [selectedStringParam, setSelectedStringParam] = useState('');
+  const [selectedProposal, setSelectedProposal] = useState<MultisigAction | null>(null);
 
   const options = [
     { value: 'change_quorum', label: 'Change quorum' },
@@ -30,10 +31,16 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
   ];
 
   const handleOptionChange = (option: any, label: any) => {
+    setSelectedProposal(null);
+
     setSelectedOption(option.value.toString());
   };
 
   const onProposeClicked = () => {
+    if (selectedProposal instanceof MultisigSendEgld) {
+      multisig.mutateSendEgld(selectedProposal.address, selectedProposal.amount, selectedProposal.data);
+    }
+
     switch (selectedOption) {
       case 'change_quorum':
         multisig.mutateProposeChangeQuorum(selectedNumericParam);
@@ -46,9 +53,6 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
         break;
       case 'remove_user':
         multisig.mutateProposeRemoveUser(selectedAddressParam);
-        break;
-      case 'send_egld':
-        multisig.mutateSendEgld(selectedAddressParam, new BigUIntValue(Balance.eGLD(selectedNumericParam).valueOf()), selectedStringParam);
         break;
       default:
         console.error(`Unrecognized option ${selectedOption}`);
@@ -64,8 +68,8 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
     setSelectedAddressParam(value);
   };
 
-  const handleStringParamChange = (value: string) => {
-    setSelectedStringParam(value);
+  const handleProposalChange = (proposal: MultisigAction) => {
+    setSelectedProposal(proposal);
   };
 
   return (
@@ -96,7 +100,7 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
             (selectedOption == 'add_proposer' || selectedOption == 'add_board_member' || selectedOption == 'remove_user') ?
             <ProposeInputAddressType handleParamsChange={handleAddressParamChange} /> :
             (selectedOption == 'send_egld') ?
-            <ProposeSendEgld handleAddressChange={handleAddressParamChange} handleAmountChange={handleNumericParamChange} handleDataChange={handleStringParamChange} /> : 
+            <ProposeSendEgld handleChange={handleProposalChange} /> : 
             null
           }
           </div>
