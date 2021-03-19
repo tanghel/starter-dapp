@@ -4,7 +4,9 @@ import Select from 'react-select';
 import ProposeChangeQuorum from './ProposeChangeQuorum';
 import ProposeInputAddressType from './ProposeInputAddress';
 import { useMultisig } from 'helpers';
-import { Address } from '@elrondnetwork/erdjs/out';
+import { Address, Balance } from '@elrondnetwork/erdjs/out';
+import ProposeSendEgld from './ProposeSendEgld';
+import { BigUIntValue } from '@elrondnetwork/erdjs/out/smartcontracts/typesystem';
 
 interface ProposeModalType {
   show: boolean;
@@ -17,12 +19,14 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
   const [selectedOption, setSelectedOption] = useState('');
   const [selectedNumericParam, setSelectedNumericParam] = useState(0);
   const [selectedAddressParam, setSelectedAddressParam] = useState(new Address());
+  const [selectedStringParam, setSelectedStringParam] = useState('');
 
   const options = [
     { value: 'change_quorum', label: 'Change quorum' },
     { value: 'add_proposer', label: 'Add proposer' },
     { value: 'add_board_member', label: 'Add board member' },
     { value: 'remove_user', label: 'Remove user' },
+    { value: 'send_egld', label: 'Send Egld' },
   ];
 
   const handleOptionChange = (option: any, label: any) => {
@@ -43,6 +47,9 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
       case 'remove_user':
         multisig.mutateProposeRemoveUser(selectedAddressParam);
         break;
+      case 'send_egld':
+        multisig.mutateSendEgld(selectedAddressParam, new BigUIntValue(Balance.eGLD(selectedNumericParam).valueOf()), selectedStringParam);
+        break;
       default:
         console.error(`Unrecognized option ${selectedOption}`);
         break;
@@ -55,6 +62,10 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
 
   const handleAddressParamChange = (value: Address) => {
     setSelectedAddressParam(value);
+  };
+
+  const handleStringParamChange = (value: string) => {
+    setSelectedStringParam(value);
   };
 
   return (
@@ -83,7 +94,10 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
           { selectedOption == 'change_quorum' ?
             <ProposeChangeQuorum handleParamsChange={handleNumericParamChange} /> : 
             (selectedOption == 'add_proposer' || selectedOption == 'add_board_member' || selectedOption == 'remove_user') ?
-            <ProposeInputAddressType handleParamsChange={handleAddressParamChange} /> : null
+            <ProposeInputAddressType handleParamsChange={handleAddressParamChange} /> :
+            (selectedOption == 'send_egld') ?
+            <ProposeSendEgld handleAddressChange={handleAddressParamChange} handleAmountChange={handleNumericParamChange} handleDataChange={handleStringParamChange} /> : 
+            null
           }
           </div>
 

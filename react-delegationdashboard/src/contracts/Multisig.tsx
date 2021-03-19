@@ -17,6 +17,7 @@ import { contractData } from '../config';
 import { parseAction, parseActionDetailed } from 'helpers/converters';
 import { Query } from '@elrondnetwork/erdjs/out/smartcontracts/query';
 import { DappState, MultisigAction, MultisigActionDetailed, MultisigActionType } from '../context/state';
+import { BigUIntValue } from '@elrondnetwork/erdjs/out/smartcontracts/typesystem';
 
 export default class Multisig {
   private dapp: DappState;
@@ -60,6 +61,14 @@ export default class Multisig {
 
   mutateProposeRemoveUser(address: Address) {
     return this.sendTransaction('0', 'proposeRemoveUser', Argument.fromHex(address.hex()).valueOf());
+  }
+
+  mutateSendEgld(address: Address, amount: BigUIntValue, data: string) {
+    let addressEncoded = Argument.fromHex(address.hex()).valueOf();
+    let amountEncoded = Argument.fromBigInt(amount.valueOf()).valueOf();
+    let dataEncoded = Argument.fromBytes(Buffer.from(data)).valueOf();
+
+    return this.sendTransaction('0', 'proposeSendEgld', `${addressEncoded}@${amountEncoded}@${dataEncoded}`);
   }
 
   queryAllActions(): Promise<MultisigActionDetailed[]> {
