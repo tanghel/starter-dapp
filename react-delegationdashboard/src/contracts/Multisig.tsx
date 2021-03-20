@@ -14,7 +14,7 @@ import {
 } from '@elrondnetwork/erdjs';
 import { setItem } from '../storage/session';
 import { contractData } from '../config';
-import { parseAction, parseActionDetailed } from 'helpers/converters';
+import { getBytesFromIntValue, parseAction, parseActionDetailed, getBytesFromHexString } from 'helpers/converters';
 import { Query } from '@elrondnetwork/erdjs/out/smartcontracts/query';
 import { DappState } from '../context/state';
 import { BigUIntValue } from '@elrondnetwork/erdjs/out/smartcontracts/typesystem';
@@ -75,49 +75,66 @@ export default class Multisig {
     return this.sendTransaction('0', 'proposeSendEgld', `${addressEncoded}@${amountEncoded}@${dataEncoded}`);
   }
 
+  mutateSmartContractCall(address: Address, amount: BigUIntValue, endpointName: string, args: Argument[]) {
+    let addressEncoded = Argument.fromHex(address.hex()).valueOf();
+    let amountEncoded = Argument.fromBigInt(amount.valueOf()).valueOf();
+    let endpointNameEncoded = Argument.fromUTF8(endpointName).valueOf();
+
+    let data = `${addressEncoded}@${amountEncoded}@${endpointNameEncoded}`;
+
+    for (let arg of args) {
+      data += '@' + arg.valueOf();
+    }
+
+    return this.sendTransaction('0', 'proposeSCCall', data);
+  }
+
   mutateIssueToken(proposal: MultisigIssueToken) {
     let esdtAddress = new Address('erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u');
     let esdtAmount = new BigUIntValue(Balance.eGLD(5).valueOf());
 
-    console.log({decimals: proposal.decimals});
-    console.log({mintAmount: proposal.amount * Math.pow(10, proposal.decimals)});
+    let args = [];
+    args.push(Argument.fromUTF8(proposal.name));
+    args.push(Argument.fromUTF8(proposal.identifier));
+    args.push(Argument.fromNumber(proposal.amount * Math.pow(10, proposal.decimals)));
+    args.push(Argument.fromNumber(proposal.decimals));
 
-    let name = Argument.fromUTF8(proposal.name).valueOf();
-    let identifier = Argument.fromUTF8(proposal.identifier).valueOf();
-    let mintAmount = Argument.fromNumber(proposal.amount * Math.pow(10, proposal.decimals)).valueOf();
-    let decimals = Argument.fromNumber(proposal.decimals).valueOf();
-
-    let extras = '';
     if (proposal.canFreeze) {
-      extras += `@${Argument.fromUTF8('canFreeze').valueOf()}@${Argument.fromUTF8('true').valueOf()}`;
+      args.push(Argument.fromUTF8('canFreeze'));
+      args.push(Argument.fromUTF8('true'));
     }
 
     if (proposal.canWipe) {
-      extras += `@${Argument.fromUTF8('canWipe').valueOf()}@${Argument.fromUTF8('true').valueOf()}`;
+      args.push(Argument.fromUTF8('canWipe'));
+      args.push(Argument.fromUTF8('true'));
     }
 
     if (proposal.canPause) {
-      extras += `@${Argument.fromUTF8('canPause').valueOf()}@${Argument.fromUTF8('true').valueOf()}`;
+      args.push(Argument.fromUTF8('canPause'));
+      args.push(Argument.fromUTF8('true'));
     }
 
     if (proposal.canMint) {
-      extras += `@${Argument.fromUTF8('canMint').valueOf()}@${Argument.fromUTF8('true').valueOf()}`;
+      args.push(Argument.fromUTF8('canMint'));
+      args.push(Argument.fromUTF8('true'));
     }
 
     if (proposal.canBurn) {
-      extras += `@${Argument.fromUTF8('canBurn').valueOf()}@${Argument.fromUTF8('true').valueOf()}`;
+      args.push(Argument.fromUTF8('canBurn'));
+      args.push(Argument.fromUTF8('true'));
     }
 
     if (proposal.canChangeOwner) {
-      extras += `@${Argument.fromUTF8('canChangeOwner').valueOf()}@${Argument.fromUTF8('true').valueOf()}`;
+      args.push(Argument.fromUTF8('canChangeOwner'));
+      args.push(Argument.fromUTF8('true'));
     }
 
     if (proposal.canUpgrade) {
-      extras += `@${Argument.fromUTF8('canUpgrade').valueOf()}@${Argument.fromUTF8('true').valueOf()}`;
+      args.push(Argument.fromUTF8('canUpgrade'));
+      args.push(Argument.fromUTF8('true'));
     }
 
-    let data = `issue@${name}@${identifier}@${mintAmount}@${decimals}${extras}`;
-    this.mutateSendEgld(esdtAddress, esdtAmount, data);
+    this.mutateSmartContractCall(esdtAddress, esdtAmount, 'issue', args);
   }
 
   queryAllActions(): Promise<MultisigActionDetailed[]> {
