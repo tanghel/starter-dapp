@@ -10,6 +10,8 @@ import { MultisigSendEgld } from 'types/MultisigSendEgld';
 import { MultisigAction } from 'types/MultisigAction';
 import { MultisigIssueToken } from 'types/MultisigIssueToken';
 import ProposeIssueToken from './ProposeIssueToken';
+import { MultisigSendToken } from 'types/MultisigSendToken';
+import ProposeSendToken from './ProposeSendToken';
 
 interface ProposeModalType {
   show: boolean;
@@ -31,6 +33,7 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
     { value: 'remove_user', label: 'Remove user' },
     { value: 'send_egld', label: 'Send Egld' },
     { value: 'issue_token', label: 'Issue Token' },
+    { value: 'send_token', label: 'Send Token' },
   ];
 
   const handleOptionChange = (option: any, label: any) => {
@@ -44,7 +47,10 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
       multisig.mutateSendEgld(selectedProposal.address, selectedProposal.amount, selectedProposal.data);
       return;
     } else if (selectedProposal instanceof MultisigIssueToken) {
-      multisig.mutateIssueToken(selectedProposal as MultisigIssueToken);
+      multisig.mutateEsdtIssueToken(selectedProposal as MultisigIssueToken);
+      return;
+    } else if (selectedProposal instanceof MultisigSendToken) {
+      multisig.mutateEsdtSendToken(selectedProposal as MultisigSendToken);
       return;
     }
 
@@ -110,6 +116,8 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
             <ProposeSendEgld handleChange={handleProposalChange} /> : 
             (selectedOption == 'issue_token') ?
             <ProposeIssueToken handleChange={handleProposalChange} /> :
+            (selectedOption == 'send_token') ?
+            <ProposeSendToken handleChange={handleProposalChange} /> :
             null
           }
           </div>

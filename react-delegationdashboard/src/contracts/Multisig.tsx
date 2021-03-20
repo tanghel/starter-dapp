@@ -22,6 +22,7 @@ import { MultisigAction } from 'types/MultisigAction';
 import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
 import { MultisigIssueToken } from 'types/MultisigIssueToken';
 import { settings } from 'node:cluster';
+import { MultisigSendToken } from 'types/MultisigSendToken';
 
 export default class Multisig {
   private dapp: DappState;
@@ -89,7 +90,11 @@ export default class Multisig {
     return this.sendTransaction('0', 'proposeSCCall', data);
   }
 
-  mutateIssueToken(proposal: MultisigIssueToken) {
+  mutateEsdtSendToken(proposal: MultisigSendToken) {
+    this.mutateSmartContractCall(proposal.address, new BigUIntValue(BigInt(0)), 'ESDTTransfer', [ Argument.fromUTF8(proposal.identifier), Argument.fromNumber(proposal.amount) ]);
+  }
+
+  mutateEsdtIssueToken(proposal: MultisigIssueToken) {
     let esdtAddress = new Address('erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u');
     let esdtAmount = new BigUIntValue(Balance.eGLD(5).valueOf());
 
