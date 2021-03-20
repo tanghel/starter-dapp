@@ -8,6 +8,8 @@ import { Address, Balance } from '@elrondnetwork/erdjs/out';
 import ProposeSendEgld from './ProposeSendEgld';
 import { MultisigSendEgld } from 'types/MultisigSendEgld';
 import { MultisigAction } from 'types/MultisigAction';
+import { MultisigIssueToken } from 'types/MultisigIssueToken';
+import ProposeIssueToken from './ProposeIssueToken';
 
 interface ProposeModalType {
   show: boolean;
@@ -28,6 +30,7 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
     { value: 'add_board_member', label: 'Add board member' },
     { value: 'remove_user', label: 'Remove user' },
     { value: 'send_egld', label: 'Send Egld' },
+    { value: 'issue_token', label: 'Issue Token' },
   ];
 
   const handleOptionChange = (option: any, label: any) => {
@@ -39,6 +42,10 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
   const onProposeClicked = () => {
     if (selectedProposal instanceof MultisigSendEgld) {
       multisig.mutateSendEgld(selectedProposal.address, selectedProposal.amount, selectedProposal.data);
+      return;
+    } else if (selectedProposal instanceof MultisigIssueToken) {
+      multisig.mutateIssueToken(selectedProposal as MultisigIssueToken);
+      return;
     }
 
     switch (selectedOption) {
@@ -101,6 +108,8 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
             <ProposeInputAddressType handleParamsChange={handleAddressParamChange} /> :
             (selectedOption == 'send_egld') ?
             <ProposeSendEgld handleChange={handleProposalChange} /> : 
+            (selectedOption == 'issue_token') ?
+            <ProposeIssueToken handleChange={handleProposalChange} /> :
             null
           }
           </div>

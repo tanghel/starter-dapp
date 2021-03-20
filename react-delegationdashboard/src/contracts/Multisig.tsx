@@ -20,6 +20,8 @@ import { DappState } from '../context/state';
 import { BigUIntValue } from '@elrondnetwork/erdjs/out/smartcontracts/typesystem';
 import { MultisigAction } from 'types/MultisigAction';
 import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
+import { MultisigIssueToken } from 'types/MultisigIssueToken';
+import { settings } from 'node:cluster';
 
 export default class Multisig {
   private dapp: DappState;
@@ -71,6 +73,51 @@ export default class Multisig {
     let dataEncoded = Argument.fromBytes(Buffer.from(data)).valueOf();
 
     return this.sendTransaction('0', 'proposeSendEgld', `${addressEncoded}@${amountEncoded}@${dataEncoded}`);
+  }
+
+  mutateIssueToken(proposal: MultisigIssueToken) {
+    let esdtAddress = new Address('erd1qqqqqqqqqqqqqqqpqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqzllls8a5w6u');
+    let esdtAmount = new BigUIntValue(Balance.eGLD(5).valueOf());
+
+    console.log({decimals: proposal.decimals});
+    console.log({mintAmount: proposal.amount * Math.pow(10, proposal.decimals)});
+
+    let name = Argument.fromUTF8(proposal.name).valueOf();
+    let identifier = Argument.fromUTF8(proposal.identifier).valueOf();
+    let mintAmount = Argument.fromNumber(proposal.amount * Math.pow(10, proposal.decimals)).valueOf();
+    let decimals = Argument.fromNumber(proposal.decimals).valueOf();
+
+    let extras = '';
+    if (proposal.canFreeze) {
+      extras += `@${Argument.fromUTF8('canFreeze').valueOf()}@${Argument.fromUTF8('true').valueOf()}`;
+    }
+
+    if (proposal.canWipe) {
+      extras += `@${Argument.fromUTF8('canWipe').valueOf()}@${Argument.fromUTF8('true').valueOf()}`;
+    }
+
+    if (proposal.canPause) {
+      extras += `@${Argument.fromUTF8('canPause').valueOf()}@${Argument.fromUTF8('true').valueOf()}`;
+    }
+
+    if (proposal.canMint) {
+      extras += `@${Argument.fromUTF8('canMint').valueOf()}@${Argument.fromUTF8('true').valueOf()}`;
+    }
+
+    if (proposal.canBurn) {
+      extras += `@${Argument.fromUTF8('canBurn').valueOf()}@${Argument.fromUTF8('true').valueOf()}`;
+    }
+
+    if (proposal.canChangeOwner) {
+      extras += `@${Argument.fromUTF8('canChangeOwner').valueOf()}@${Argument.fromUTF8('true').valueOf()}`;
+    }
+
+    if (proposal.canUpgrade) {
+      extras += `@${Argument.fromUTF8('canUpgrade').valueOf()}@${Argument.fromUTF8('true').valueOf()}`;
+    }
+
+    let data = `issue@${name}@${identifier}@${mintAmount}@${decimals}${extras}`;
+    this.mutateSendEgld(esdtAddress, esdtAmount, data);
   }
 
   queryAllActions(): Promise<MultisigActionDetailed[]> {
