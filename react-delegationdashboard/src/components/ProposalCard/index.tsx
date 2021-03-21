@@ -60,19 +60,19 @@ const ProposalCard = ({
           </div>
           <div>
             { canSign &&
-                <button onClick={sign} className="btn btn-primary mb-3">Sign</button>
+                <button onClick={sign} className="btn btn-primary mb-3 mr-2">Sign</button>
             }
 
             { canUnsign &&
-                <button onClick={unsign} className="btn btn-primary mb-3">Unsign</button>
+                <button onClick={unsign} className="btn btn-primary mb-3 mr-2">Unsign</button>
             }  
 
             { canPerformAction &&
-                <button onClick={performAction} className="btn btn-primary mb-3">Perform action</button>
+                <button onClick={performAction} className="btn btn-primary mb-3 mr-2">Perform action</button>
             }  
 
             { canDiscardAction &&
-                <button onClick={discardAction} className="btn btn-primary mb-3">Discard action</button>
+                <button onClick={discardAction} className="btn btn-primary mb-3 mr-2">Discard action</button>
             }  
           </div>
       </div>
