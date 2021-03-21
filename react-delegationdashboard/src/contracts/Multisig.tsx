@@ -1,5 +1,4 @@
 import {
-  ProxyProvider,
   ContractFunction,
   Transaction,
   TransactionPayload,
@@ -12,22 +11,21 @@ import {
   SmartContract,
   Argument,
 } from '@elrondnetwork/erdjs';
-import { setItem } from '../storage/session';
-import { contractData } from '../config';
-import { getBytesFromIntValue, parseAction, parseActionDetailed, getBytesFromHexString } from 'helpers/converters';
+
+import { parseAction, parseActionDetailed } from 'helpers/converters';
 import { Query } from '@elrondnetwork/erdjs/out/smartcontracts/query';
 import { DappState } from '../context/state';
 import { BigUIntValue } from '@elrondnetwork/erdjs/out/smartcontracts/typesystem';
 import { MultisigAction } from 'types/MultisigAction';
 import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
 import { MultisigIssueToken } from 'types/MultisigIssueToken';
-import { settings } from 'node:cluster';
 import { MultisigSendToken } from 'types/MultisigSendToken';
 
-export default class Multisig {
+export class Multisig {
   private dapp: DappState;
   private contract: SmartContract;
   private signerProvider?: IDappProvider;
+  private standardGasLimit = 120000000;
 
   constructor(dapp: DappState, contract?: string, signer?: IDappProvider) {
     this.dapp = dapp;
@@ -37,57 +35,46 @@ export default class Multisig {
   }
 
   mutateSign(actionId: number) {
-    return this.sendTransaction('0', 'sign', Argument.fromNumber(actionId).valueOf());
+    return this.sendTransaction(0, 'sign', Argument.fromNumber(actionId));
   }
 
   mutateUnsign(actionId: number) {
-    return this.sendTransaction('0', 'unsign', Argument.fromNumber(actionId).valueOf());
+    return this.sendTransaction(0, 'unsign', Argument.fromNumber(actionId));
   }
 
   mutatePerformAction(actionId: number) {
-    return this.sendTransaction('0', 'performAction', Argument.fromNumber(actionId).valueOf());
+    return this.sendTransaction(0, 'performAction', Argument.fromNumber(actionId));
   }
 
   mutateDiscardAction(actionId: number) {
-    return this.sendTransaction('0', 'discardAction', Argument.fromNumber(actionId).valueOf());
+    return this.sendTransaction(0, 'discardAction', Argument.fromNumber(actionId));
   }
 
   mutateProposeChangeQuorum(quorumSize: number) {
-    return this.sendTransaction('0', 'proposeChangeQuorum', Argument.fromNumber(quorumSize).valueOf());
+    return this.sendTransaction(0, 'proposeChangeQuorum', Argument.fromNumber(quorumSize));
   }
 
   mutateProposeAddProposer(address: Address) {
-    return this.sendTransaction('0', 'proposeAddProposer', Argument.fromHex(address.hex()).valueOf());
+    return this.sendTransaction(0, 'proposeAddProposer', Argument.fromHex(address.hex()));
   }
 
   mutateProposeAddBoardMember(address: Address) {
-    return this.sendTransaction('0', 'proposeAddBoardMember', Argument.fromHex(address.hex()).valueOf());
+    return this.sendTransaction(0, 'proposeAddBoardMember', Argument.fromHex(address.hex()));
   }
 
   mutateProposeRemoveUser(address: Address) {
-    return this.sendTransaction('0', 'proposeRemoveUser', Argument.fromHex(address.hex()).valueOf());
+    return this.sendTransaction(0, 'proposeRemoveUser', Argument.fromHex(address.hex()));
   }
 
   mutateSendEgld(address: Address, amount: BigUIntValue, data: string) {
-    let addressEncoded = Argument.fromHex(address.hex()).valueOf();
-    let amountEncoded = Argument.fromBigInt(amount.valueOf()).valueOf();
-    let dataEncoded = Argument.fromBytes(Buffer.from(data)).valueOf();
-
-    return this.sendTransaction('0', 'proposeSendEgld', `${addressEncoded}@${amountEncoded}@${dataEncoded}`);
+    return this.sendTransaction(0, 'proposeSendEgld', Argument.fromPubkey(address), Argument.fromBigInt(BigInt(amount)), Argument.fromBytes(Buffer.from(data)));
   }
 
   mutateSmartContractCall(address: Address, amount: BigUIntValue, endpointName: string, args: Argument[]) {
-    let addressEncoded = Argument.fromHex(address.hex()).valueOf();
-    let amountEncoded = Argument.fromBigInt(amount.valueOf()).valueOf();
-    let endpointNameEncoded = Argument.fromUTF8(endpointName).valueOf();
+    let allArgs = [ Argument.fromPubkey(address), Argument.fromBigInt(amount.valueOf()), Argument.fromUTF8(endpointName) ];
+    allArgs.push(...args);
 
-    let data = `${addressEncoded}@${amountEncoded}@${endpointNameEncoded}`;
-
-    for (let arg of args) {
-      data += '@' + arg.valueOf();
-    }
-
-    return this.sendTransaction('0', 'proposeSCCall', data);
+    return this.sendTransaction(0, 'proposeSCCall', ...allArgs);
   }
 
   mutateEsdtSendToken(proposal: MultisigSendToken) {
@@ -254,9 +241,9 @@ export default class Multisig {
   }
 
   private async sendTransaction(
-    value: string,
-    transactionType: string,
-    args: string = ''
+    value: number,
+    functionName: string,
+    ...args: Argument[]
   ): Promise<boolean> {
     if (!this.signerProvider) {
       throw new Error(
@@ -266,11 +253,9 @@ export default class Multisig {
 
     switch (this.signerProvider.constructor) {
       case WalletProvider:
-        // Can use something like this to handle callback redirect
-        setItem('transaction_identifier', true, 120);
-        return this.sendTransactionBasedOnType(value, transactionType, args);
+        return this.sendTransactionBasedOnType(value, functionName, ...args);
       case HWProvider:
-        return this.sendTransactionBasedOnType(value, transactionType, args);
+        return this.sendTransactionBasedOnType(value, functionName, ...args);
       default:
         console.warn('invalid signerProvider');
     }
@@ -279,33 +264,27 @@ export default class Multisig {
   }
 
   private async sendTransactionBasedOnType(
-    value: string,
-    transactionType: string,
-    args: string = ''
+    value: number,
+    functionName: string,
+    ...args: Argument[]
   ): Promise<boolean> {
-    let contract = contractData.find(d => d.name === transactionType);
-    if (!contract) {
-      throw new Error('The contract for this action in not defined');
-    } else {
-      let funcName = contract.data;
-      if (args !== '') {
-        funcName = `${contract.data}${args}`;
-      }
-      const func = new ContractFunction(funcName);
-      let payload = TransactionPayload.contractCall()
-        .setFunction(func)
-        .build();
-      let transaction = new Transaction({
-        receiver: this.contract.getAddress(),
-        value: Balance.eGLD(value),
-        gasLimit: new GasLimit(contract.gasLimit),
-        data: payload,
-      });
+    const func = new ContractFunction(functionName);
 
-      // @ts-ignore
-      await this.signerProvider.sendTransaction(transaction);
+    let payload = TransactionPayload.contractCall()
+      .setFunction(func)
+      .setArgs(args)
+      .build();
 
-      return true;
-    }
+    let transaction = new Transaction({
+      receiver: this.contract.getAddress(),
+      value: Balance.eGLD(value),
+      gasLimit: new GasLimit(this.standardGasLimit),
+      data: payload,
+    });
+
+    // @ts-ignore
+    await this.signerProvider.sendTransaction(transaction);
+
+    return true;
   }
 }

@@ -1,4 +1,4 @@
-import { Address, Argument } from '@elrondnetwork/erdjs/out';
+import { Address, Argument, Nonce } from '@elrondnetwork/erdjs/out';
 import { NumericalBinaryCodec } from '@elrondnetwork/erdjs/out/smartcontracts/codec/numerical';
 import { BigUIntType, NumericalType, NumericalValue, U32Type } from '@elrondnetwork/erdjs/out/smartcontracts/typesystem';
 import { MultisigAction } from 'types/MultisigAction';
@@ -10,6 +10,7 @@ import { MultisigChangeQuorum } from 'types/MultisigChangeQuorum';
 import { MultisigRemoveUser } from 'types/MultisigRemoveUser';
 import { MultisigSendEgld } from 'types/MultisigSendEgld';
 import { MultisigSmartContractCall } from 'types/MultisigSmartContractCall';
+const createKeccakHash = require('keccak');
 
 export function parseAction(buffer: Buffer): [MultisigAction | null, Buffer] {
     let actionTypeByte = buffer.slice(0, 1)[0];
@@ -167,7 +168,7 @@ export function getBytesFromHexString(hex: string) {
   return Buffer.from(bytes);
 };
 
-export function getBytesFromIntValue(value: number) {
+export function get32BitBufferFromNumber(value: number) {
   let paddedBuffer = Buffer.alloc(4);
   let encodedValue = Argument.fromNumber(value).valueOf();
 
@@ -175,4 +176,42 @@ export function getBytesFromIntValue(value: number) {
   let concatenatedBuffer = Buffer.concat([paddedBuffer, encodedBuffer]);
   let result = concatenatedBuffer.slice(-4);
   return result;
+};
+
+export function get64BitBufferFromBigIntBE(value: BigInt) {
+  let paddedBuffer = Buffer.alloc(8);
+  let encodedValue = Argument.fromBigInt(value).valueOf();
+
+  let encodedBuffer = getBytesFromHexString(encodedValue.toString());
+  let concatenatedBuffer = Buffer.concat([paddedBuffer, encodedBuffer]);
+  let result = concatenatedBuffer.slice(-8);
+  return result;
+};
+
+export function get64BitBufferFromBigIntLE(value: BigInt) {
+  let paddedBuffer = Buffer.alloc(8);
+  let encodedValue = Argument.fromBigInt(value).valueOf();
+
+  let encodedBuffer = getBytesFromHexString(encodedValue.toString()).reverse();
+  let concatenatedBuffer = Buffer.concat([encodedBuffer, paddedBuffer]);
+  let result = concatenatedBuffer.slice(0, 8);
+  return result;
+};
+
+export function computeSmartContractAddress(owner: Address, nonce: Nonce) {
+  let initialPadding = Buffer.alloc(8, 0);
+  let ownerPubkey = owner.pubkey();
+  let shardSelector = ownerPubkey.slice(30);
+  let ownerNonceBytes = get64BitBufferFromBigIntLE(BigInt(nonce.valueOf()));
+  let bytesToHash = Buffer.concat([ownerPubkey, ownerNonceBytes]);
+  let hash = createKeccakHash('keccak256').update(bytesToHash).digest();
+  let vmTypeBytes = Buffer.from('0500', 'hex');
+  let addressBytes = Buffer.concat([
+      initialPadding,
+      vmTypeBytes,
+      hash.slice(10, 30),
+      shardSelector
+  ]);
+  let address = new Address(addressBytes);
+  return address;
 };
