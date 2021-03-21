@@ -4,20 +4,20 @@
   "private": true,
   "dependencies": {
     "@elrondnetwork/erdjs": "^2.3.0",
-    "@fortawesome/fontawesome-svg-core": "^1.2.34",
-    "@fortawesome/free-solid-svg-icons": "^5.15.2",
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.12",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "@types/jest": "^24.0.0",
-    "@types/react": "^16.14.4",
+    "@types/react": "^16.14.5",
     "@types/react-dom": "^16.9.11",
     "@types/react-router-dom": "^5.1.6",
     "bignumber.js": "^9.0.1",
     "bootstrap": "^4.6.0",
     "formik": "^2.2.6",
-    "immer": "^8.0.1",
+    "immer": "^8.0.4",
     "moment": "^2.29.1",
     "node-sass": "^4.0.0",
     "react": "^16.13.1",
@@ -57,17 +57,17 @@
     ]
   },
   "devDependencies": {
-    "@types/node": "^14.14.31",
+    "@types/node": "^14.14.35",
     "@types/react-select": "^4.0.13",
-    "@typescript-eslint/eslint-plugin": "^4.16.1",
-    "@typescript-eslint/parser": "^4.16.1",
-    "eslint": "^7.21.0",
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "@typescript-eslint/parser": "^4.18.0",
+    "eslint": "^7.22.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.3.1",
     "eslint-plugin-react": "^7.22.0",
-    "react-select": "^4.2.1",
-    "typescript": "^4.2.2"
+    "react-select": "^4.3.0",
+    "typescript": "^4.2.3"
   }
 }
