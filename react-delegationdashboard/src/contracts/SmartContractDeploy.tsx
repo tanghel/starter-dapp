@@ -11,7 +11,6 @@ import {
   SmartContract,
   Argument,
 } from '@elrondnetwork/erdjs';
-import { multisigContractCode } from 'config';
 import { useContext } from 'context';
 
 import { DappState } from '../context/state';
@@ -27,10 +26,6 @@ export class SmartContractDeploy {
     this.address = address;
     this.contract = new SmartContract({ address: new Address(contract) });
     this.signerProvider = signer;
-  }
-
-  public async deploy() {
-    this.sendTransaction(0, multisigContractCode, Argument.fromNumber(1280), Argument.fromNumber(256), Argument.fromNumber(1), Argument.fromPubkey(this.address));
   }
 
   private async sendTransaction(
