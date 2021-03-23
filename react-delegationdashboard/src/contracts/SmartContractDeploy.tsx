@@ -11,21 +11,58 @@ import {
   SmartContract,
   Argument,
 } from '@elrondnetwork/erdjs';
-import { useContext } from 'context';
+import { Query } from '@elrondnetwork/erdjs/out/smartcontracts/query';
+import { parseContractInfo } from 'helpers/converters';
+import { MultisigContractInfo } from 'types/MultisigContractInfo';
 
 import { DappState } from '../context/state';
 
 export class SmartContractDeploy {
-
   private address: Address;
+  private dapp: DappState;
   private contract: SmartContract;
   private signerProvider?: IDappProvider;
   private standardGasLimit = 120000000;
 
   constructor(dapp: DappState, contract: string, signer: IDappProvider, address: Address) {
-    this.address = address;
+    this.dapp = dapp;
     this.contract = new SmartContract({ address: new Address(contract) });
     this.signerProvider = signer;
+    this.address = address;
+  }
+
+  public async mutateDeploy(name: string, quorum: number, boardMembers: Address[]) {
+    this.sendTransaction(0, 'deployContract', Argument.fromUTF8(name), Argument.fromNumber(quorum), ...boardMembers.map(x => Argument.fromPubkey(x)));
+  }
+
+  private async queryMultisigContractInfoArray(functionName: string, ...args: Argument[]): Promise<MultisigContractInfo[]> {
+    let result = await this.query(functionName, ...args);
+
+    let contractInfos = [];
+    for (let returnData of result.returnData) {
+        let buffer = returnData.asBuffer;
+        
+        let contractInfo = parseContractInfo(buffer);
+        if (contractInfo !== null) {
+          contractInfos.push(contractInfo);
+        }
+    }
+
+    return contractInfos;
+  }
+
+  public async queryContracts() {
+    return this.queryMultisigContractInfoArray('getMultisigContracts', Argument.fromPubkey(this.address));
+  }
+
+  private async query(functionName: string, ...args: Argument[]) {
+    const query = new Query({
+      address: this.contract.getAddress(),
+      func: new ContractFunction(functionName),
+      args: args,
+    });
+
+    return await this.dapp.proxy.queryContract(query);
   }
 
   private async sendTransaction(
@@ -41,9 +78,9 @@ export class SmartContractDeploy {
 
     switch (this.signerProvider.constructor) {
       case WalletProvider:
-        return this.sendTransactionBasedOnType2(value, functionName, ...args);
+        return this.sendTransactionBasedOnType(value, functionName, ...args);
       case HWProvider:
-        return this.sendTransactionBasedOnType2(value, functionName, ...args);
+        return this.sendTransactionBasedOnType(value, functionName, ...args);
       default:
         console.warn('invalid signerProvider');
     }
@@ -51,7 +88,7 @@ export class SmartContractDeploy {
     return true;
   }
 
-  private async sendTransactionBasedOnType2(
+  private async sendTransactionBasedOnType(
     value: number,
     functionName: string,
     ...args: Argument[]

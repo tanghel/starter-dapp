@@ -7,6 +7,7 @@ import { MultisigActionType } from 'types/MultisigActionType';
 import { MultisigAddBoardMember } from 'types/MultisigAddBoardMember';
 import { MultisigAddProposer } from 'types/MultisigAddProposer';
 import { MultisigChangeQuorum } from 'types/MultisigChangeQuorum';
+import { MultisigContractInfo } from 'types/MultisigContractInfo';
 import { MultisigRemoveUser } from 'types/MultisigRemoveUser';
 import { MultisigSendEgld } from 'types/MultisigSendEgld';
 import { MultisigSmartContractCall } from 'types/MultisigSmartContractCall';
@@ -131,28 +132,46 @@ function parseSmartContractCall(remainingBytes: Buffer): [ MultisigAction | null
 }
 
 export function parseActionDetailed(buffer: Buffer): MultisigActionDetailed | null {
-    let actionId = getIntValueFromBytes(buffer.slice(0, 4));
-    let actionBytes = buffer.slice(4);
+  let actionId = getIntValueFromBytes(buffer.slice(0, 4));
+  let actionBytes = buffer.slice(4);
 
-    let [action, remainingBytes] = parseAction(actionBytes);
-    if (action === null) {
-        return null;
-    }
-
-    let signerCount = getIntValueFromBytes(remainingBytes.slice(0, 4));
-    remainingBytes = remainingBytes.slice(4);
-    
-    let signers = [];
-    for (let i = 0; i < signerCount; i++) {
-        let addressBytes = remainingBytes.slice(0, 32);
-        let address = new Address(addressBytes);
-        remainingBytes = remainingBytes.slice(32);
-
-        signers.push(address);
-    }
-
-    return new MultisigActionDetailed(action, actionId, signers);
+  let [action, remainingBytes] = parseAction(actionBytes);
+  if (action === null) {
+      return null;
   }
+
+  let signerCount = getIntValueFromBytes(remainingBytes.slice(0, 4));
+  remainingBytes = remainingBytes.slice(4);
+  
+  let signers = [];
+  for (let i = 0; i < signerCount; i++) {
+      let addressBytes = remainingBytes.slice(0, 32);
+      let address = new Address(addressBytes);
+      remainingBytes = remainingBytes.slice(32);
+
+      signers.push(address);
+  }
+
+  return new MultisigActionDetailed(action, actionId, signers);
+}
+
+export function parseContractInfo(buffer: Buffer): MultisigContractInfo | null {
+  let remainingBytes = buffer;
+
+  let addressBytes = remainingBytes.slice(0, 32);
+  let address = new Address(addressBytes);
+  remainingBytes = remainingBytes.slice(32);
+  
+  let nameSize = getIntValueFromBytes(remainingBytes.slice(0, 4));
+  remainingBytes = remainingBytes.slice(4);
+
+  let nameBytes = remainingBytes.slice(0, nameSize);
+  let name = nameBytes.toString();
+  remainingBytes = remainingBytes.slice(nameSize);
+
+  let contractInfo = new MultisigContractInfo(address, name);
+  return contractInfo;
+}
 
 export function getIntValueFromBytes(buffer: Buffer) {
   return ((buffer[buffer.length - 1]) | 

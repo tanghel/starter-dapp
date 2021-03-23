@@ -14,7 +14,7 @@ export const networks: NetworkType[] = [
     gatewayAddress: 'https://gateway.elrond.com',
     explorerAddress: 'http://explorer.elrond.com/',
     multisigContract: 'erd1qqqqqqqqqqqqqpgq8sxvjujwsa9865sw94tltgzvjpkyw7averms6qkjj7',
-    multisigManagerContract: 'erd1qqqqqqqqqqqqqpgqgjkfhle2387cehy3hwan3hwx5pvs2kywerms9tpuhp',
+    multisigManagerContract: 'erd1qqqqqqqqqqqqqpgqh7hl7t5cy0g4td0mv8hp950qtumnagamermsx0aep5',
   },
 ];
 
