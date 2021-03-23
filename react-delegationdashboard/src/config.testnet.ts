@@ -12,7 +12,8 @@ export const network: NetworkType = {
   apiAddress: 'https://testnet-api.elrond.com',
   gatewayAddress: 'https://testnet-gateway.elrond.com',
   explorerAddress: 'http://testnet-explorer.elrond.com/',
-  multisigContract: 'erd1qqqqqqqqqqqqqpgq8sxvjujwsa9865sw94tltgzvjpkyw7averms6qkjj7'
+  multisigContract: 'erd1qqqqqqqqqqqqqpgq8sxvjujwsa9865sw94tltgzvjpkyw7averms6qkjj7',
+  multisigManagerContract: 'erd1qqqqqqqqqqqqqpgqgjkfhle2387cehy3hwan3hwx5pvs2kywerms9tpuhp',
 };
 
 const networkSchema = object({
@@ -29,7 +30,8 @@ const networkSchema = object({
   apiAddress: string(),
   gatewayAddress: string(),
   explorerAddress: string(),
-  multisigContract: string()
+  multisigContract: string(),
+  multisigManagerContract: string(),
 }).required();
 
 export type NetworkType = InferType<typeof networkSchema>;

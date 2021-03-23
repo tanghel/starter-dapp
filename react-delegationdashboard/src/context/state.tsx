@@ -13,6 +13,7 @@ export const defaultNetwork: NetworkType = {
   gatewayAddress: '',
   explorerAddress: '',
   multisigContract: '',
+  multisigManagerContract: '',
 };
 
 export interface DappState {
@@ -33,6 +34,7 @@ export interface StateType {
   account: AccountType;
   explorerAddress: string;
   multisigContract?: string;
+  multisigManagerContract?: string;
   contractOverview: ContractOverview;
   totalBoardMembers: number;
   totalProposers: number;
@@ -77,6 +79,7 @@ export const initialState = () => {
     egldLabel: sessionNetwork?.egldLabel,
     explorerAddress: sessionNetwork.explorerAddress || 'https://explorer.elrond.com',
     multisigContract: sessionNetwork.multisigContract,
+    multisigManagerContract: sessionNetwork.multisigManagerContract,
     contractOverview: emptyContractOverview,
     totalBoardMembers: 0,
     totalProposers: 0,
