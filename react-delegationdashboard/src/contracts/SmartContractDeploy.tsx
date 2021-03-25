@@ -31,8 +31,8 @@ export class SmartContractDeploy {
     this.address = address;
   }
 
-  public async mutateDeploy(name: string, quorum: number, boardMembers: Address[]) {
-    this.sendTransaction(0, 'deployContract', Argument.fromUTF8(name), Argument.fromNumber(quorum), ...boardMembers.map(x => Argument.fromPubkey(x)));
+  public async mutateDeploy(quorum: number, boardMembers: Address[]) {
+    this.sendTransaction(0, 'deployContract', Argument.fromNumber(quorum), ...boardMembers.map(x => Argument.fromPubkey(x)));
   }
 
   private async queryMultisigContractInfoArray(functionName: string, ...args: Argument[]): Promise<MultisigContractInfo[]> {
