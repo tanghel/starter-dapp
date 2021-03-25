@@ -14,6 +14,7 @@ export const networks: NetworkType[] = [
     gatewayAddress: 'https://gateway.elrond.com',
     explorerAddress: 'http://explorer.elrond.com/',
     multisigContract: 'erd1qqqqqqqqqqqqqpgq8sxvjujwsa9865sw94tltgzvjpkyw7averms6qkjj7',
+    multisigDeployerContract: 'erd1qqqqqqqqqqqqqpgqh7hl7t5cy0g4td0mv8hp950qtumnagamermsx0aep5',
     multisigManagerContract: 'erd1qqqqqqqqqqqqqpgqh7hl7t5cy0g4td0mv8hp950qtumnagamermsx0aep5',
   },
 ];
@@ -33,6 +34,7 @@ const networkSchema = object({
   gatewayAddress: string(),
   explorerAddress: string(),
   multisigContract: string(),
+  multisigDeployerContract: string(),
   multisigManagerContract: string(),
 }).required();
 
