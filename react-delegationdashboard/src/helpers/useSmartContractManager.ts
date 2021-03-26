@@ -4,6 +4,6 @@ import { SmartContractManager } from 'contracts/SmartContractManager';
 
 export default function useSmartContractManager() {
   const { dapp, address, multisigManagerContract } = useContext();
-  const scDeploy = new SmartContractManager(dapp, multisigManagerContract ?? '', dapp.provider, new Address(address));
-  return { scDeploy };
+  const scManager = new SmartContractManager(dapp, multisigManagerContract ?? '', dapp.provider, new Address(address));
+  return { scManager };
 }

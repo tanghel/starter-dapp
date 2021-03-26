@@ -5,11 +5,12 @@ import { Redirect } from 'react-router-dom';
 import Overview from 'components/Overview';
 
 const Dashboard = () => {
-  const { loggedIn } = useContext();
+  const { currentMultisigAddress } = useContext();
 
-  if (!loggedIn) {
-    return <Redirect to="/" />;
+  if (!currentMultisigAddress) {
+    return <Redirect to="/owner" />;
   }
+
   return (
     <div className="dashboard w-100">
       <div className="card border-0">

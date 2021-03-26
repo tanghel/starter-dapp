@@ -1,14 +1,16 @@
 import { Address } from '@elrondnetwork/erdjs/out';
 import { useContext, useDispatch } from 'context';
 import { useMultisig } from 'helpers';
+import useSmartContractManager from 'helpers/useSmartContractManager';
 import React from 'react';
 import Footer from './Footer';
 import Navbar from './Navbar';
 
 const Layout = ({ children, page }: { children: React.ReactNode; page: string }) => {
   const dispatch = useDispatch();
-  const { address } = useContext();
+  const { address, currentMultisigAddress } = useContext();
   const { multisig } = useMultisig();
+  const { scManager } = useSmartContractManager();
 
   const getDashboardInfo = async () => {
     const [
@@ -16,13 +18,15 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
       numProposers,
       quorum,
       userRole,
-      allActions
+      allActions,
+      contracts
     ] = await Promise.all([
         multisig.queryBoardMembersCount(),
         multisig.queryProposersCount(),
         multisig.queryQuorumCount(),
         multisig.queryUserRole(new Address(address).hex()),
-        multisig.queryAllActions()
+        multisig.queryAllActions(),
+        scManager.queryContracts()
     ]);
 
     dispatch({
@@ -49,10 +53,16 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
       type: 'setAllActions',
       allActions: allActions
     });
+
+    dispatch({
+      type: 'setAllMultisigContracts',
+      allMultisigContracts: contracts
+    });
   };
 
   React.useEffect(() => {
-    if (address === null) {
+    console.log({currentMultisigAddress});
+    if (address === null || (currentMultisigAddress === null || currentMultisigAddress === undefined || currentMultisigAddress === Address.Zero())) {
       dispatch({ type: 'loading', loading: false});
       return;
     }

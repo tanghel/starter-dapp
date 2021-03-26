@@ -1,6 +1,7 @@
 import { IDappProvider, ProxyProvider, ApiProvider, WalletProvider, Address } from '@elrondnetwork/erdjs';
 import { ContractOverview } from 'helpers/contractDataDefinitions';
 import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
+import { MultisigContractInfo } from 'types/MultisigContractInfo';
 import { denomination, decimals, network, NetworkType } from '../config';
 import { getItem } from '../storage/session';
 
@@ -21,6 +22,7 @@ export interface DappState {
   provider: IDappProvider;
   proxy: ProxyProvider;
   apiProvider: ApiProvider;
+  apiUrl: string;
 }
 
 export interface StateType {
@@ -43,6 +45,8 @@ export interface StateType {
   quorumSize: number;
   userRole: number;
   allActions: MultisigActionDetailed[];
+  allMultisigContracts: MultisigContractInfo[];
+  currentMultisigAddress?: Address;
 }
 export const emptyAccount: AccountType = {
   balance: '...',
@@ -72,6 +76,9 @@ export const initialState = () => {
           : 'https://api.elrond.com/',
         4000
       ),
+      apiUrl: sessionNetwork.apiAddress !== undefined
+        ? sessionNetwork?.apiAddress
+        : 'https://api.elrond.com/'
     },
     loading: false,
     error: '',
@@ -89,6 +96,7 @@ export const initialState = () => {
     quorumSize: 0,
     userRole: 0,
     allActions: [], 
+    allMultisigContracts: [], 
   };
 };
 

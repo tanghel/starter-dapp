@@ -35,36 +35,6 @@ export class SmartContractDeploy {
     this.sendTransaction(0, 'deployContract', Argument.fromNumber(quorum), ...boardMembers.map(x => Argument.fromPubkey(x)));
   }
 
-  private async queryMultisigContractInfoArray(functionName: string, ...args: Argument[]): Promise<MultisigContractInfo[]> {
-    let result = await this.query(functionName, ...args);
-
-    let contractInfos = [];
-    for (let returnData of result.returnData) {
-        let buffer = returnData.asBuffer;
-        
-        let contractInfo = parseContractInfo(buffer);
-        if (contractInfo !== null) {
-          contractInfos.push(contractInfo);
-        }
-    }
-
-    return contractInfos;
-  }
-
-  public async queryContracts() {
-    return this.queryMultisigContractInfoArray('getMultisigContracts', Argument.fromPubkey(this.address));
-  }
-
-  private async query(functionName: string, ...args: Argument[]) {
-    const query = new Query({
-      address: this.contract.getAddress(),
-      func: new ContractFunction(functionName),
-      args: args,
-    });
-
-    return await this.dapp.proxy.queryContract(query);
-  }
-
   private async sendTransaction(
     value: number,
     functionName: string,
@@ -103,7 +73,7 @@ export class SmartContractDeploy {
     let transaction = new Transaction({
       receiver: this.contract.getAddress(),
       value: Balance.eGLD(value),
-      gasLimit: new GasLimit(this.standardGasLimit),
+      gasLimit: new GasLimit(1200000000),
       data: payload,
     });
 

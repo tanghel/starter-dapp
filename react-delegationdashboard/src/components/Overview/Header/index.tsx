@@ -5,25 +5,18 @@ import { useContext } from 'context';
 
 const Header = () => {
   const { pathname } = useLocation();
-  const { address, multisigContract, contractOverview } = useContext();
-
-  const isAdmin = () => {
-    let loginAddress = new Address(address).hex();
-    return loginAddress.localeCompare(contractOverview.ownerAddress) === 0;
-  };
+  const { address, currentMultisigAddress, contractOverview } = useContext();
 
   return (
     <div className="header card-header d-flex align-items-center border-0 justify-content-between px-spacer">
       <div className="py-spacer text-truncate">
         <p className="opacity-6 mb-0">Contract Address</p>
-        <span className="text-truncate">{multisigContract}</span>
+        <span className="text-truncate">{currentMultisigAddress?.hex()}</span>
       </div>
       <div className="d-flex justify-content-center align-items-center justify-content-between">
-        {pathname !== '/dashboard' ? (
-          <Link to="/dashboard" className="btn btn-primary btn-sm">
-            Dashboard
-          </Link>
-        ) : null}
+        <Link to="/owner" className="btn btn-primary btn-sm">
+          Manage multisigs
+        </Link>
       </div>
     </div>
   );
