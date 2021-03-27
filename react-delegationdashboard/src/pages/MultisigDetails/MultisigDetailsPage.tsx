@@ -35,6 +35,10 @@ const MultisigDetailsPage = () => {
     }
   };
 
+  if (address === null) {
+    return <Redirect to="/" />;
+  }
+
   if (!parseMultisigAddress()) {
     return <Redirect to="/multisig" />;
   }
@@ -201,7 +205,7 @@ const MultisigDetailsPage = () => {
 
     if (isCurrentMultisigAddressNotSet || isCurrentMultisigAddressDiferentThanParam) {
       dispatch({ type: 'setCurrentMultisigAddress', currentMultisigAddress: multisigAddressParam });
-    } else {
+    } else if (address !== null) {
       getDashboardInfo();
     }
   }, [ currentMultisigAddress ]);
@@ -227,28 +231,28 @@ const MultisigDetailsPage = () => {
             title="Board Members"
             value={totalBoardMembers.toString()}
             color="orange"
-            svg="contract.svg"
+            svg="clipboard-check.svg"
           />
           <StatCard
             title="Proposers"
             value={totalProposers.toString()}
             valueUnit=""
             color="purple"
-            svg="nodes.svg"
+            svg="clipboard-list.svg"
           />
           <StatCard
             title="Quorum size"
             value={quorumSize.toString()}
             valueUnit=""
             color="orange"
-            svg="leaf-solid.svg"
+            svg="quorum.svg"
           />
           <StatCard
             title="User role"
             value={userRoleAsString()}
             valueUnit=""
             color="orange"
-            svg="leaf-solid.svg"
+            svg="user.svg"
           />
         </div>
 
@@ -272,8 +276,10 @@ const MultisigDetailsPage = () => {
                   allActions.map(action => 
                     <MultisigProposalCard 
                       key={action.actionId} 
+                      type={action.typeNumber()}
                       actionId={action.actionId}
                       title={action.title()} 
+                      tooltip={action.tooltip()}
                       value={action.description()} 
                       canSign={canSign(action)} 
                       canUnsign={canUnsign(action)}

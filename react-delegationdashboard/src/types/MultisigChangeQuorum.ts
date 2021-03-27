@@ -10,10 +10,14 @@ export class MultisigChangeQuorum extends MultisigAction {
     }
   
     title() {
-      return 'Change quorum';
+      return 'Change Quorum';
     }
   
     description() {
-      return this.newSize.toString();
+      return 'New Quorum Size: ' + this.newSize.toString();
+    }
+
+    tooltip() {
+      return '';
     }
   }

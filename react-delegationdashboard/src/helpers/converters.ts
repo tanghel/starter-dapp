@@ -263,3 +263,15 @@ export function hexToAddress(hex: string): Address | null {
     return null;
   }
 }
+
+export function hexToBigInt(hex: string): BigInt | null {
+  let bytes = getBytesFromHexString(hex);
+
+  try {
+    let codec = new NumericalBinaryCodec();
+    return codec.decodeTopLevel(bytes, BigUIntType.One).valueOf();
+  } catch {
+    console.error(`Could not parse hex '${hex}' to BigInt`);
+    return null;
+  }
+}

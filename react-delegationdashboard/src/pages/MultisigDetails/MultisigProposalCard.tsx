@@ -1,10 +1,20 @@
 import React from 'react';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { useContext } from 'context';
 import { Address } from '@elrondnetwork/erdjs/out';
 import { useMultisigContract } from 'contracts/MultisigContract';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ReactComponent as AddUser } from '../../assets/images/add-user.svg';
+import { ReactComponent as DeleteUser } from '../../assets/images/delete-user.svg';
+import { ReactComponent as Quorum } from '../../assets/images/quorum.svg';
+import { ReactComponent as Token } from '../../assets/images/token.svg';
+import { ReactComponent as Logo } from '../../assets/images/logo.svg';
+import { MultisigActionType } from 'types/MultisigActionType';
 
 export interface MultisigProposalCardType {
+  type: number;
   actionId?: number;
+  tooltip?: string;
   title?: string;
   value?: string;
   canSign?: boolean;
@@ -15,7 +25,9 @@ export interface MultisigProposalCardType {
 }
 
 const MultisigProposalCard = ({
+  type = 0,
   actionId = 0,
+  tooltip = '',
   title = '',
   value = '0',
   canSign = false,
@@ -47,17 +59,32 @@ const MultisigProposalCard = ({
     <div className="statcard card-bg-red text-white py-3 px-4 mb-spacer ml-spacer rounded">
       <div className="d-flex align-items-center justify-content-between mt-1 mb-2">
         <div className="icon my-1 fill-white">
-          
+          { type === MultisigActionType.AddBoardMember || type === MultisigActionType.AddProposer ?
+            <AddUser /> : 
+            type === MultisigActionType.RemoveUser ?
+            <DeleteUser /> :
+            type === MultisigActionType.ChangeQuorum ?
+            <Quorum /> :
+            type === MultisigActionType.SCCall ?
+            <Token /> :
+            type === MultisigActionType.SendEgld ?
+            <Logo style={{ width:20, height: 20 }} /> :
+            null
+          }
         </div>
       </div>
-      <div className="d-flex flex-wrap align-items-center justify-content-between">
+      <div className="d-flex align-items-center justify-content-between">
           <div>
-            <span className="opacity-6">{title} ({signers.length} / {quorumSize})</span>
-            <p className="h5 mb-0">
-                {value}
+            <p className="h5 mb-0" >
+              {title}
+              { tooltip !== '' ?
+                <FontAwesomeIcon style={{width: 16, height: 16, marginBottom: 2}} icon={faInfoCircle} className="text-white ml-2" data-toggle="tooltip" data-html="true" title={tooltip} />
+                : null
+              }
             </p>
+            <span className="opacity-6">{value}</span>
           </div>
-          <div>
+          <div className="d-flex align-items-center">
             { canSign &&
                 <button onClick={sign} className="btn btn-primary mb-3 mr-2">Sign</button>
             }
@@ -67,11 +94,11 @@ const MultisigProposalCard = ({
             }  
 
             { canPerformAction &&
-                <button onClick={performAction} className="btn btn-primary mb-3 mr-2">Perform action</button>
+                <button style={{whiteSpace: 'nowrap'}} onClick={performAction} className="btn btn-primary mb-3 mr-2">Perform action</button>
             }  
 
             { canDiscardAction &&
-                <button onClick={discardAction} className="btn btn-primary mb-3 mr-2">Discard action</button>
+                <button style={{whiteSpace: 'nowrap'}} onClick={discardAction} className="btn btn-primary mb-3 mr-2">Discard action</button>
             }  
           </div>
       </div>

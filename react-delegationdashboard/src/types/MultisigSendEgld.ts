@@ -8,7 +8,7 @@ export class MultisigSendEgld extends MultisigAction {
     amount: BigUIntValue;
     data: string;
   
-    constructor(address: Address, amount: BigUIntValue, data: string) { 
+    constructor(address: Address, amount: BigUIntValue, data: string,) { 
         super(MultisigActionType.SendEgld);
         this.address = address;
         this.amount = amount;
@@ -16,7 +16,7 @@ export class MultisigSendEgld extends MultisigAction {
     }
   
     title() {
-      return 'Send Egld';
+      return 'Send eGLD';
     }
   
     description() {
@@ -27,5 +27,9 @@ export class MultisigSendEgld extends MultisigAction {
       }
   
       return description;
+    }
+
+    tooltip() {
+      return '';
     }
   }

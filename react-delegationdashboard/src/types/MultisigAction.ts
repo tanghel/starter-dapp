@@ -9,4 +9,5 @@ export abstract class MultisigAction {
   
     abstract title(): string;
     abstract description(): string;
+    abstract tooltip(): string;
   }

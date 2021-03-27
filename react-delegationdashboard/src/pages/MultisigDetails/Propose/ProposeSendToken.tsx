@@ -31,25 +31,23 @@ const ProposeSendToken = ({ handleChange } : ProposeSendTokenType) => {
 
   const onAddressChanged = (event: any) => {
     setAddress(event.target.value);
-
-    refreshProposal();
   };
 
   const onIdentifierChanged = (event: any) => {
     setIdentifier(event.target.value);
-
-    refreshProposal();
   };
 
   const onAmountChanged = (event: any) => {
     setAmount(event.target.value);
-
-    refreshProposal();
   };
+
+  React.useEffect(() => {
+    refreshProposal();
+  }, [ address, identifier, amount ]);
 
   return (
     <div>
-      <div style={{display: 'flex', alignItems: 'center'}}>
+      <div className="modal-control-container">
         <span>Address: </span>
         <input 
           type="text"
@@ -59,7 +57,7 @@ const ProposeSendToken = ({ handleChange } : ProposeSendTokenType) => {
           onChange={onAddressChanged}
         />
       </div>
-      <div style={{display: 'flex', alignItems: 'center'}}>
+      <div className="modal-control-container">
         <span>Identifier: </span>
         <input 
           type="text"
@@ -69,7 +67,7 @@ const ProposeSendToken = ({ handleChange } : ProposeSendTokenType) => {
           onChange={onIdentifierChanged}
         />
       </div>
-      <div style={{display: 'flex', alignItems: 'center'}}>
+      <div className="modal-control-container">
         <span>Amount: </span>
         <input 
           type="number"

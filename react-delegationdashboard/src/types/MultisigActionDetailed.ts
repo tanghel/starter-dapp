@@ -1,5 +1,6 @@
 import { Address } from '@elrondnetwork/erdjs/out';
 import { MultisigAction } from './MultisigAction';
+import { MultisigActionType } from './MultisigActionType';
 
 export class MultisigActionDetailed {
     actionId: number;
@@ -18,5 +19,13 @@ export class MultisigActionDetailed {
   
     description(): string {
       return this.action.description();
+    }
+
+    tooltip(): string {
+      return this.action.tooltip();
+    }
+
+    typeNumber(): number {
+      return this.action.type;
     }
   }

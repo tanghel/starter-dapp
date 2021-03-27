@@ -24,7 +24,7 @@ const DeployMultisigModal = ({ show, handleClose, handleDeploy }: DeployMultisig
 
           <div className="p-spacer">
             <div style={{display: 'flex', alignItems: 'center'}}>
-              <span>Name: </span>
+              <span className="mr-2">Name: </span>
               <input 
                 type="text"
                 className='form-control'

@@ -11,10 +11,14 @@ export class MultisigRemoveUser extends MultisigAction {
     }
   
     title() {
-      return 'Remove user';
+      return 'Remove User';
     }
   
     description() {
       return this.address.bech32();
+    }
+
+    tooltip() {
+      return '';
     }
   }

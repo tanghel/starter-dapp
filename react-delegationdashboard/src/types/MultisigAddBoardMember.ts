@@ -11,10 +11,14 @@ export class MultisigAddBoardMember extends MultisigAction {
     }
   
     title() {
-      return 'Add board member';
+      return 'Add Board Member';
     }
   
     description() {
       return this.address.bech32();
+    }
+
+    tooltip() {
+      return '';
     }
   }

@@ -16,7 +16,7 @@ export class MultisigIssueToken extends MultisigAction {
     canUpgrade: boolean = true;
   
     constructor(name: string, identifier: string, amount: number, decimals: number) { 
-        super(MultisigActionType.SendEgld);
+        super(MultisigActionType.SCCall);
         this.name = name;
         this.identifier = identifier;
         this.amount = amount;
@@ -24,10 +24,14 @@ export class MultisigIssueToken extends MultisigAction {
     }
   
     title() {
-      return 'Issue token';
+      return 'Issue Token';
     }
   
     description() {
       return `${this.name} (${this.description})`;
+    }
+
+    tooltip() {
+      return '';
     }
   }

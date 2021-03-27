@@ -16,7 +16,7 @@ const ProposeInputAddress = ({ handleParamsChange } : ProposeInputAddressType) =
   };
 
   return (
-    <div style={{display: 'flex', alignItems: 'center'}}>
+    <div className="modal-control-container">
       <span>Address: </span>
       <input 
         type="text"

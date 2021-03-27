@@ -8,7 +8,7 @@ export class MultisigSendToken extends MultisigAction {
     amount: number;
   
     constructor(address: Address, identifier: string, amount: number) { 
-        super(MultisigActionType.SendEgld);
+        super(MultisigActionType.SCCall);
         this.address = address;
         this.identifier = identifier;
         this.amount = amount;
@@ -20,5 +20,9 @@ export class MultisigSendToken extends MultisigAction {
   
     description() {
       return `${this.amount} (${this.description})`;
+    }
+
+    tooltip() {
+      return '';
     }
   }

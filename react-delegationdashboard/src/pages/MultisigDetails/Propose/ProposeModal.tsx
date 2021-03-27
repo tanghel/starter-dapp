@@ -86,13 +86,14 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
   };
 
   return (
-    <Modal show={show} onHide={handleClose} className="modal-container" animation={false} centered>
+    <Modal size="lg" show={show} onHide={handleClose} className="modal-container" animation={false} centered>
       <div className="card">
         <div className="card-body p-spacer text-center">
           <p className="h6 mb-spacer" data-testid="delegateTitle">
             Propose
           </p>
           <Select 
+
             options={options} 
             onChange={handleOptionChange}
             theme={theme => ({
@@ -101,8 +102,9 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
               colors: {
                 ...theme.colors,
                 primary25: 'rgba(255, 255, 255, 0.4)',
-                primary: 'rgba(255, 255, 255, 0.8)',
-                neutral0: 'rgba(0, 0, 0, 0.9)'
+                primary: 'rgba(255, 255, 255, 0.9)',
+                neutral0: 'rgba(0, 0, 0, 0.9)',
+                neutral80: 'rgba(255, 255, 255, 0.9)'
               },
             })}
           />

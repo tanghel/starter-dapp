@@ -21,8 +21,8 @@ const ProposeChangeQuorum = ({ handleParamsChange } : ProposeChangeQuorumType) =
   }, []);
 
   return (
-    <div style={{display: 'flex', alignItems: 'center'}}>
-      <span style={{flexGrow: 1}}>Quorum size: </span>
+    <div className="modal-control-container">
+      <span>Quorum size: </span>
       <input 
         style={{width: 250}}
         type="number"

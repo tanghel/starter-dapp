@@ -136,6 +136,7 @@ const MultisigListPage = () => {
 
             <div className="card border-0">
               <div className="card-body pt-0 px-spacer pb-spacer">
+                <h2 className="text-center my-5">Your Multisig wallets</h2>
               </div>
 
               {multisigContracts.length > 0 ?

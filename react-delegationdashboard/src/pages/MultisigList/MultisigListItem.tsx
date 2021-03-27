@@ -3,6 +3,7 @@ import { useDispatch } from 'context';
 import { Address } from '@elrondnetwork/erdjs/out';
 import { useHistory } from 'react-router-dom';
 import { useManagerContract } from 'contracts/ManagerContract';
+import { ReactComponent as Wallet } from '../../assets/images/wallet.svg';
 
 export interface MultisigCardType {
   address: Address;
@@ -29,15 +30,13 @@ const MultisigCard = ({
     <div className="statcard card-bg-red text-white py-3 px-4 mb-spacer ml-spacer rounded mx-4">
       <div className="d-flex align-items-center justify-content-between mt-1 mb-2">
         <div className="icon my-1 fill-white">
-          
+          <Wallet className="logo" />
         </div>
       </div>
       <div className="d-flex flex-wrap align-items-center justify-content-between mb-2">
           <div>
-            <span className="opacity-6">{address.bech32()}</span>
-            <p className="h5 mb-0">
-                {name}
-            </p>
+            <div className="opacity-6">{address.bech32()}</div>
+            <div className="h5 mb-0">{name}</div>
           </div>
           <div>
             <button onClick={onEnterClicked} className="btn btn-primary mb-3 mr-2">Enter</button>

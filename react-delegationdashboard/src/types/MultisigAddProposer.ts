@@ -11,10 +11,14 @@ export class MultisigAddProposer extends MultisigAction {
   }
 
   title() {
-    return 'Add proposer';
+    return 'Add Proposer';
   }
 
   description() {
     return this.address.bech32();
+  }
+
+  tooltip() {
+    return '';
   }
 }

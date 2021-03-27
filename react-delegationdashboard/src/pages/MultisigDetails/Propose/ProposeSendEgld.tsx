@@ -13,6 +13,8 @@ const ProposeSendEgld = ({ handleChange } : ProposeSendEgldType) => {
   const [amount, setAmount] = useState('');
   const [data, setData] = useState('');
 
+  const { egldLabel } = useContext();
+
   const getProposal = () : MultisigSendEgld | null => {
     let addressParam = new Address(address);
 
@@ -35,25 +37,23 @@ const ProposeSendEgld = ({ handleChange } : ProposeSendEgldType) => {
 
   const onAddressChanged = (event: any) => {
     setAddress(event.target.value);
-
-    refreshProposal();
   };
 
   const onAmountChanged = (event: any) => {
     setAmount(event.target.value);
-
-    refreshProposal();
   };
 
   const onDataChanged = (event: any) => {
     setData(event.target.value);
-
-    refreshProposal();
   };
+
+  React.useEffect(() => {
+    refreshProposal();
+  }, [ address, amount, data ]);
 
   return (
     <div>
-      <div style={{display: 'flex', alignItems: 'center'}}>
+      <div className="modal-control-container">
         <span>Address: </span>
         <input 
           type="text"
@@ -63,7 +63,7 @@ const ProposeSendEgld = ({ handleChange } : ProposeSendEgldType) => {
           onChange={onAddressChanged}
         />
       </div>
-      <div style={{display: 'flex', alignItems: 'center'}}>
+      <div className="modal-control-container">
         <span>Amount: </span>
         <input 
           type="text"
@@ -73,7 +73,7 @@ const ProposeSendEgld = ({ handleChange } : ProposeSendEgldType) => {
           onChange={onAmountChanged}
         />
       </div>
-      <div style={{display: 'flex', alignItems: 'center'}}>
+      <div className="modal-control-container">
         <span>Data: </span>
         <input 
           type="text"
