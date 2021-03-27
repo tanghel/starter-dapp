@@ -1,5 +1,5 @@
 import React from 'react';
-import { useContext } from 'context';
+import { useContext, useDispatch } from 'context';
 import { Link, Redirect } from 'react-router-dom';
 import StatCard from 'components/StatCard';
 import State from 'components/State';
@@ -8,13 +8,57 @@ import ProposeAction from './Propose/ProposeAction';
 import MultisigProposalCard from 'pages/MultisigDetails/MultisigProposalCard';
 import { Address } from '@elrondnetwork/erdjs/out';
 import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
+import { useMultisigContract } from 'contracts/MultisigContract';
 
 const MultisigDetailsPage = () => {
   const { address, currentMultisigAddress, totalBoardMembers, totalProposers, quorumSize, userRole, loading, allActions } = useContext();
+  const { multisigContract } = useMultisigContract();
+  const dispatch = useDispatch();
 
   if (!currentMultisigAddress) {
     return <Redirect to="/owner" />;
   }
+
+  const getDashboardInfo = async () => {
+    const [
+      numBoardMembers,
+      numProposers,
+      quorum,
+      userRole,
+      allActions,
+    ] = await Promise.all([
+      multisigContract.queryBoardMembersCount(),
+      multisigContract.queryProposersCount(),
+      multisigContract.queryQuorumCount(),
+      multisigContract.queryUserRole(new Address(address).hex()),
+      multisigContract.queryAllActions(),
+    ]);
+
+    dispatch({
+      type: 'setTotalBoardMembers',
+      totalBoardMembers: numBoardMembers
+    });
+
+    dispatch({
+      type: 'setTotalProposers',
+      totalProposers: numProposers
+    });
+
+    dispatch({
+      type: 'setQuorumSize',
+      quorumSize: quorum
+    }); 
+
+    dispatch({
+      type: 'setUserRole',
+      userRole: userRole
+    });
+
+    dispatch({
+      type: 'setAllActions',
+      allActions: allActions
+    });
+  };
 
   const userRoleAsString = () => {
     switch (userRole) {
@@ -63,6 +107,15 @@ const MultisigDetailsPage = () => {
   const canDiscardAction = (action: MultisigActionDetailed) => {
     return isBoardMember() && action.signers.length === 0;
   };
+
+  React.useEffect(() => {
+    if (address === null || (currentMultisigAddress === null || currentMultisigAddress === undefined || currentMultisigAddress === Address.Zero())) {
+      dispatch({ type: 'loading', loading: false});
+      return;
+    }
+
+    getDashboardInfo();
+  }, []);
 
   return (
     <div className="dashboard w-100">
