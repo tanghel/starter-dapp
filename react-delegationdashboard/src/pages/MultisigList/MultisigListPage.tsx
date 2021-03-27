@@ -6,8 +6,8 @@ import MultisigListItem from 'pages/MultisigList/MultisigListItem';
 import useSmartContractDeploy from 'helpers/useSmartContractDeploy';
 import useSmartContractManager from 'helpers/useSmartContractManager';
 import { MultisigContractInfo } from 'types/MultisigContractInfo';
-import AddMultisigModal from 'pages/MultisigDetails/Multisig/AddMultisigModal';
-import DeployMultisigModal from 'pages/MultisigDetails/Multisig/DeployMultisigModal';
+import AddMultisigModal from './AddMultisigModal';
+import DeployMultisigModal from './DeployMultisigModal';
 
 const MultisigListPage = () => {
   const { loggedIn, allMultisigContracts, address, dapp, multisigDeployerContract, multisigManagerContract } = useContext();
