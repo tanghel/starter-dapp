@@ -19,14 +19,12 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
       quorum,
       userRole,
       allActions,
-      contracts
     ] = await Promise.all([
       multisigContract.queryBoardMembersCount(),
       multisigContract.queryProposersCount(),
       multisigContract.queryQuorumCount(),
       multisigContract.queryUserRole(new Address(address).hex()),
       multisigContract.queryAllActions(),
-      managerContract.queryContracts()
     ]);
 
     dispatch({
@@ -52,11 +50,6 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
     dispatch({
       type: 'setAllActions',
       allActions: allActions
-    });
-
-    dispatch({
-      type: 'setAllMultisigContracts',
-      allMultisigContracts: contracts
     });
   };
 

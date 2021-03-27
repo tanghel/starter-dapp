@@ -43,7 +43,6 @@ export interface StateType {
   quorumSize: number;
   userRole: number;
   allActions: MultisigActionDetailed[];
-  allMultisigContracts: MultisigContractInfo[];
   currentMultisigAddress?: Address;
 }
 
@@ -90,7 +89,6 @@ export const initialState = () => {
     quorumSize: 0,
     userRole: 0,
     allActions: [], 
-    allMultisigContracts: [], 
   };
 };
 

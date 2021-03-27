@@ -10,14 +10,13 @@ import { useDeployContract } from 'contracts/DeployContract';
 import { useManagerContract } from 'contracts/ManagerContract';
 
 const MultisigListPage = () => {
-  const { loggedIn, allMultisigContracts, address, dapp, multisigDeployerContract, multisigManagerContract } = useContext();
+  const { loggedIn, address, dapp, multisigDeployerContract, multisigManagerContract } = useContext();
   const { deployContract } = useDeployContract();
   const { managerContract } = useManagerContract();
   const [showAddMultisigModal, setShowAddMultisigModal] = React.useState(false);
   const [showDeployMultisigModal, setShowDeployMultisigModal] = React.useState(false);
 
-  const initialMultisigContracts: MultisigContractInfo[] = [];
-  const [multisigContracts, setMultisigContracts] = useState(initialMultisigContracts);
+  const [multisigContracts, setMultisigContracts] = useState<MultisigContractInfo[]>([]);
 
   const onDeployClicked = async () => {
     setShowDeployMultisigModal(true);

@@ -12,7 +12,6 @@ export type ActionType =
   | { type: 'setQuorumSize'; quorumSize: StateType['quorumSize'] }
   | { type: 'setUserRole'; userRole: StateType['userRole'] }
   | { type: 'setAllActions'; allActions: StateType['allActions'] }
-  | { type: 'setAllMultisigContracts'; allMultisigContracts: StateType['allMultisigContracts'] }
   | { type: 'setCurrentMultisigAddress'; currentMultisigAddress: StateType['currentMultisigAddress'] }
   ;
 
@@ -75,14 +74,6 @@ export function reducer(state: StateType, action: ActionType): StateType {
       return {
         ...state,
         allActions,
-      };
-    }
-
-    case 'setAllMultisigContracts': {
-      const { allMultisigContracts } = action;
-      return {
-        ...state,
-        allMultisigContracts,
       };
     }
 
