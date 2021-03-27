@@ -21,7 +21,7 @@ const Home = () => {
           description="If the problem persists please contact support."
         />
       ) : loggedIn ? (
-        <Redirect to="/dashboard" />
+        <Redirect to="/owner" />
       ) : loading ? (
         <State icon={faCircleNotch} iconClass="fa-spin text-primary" />
       ) : (

@@ -18,12 +18,7 @@ const MultisigCard = ({
   const { managerContract } = useManagerContract();
 
   const onEnterClicked = () => {
-    dispatch({
-      type: 'setCurrentMultisigAddress',
-      currentMultisigAddress: address
-    });
-
-    history.push('/dashboard');
+    history.push('/dashboard/' + address.bech32());
   };
 
   const onUnregisterClicked = async () => {

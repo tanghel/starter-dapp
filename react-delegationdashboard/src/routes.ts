@@ -19,7 +19,7 @@ const routes: RouteType[] = [
     component: Home,
   },
   {
-    path: '/dashboard',
+    path: '/dashboard/:multisigAddressParam',
     page: 'dashboard',
     title: 'Dashboard',
     component: MultisigDetailsPage,

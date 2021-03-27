@@ -1,6 +1,6 @@
 import React from 'react';
 import { useContext, useDispatch } from 'context';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, useParams } from 'react-router-dom';
 import StatCard from 'components/StatCard';
 import State from 'components/State';
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
@@ -11,13 +11,26 @@ import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
 import { useMultisigContract } from 'contracts/MultisigContract';
 import { useLoading } from 'helpers/loading';
 
+interface MultisigDetailsPageParams {
+  multisigAddressParam: string
+}
+
 const MultisigDetailsPage = () => {
-  const { address, currentMultisigAddress, totalBoardMembers, totalProposers, quorumSize, userRole, loading, allActions } = useContext();
+  const { address, totalBoardMembers, totalProposers, quorumSize, userRole, loading, allActions, currentMultisigAddress } = useContext();
   const { multisigContract } = useMultisigContract();
   const dispatch = useDispatch();
   const loadingIndicator = useLoading();
+  let { multisigAddressParam } = useParams<MultisigDetailsPageParams>();
 
-  if (!currentMultisigAddress) {
+  const parseMultisigAddress = (): Address | undefined => {
+    try {
+      return new Address(multisigAddressParam);
+    } catch {
+      return undefined;
+    }
+  };
+
+  if (!parseMultisigAddress()) {
     return <Redirect to="/owner" />;
   }
 
@@ -116,13 +129,12 @@ const MultisigDetailsPage = () => {
   };
 
   React.useEffect(() => {
-    if (address === null || (currentMultisigAddress === null || currentMultisigAddress === undefined || currentMultisigAddress === Address.Zero())) {
-      loadingIndicator.hide();
-      return;
+    if (!currentMultisigAddress) {
+      dispatch({ type: 'setCurrentMultisigAddress', currentMultisigAddress: parseMultisigAddress() });
+    } else {
+      getDashboardInfo();
     }
-
-    getDashboardInfo();
-  }, []);
+  }, [ currentMultisigAddress ]);
 
   return (
     <div className="dashboard w-100">
