@@ -1,5 +1,5 @@
 import React from 'react';
-import MultisigListPage from './pages/MultisigList/MultisigListPage';
+import MultisigListPage from './pages/MultisigDetails/MultisigListPage';
 import Home from './pages/Home';
 import withPageTitle from './components/PageTitle';
 import Owner from 'pages/Owner';
