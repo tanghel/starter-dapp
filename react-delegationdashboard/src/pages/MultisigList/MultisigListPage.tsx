@@ -2,7 +2,6 @@ import { Redirect } from 'react-router-dom';
 import { Address, Transaction, TransactionHash } from '@elrondnetwork/erdjs/out';
 import React, { useState } from 'react';
 import { useContext } from 'context';
-import Overview from 'components/Overview';
 import MultisigCard from 'components/MultisigCard';
 import useSmartContractDeploy from 'helpers/useSmartContractDeploy';
 import useSmartContractManager from 'helpers/useSmartContractManager';
@@ -10,7 +9,7 @@ import { MultisigContractInfo } from 'types/MultisigContractInfo';
 import AddMultisigModal from 'pages/MultisigDetails/Multisig/AddMultisigModal';
 import DeployMultisigModal from 'pages/MultisigDetails/Multisig/DeployMultisigModal';
 
-const Owner = () => {
+const MultisigListPage = () => {
   const { loggedIn, allMultisigContracts, address, dapp, multisigDeployerContract, multisigManagerContract } = useContext();
   const { scDeploy } = useSmartContractDeploy();
   const { scManager } = useSmartContractManager();
@@ -167,4 +166,4 @@ const Owner = () => {
   );
 };
 
-export default Owner;
+export default MultisigListPage;

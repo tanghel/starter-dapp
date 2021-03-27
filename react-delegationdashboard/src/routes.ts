@@ -2,7 +2,7 @@ import React from 'react';
 import MultisigListPage from './pages/MultisigDetails/MultisigListPage';
 import Home from './pages/Home';
 import withPageTitle from './components/PageTitle';
-import Owner from 'pages/Owner';
+import Owner from 'pages/MultisigList/MultisigListPage';
 
 interface RouteType {
   path: string;
