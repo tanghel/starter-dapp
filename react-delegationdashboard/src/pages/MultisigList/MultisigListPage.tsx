@@ -2,7 +2,7 @@ import { Redirect } from 'react-router-dom';
 import { Address, Transaction, TransactionHash } from '@elrondnetwork/erdjs/out';
 import React, { useState } from 'react';
 import { useContext } from 'context';
-import MultisigCard from 'components/MultisigCard';
+import MultisigListItem from 'pages/MultisigList/MultisigListItem';
 import useSmartContractDeploy from 'helpers/useSmartContractDeploy';
 import useSmartContractManager from 'helpers/useSmartContractManager';
 import { MultisigContractInfo } from 'types/MultisigContractInfo';
@@ -139,7 +139,7 @@ const MultisigListPage = () => {
 
           {
             multisigContracts.map(contract => 
-              <MultisigCard 
+              <MultisigListItem 
                 key={contract.address.hex()}
                 address={contract.address}
                 name={contract.name}
