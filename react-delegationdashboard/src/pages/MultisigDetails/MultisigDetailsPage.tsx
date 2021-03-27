@@ -12,7 +12,7 @@ import { useMultisigContract } from 'contracts/MultisigContract';
 import { useLoading } from 'helpers/loading';
 import { tryParseTransactionParameter } from 'helpers/urlparameters';
 import { hexToNumber, hexToString } from 'helpers/converters';
-import ConfirmModal from './ConfirmModal';
+import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
 
 interface MultisigDetailsPageParams {
   multisigAddressParam: string
