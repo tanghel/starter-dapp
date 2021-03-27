@@ -234,3 +234,32 @@ export function computeSmartContractAddress(owner: Address, nonce: Nonce) {
   let address = new Address(addressBytes);
   return address;
 };
+
+export function hexToString(hex: string): string | null {
+  try {
+    let bytes = getBytesFromHexString(hex);
+    return bytes.toString();
+  } catch {
+    console.error(`Could not parse hex '${hex} to string'`);
+    return null;
+  }
+}
+
+export function hexToNumber(hex: string): number | null {
+  try {
+    let bytes = getBytesFromHexString(hex);
+    return getIntValueFromBytes(bytes);
+  } catch {
+    console.error(`Could not parse hex '${hex} to number'`);
+    return null;
+  }
+}
+
+export function hexToAddress(hex: string): Address | null {
+  try {
+    return new Address(hex);
+  } catch {
+    console.error(`Could not parse hex '${hex} to address'`);
+    return null;
+  }
+}

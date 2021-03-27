@@ -12,6 +12,7 @@ export const defaultNetwork: NetworkType = {
   apiAddress: '',
   gatewayAddress: '',
   explorerAddress: '',
+  multisigContract: '',
   multisigDeployerContract: '',
   multisigManagerContract: '',
 };

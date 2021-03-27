@@ -11,7 +11,7 @@ export const network: NetworkType = {
   apiAddress: 'https://testnet-api.elrond.com',
   gatewayAddress: 'https://testnet-gateway.elrond.com',
   explorerAddress: 'http://testnet-explorer.elrond.com/',
-  multisigContract: 'erd1qqqqqqqqqqqqqpgq8sxvjujwsa9865sw94tltgzvjpkyw7averms6qkjj7',
+  multisigContract: '',
   multisigDeployerContract: 'erd1qqqqqqqqqqqqqpgqkjwl2f43uzz44nrm6y4njk856w9y4t49ermsm4yn9e',
   multisigManagerContract: 'erd1qqqqqqqqqqqqqpgqt6n2z0tmupt2sjh6ztxzdv87t9xxrvz5ermsksgvua',
 };

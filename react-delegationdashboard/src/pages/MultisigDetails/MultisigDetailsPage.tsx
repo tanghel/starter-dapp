@@ -10,13 +10,15 @@ import { Address } from '@elrondnetwork/erdjs/out';
 import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
 import { useMultisigContract } from 'contracts/MultisigContract';
 import { useLoading } from 'helpers/loading';
+import { tryParseTransactionParameter } from 'helpers/urlparameters';
+import { hexToNumber, hexToString } from 'helpers/converters';
 
 interface MultisigDetailsPageParams {
   multisigAddressParam: string
 }
 
 const MultisigDetailsPage = () => {
-  const { address, totalBoardMembers, totalProposers, quorumSize, userRole, loading, allActions, currentMultisigAddress } = useContext();
+  const { address, totalBoardMembers, totalProposers, quorumSize, userRole, loading, allActions, currentMultisigAddress, dapp } = useContext();
   const { multisigContract } = useMultisigContract();
   const dispatch = useDispatch();
   const loadingIndicator = useLoading();
@@ -128,7 +130,43 @@ const MultisigDetailsPage = () => {
     return isBoardMember() && action.signers.length === 0;
   };
 
+  const tryParseUrlParams = async () => {
+    let parameters = await tryParseTransactionParameter(dapp.apiUrl);
+    if (parameters === null) {
+      return;
+    }
+
+    if (parameters.receiver.bech32() === currentMultisigAddress?.bech32()) {
+      if (parameters.functionName.startsWith('propose')) {
+        if (parameters.outputParameters.length === 2 && hexToString(parameters.outputParameters[0]) === 'ok') {
+          let actionId = hexToNumber(parameters.outputParameters[1]);
+          if (actionId !== null) {
+            onSignOrPropose(actionId);
+          }
+        }
+      } else if (parameters.functionName === 'sign') {
+        if (parameters.outputParameters.length === 1 && hexToString(parameters.outputParameters[0]) === 'ok') {
+          let actionId = hexToNumber(parameters.inputParameters[0]);
+          if (actionId !== null) {
+            onSignOrPropose(actionId);
+          }
+        }
+      }
+    }
+  };
+
+  const onSignOrPropose = async (actionId: number) => {
+    let validSignerCount = await multisigContract.queryActionValidSignerCount(actionId);
+    let realQuorumSize = await multisigContract.queryQuorumCount();
+
+    if (validSignerCount >= realQuorumSize) {
+      
+    }
+  };
+
   React.useEffect(() => {
+    tryParseUrlParams();
+
     let multisigAddressParam = parseMultisigAddress();
 
     let isCurrentMultisigAddressNotSet = !currentMultisigAddress;

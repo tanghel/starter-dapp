@@ -7,7 +7,10 @@ import { MultisigContractInfo } from 'types/MultisigContractInfo';
 import AddMultisigModal from './AddMultisigModal';
 import DeployMultisigModal from './DeployMultisigModal';
 import { useDeployContract } from 'contracts/DeployContract';
-import { useManagerContract } from 'contracts/ManagerContract';
+import { ManagerContract, useManagerContract } from 'contracts/ManagerContract';
+import { hexToAddress, hexToString } from 'helpers/converters';
+import TransactionParameter from 'types/TransactionParameter';
+import { tryParseTransactionParameter } from 'helpers/urlparameters';
 
 const MultisigListPage = () => {
   const { loggedIn, address, dapp, multisigDeployerContract, multisigManagerContract } = useContext();
@@ -33,7 +36,7 @@ const MultisigListPage = () => {
   };
 
   const onDeployMultisigFinished = async (name: string) => {
-    localStorage.setItem('deployedMultisigName', name);
+    sessionStorage.setItem('deployedMultisigName', name);
 
     await deployContract.mutateDeploy(1, [ new Address(address) ]);
   };
@@ -45,54 +48,57 @@ const MultisigListPage = () => {
   };
 
   const tryParseUrlParams = async () => {
-    let searchParams = new URLSearchParams(window.location.search);
-    let txHash = searchParams.get('txHash');
-    if (txHash && txHash !== '') {
-      let result = await fetch(`${dapp.apiUrl}/transactions/${txHash}`);
-      let json = await result.json();
+    let parameters = await tryParseTransactionParameter(dapp.apiUrl);
+    if (parameters === null) {
+      return;
+    }
 
-      let inputData = json.data;
-      let inputDecoded = atob(inputData);
-      let inputParams = inputDecoded.split('@');
-
-      let scResults = json.scResults;
-      if (scResults.length > 0) {
-        if (json.receiver === multisigDeployerContract) {
-          let outputData = scResults[0].data;
-          let outputDecoded = atob(outputData);
-
-          let resultParams = outputDecoded.split('@').slice(1);
-          if (resultParams.length === 2 && resultParams[0] === '6f6b') {
-            let multisigAddress = new Address(resultParams[1]);
-
-            localStorage.setItem('multisigAddressHex', resultParams[1]);
-
-            setTimeout(() => {
-              managerContract.mutateRegisterMultisigContract(multisigAddress);
-            }, 1000);
-          }
-        } else if (json.receiver === multisigManagerContract) {
-          let data = scResults[0].data;
-          let decoded = atob(data);
-
-          let functionName = inputParams[0];
-
-          let resultParams = decoded.split('@').slice(1);
-          if (resultParams.length === 1 && resultParams[0] === '6f6b') {
-            if (functionName === 'registerMultisigContract') {
-              let multisigAddressHex = localStorage.getItem('multisigAddressHex');
-              let deployedMultisigName = localStorage.getItem('deployedMultisigName') ?? '';
-
-              if (multisigAddressHex && deployedMultisigName) {
-                let multisigAddress = new Address(multisigAddressHex);
-
-                setTimeout(() => managerContract.mutateRegisterMultisigContractName(multisigAddress, deployedMultisigName), 1000);
-              }
-            }
+    if (parameters.receiver.bech32() === multisigDeployerContract) {
+      if (parameters.functionName === 'deployContract') {
+        if (parameters.outputParameters.length === 2 && hexToString(parameters.outputParameters[0]) === 'ok') {
+          let multisigAddress = hexToAddress(parameters.outputParameters[1]);
+          if (multisigAddress !== null) {
+            onDeployContract(multisigAddress);
           }
         }
       }
+    } else if (parameters.receiver.bech32() === multisigManagerContract) {
+      if (parameters.functionName === 'registerMultisigName') {
+        if (parameters.outputParameters.length === 1 && hexToString(parameters.outputParameters[0]) === 'ok') {
+          onRegisterMultisigName();
+        }
+      } else if (parameters.functionName === 'registerMultisigContract') {
+        if (parameters.outputParameters.length === 1 && hexToString(parameters.outputParameters[0]) === 'ok') {
+          onRegisterMultisigContract();
+        }
+      }
     }
+  };
+
+  const onDeployContract = (multisigAddress: Address) => {
+    sessionStorage.setItem('multisigAddressHex', multisigAddress.hex());
+    let deployedMultisigName = sessionStorage.getItem('deployedMultisigName') ?? '';
+    if (!deployedMultisigName) {
+      return;
+    }
+
+    setTimeout(() => managerContract.mutateRegisterMultisigContractName(multisigAddress, deployedMultisigName), 1000);
+  };
+
+  const onRegisterMultisigName = () => {
+    let multisigAddressHex = sessionStorage.getItem('multisigAddressHex');
+    if (!multisigAddressHex) {
+      return;
+    }
+
+    let multisigAddress = new Address(multisigAddressHex);
+
+    setTimeout(() => managerContract.mutateRegisterMultisigContract(multisigAddress), 1000);
+  };
+
+  const onRegisterMultisigContract = () => {
+    sessionStorage.removeItem('multisigAddressHex');
+    sessionStorage.removeItem('deployedMultisigName');
   };
 
   React.useEffect(() => {
