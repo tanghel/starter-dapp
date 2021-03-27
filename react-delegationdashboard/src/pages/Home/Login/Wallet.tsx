@@ -34,12 +34,11 @@ const WalletLogin = () => {
     if (getItem('wallet_login')) {
       loadingIndicator.show();
       dapp.provider.init().then(initialised => {
+        loadingIndicator.hide();
+
         if (!initialised) {
-          loadingIndicator.hide();
           return;
         }
-
-        loadingIndicator.hide();
 
         dapp.provider
           .getAddress()

@@ -41,8 +41,6 @@ const MultisigListPage = () => {
   const readMultisigContracts = async () => {
     let contracts = await managerContract.queryContracts();
 
-    console.log({contracts});
-
     setMultisigContracts(contracts);
   };
 
@@ -50,11 +48,8 @@ const MultisigListPage = () => {
     let searchParams = new URLSearchParams(window.location.search);
     let txHash = searchParams.get('txHash');
     if (txHash && txHash !== '') {
-      console.log({txHash});
-
       let result = await fetch(`${dapp.apiUrl}/transactions/${txHash}`);
       let json = await result.json();
-      console.log({json});
 
       let inputData = json.data;
       let inputDecoded = atob(inputData);
@@ -67,10 +62,8 @@ const MultisigListPage = () => {
           let outputDecoded = atob(outputData);
 
           let resultParams = outputDecoded.split('@').slice(1);
-          console.log({resultParams});
           if (resultParams.length === 2 && resultParams[0] === '6f6b') {
             let multisigAddress = new Address(resultParams[1]);
-            console.log({multisigAddress});
 
             localStorage.setItem('multisigAddressHex', resultParams[1]);
 
@@ -87,8 +80,6 @@ const MultisigListPage = () => {
           let resultParams = decoded.split('@').slice(1);
           if (resultParams.length === 1 && resultParams[0] === '6f6b') {
             if (functionName === 'registerMultisigContract') {
-              console.log({resultParams});
-
               let multisigAddressHex = localStorage.getItem('multisigAddressHex');
               let deployedMultisigName = localStorage.getItem('deployedMultisigName') ?? '';
 
