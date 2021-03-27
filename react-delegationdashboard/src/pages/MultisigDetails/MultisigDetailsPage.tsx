@@ -5,7 +5,7 @@ import StatCard from 'components/StatCard';
 import State from 'components/State';
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import ProposeAction from './Propose/ProposeAction';
-import ProposalCard from 'components/ProposalCard';
+import MultisigProposalCard from 'pages/MultisigDetails/MultisigProposalCard';
 import { Address } from '@elrondnetwork/erdjs/out';
 import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
 
@@ -128,7 +128,7 @@ const MultisigDetailsPage = () => {
 
                 {
                   allActions.map(action => 
-                    <ProposalCard 
+                    <MultisigProposalCard 
                       key={action.actionId} 
                       actionId={action.actionId}
                       title={action.title()} 

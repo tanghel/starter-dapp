@@ -4,7 +4,7 @@ import { useMultisig } from 'helpers';
 import { useContext } from 'context';
 import { Address } from '@elrondnetwork/erdjs/out';
 
-export interface ProposalCardType {
+export interface MultisigProposalCardType {
   actionId?: number;
   title?: string;
   value?: string;
@@ -15,7 +15,7 @@ export interface ProposalCardType {
   signers: Address[];
 }
 
-const ProposalCard = ({
+const MultisigProposalCard = ({
   actionId = 0,
   title = '',
   value = '0',
@@ -24,7 +24,7 @@ const ProposalCard = ({
   canPerformAction = false,
   canDiscardAction = false,
   signers = []
-}: ProposalCardType) => {
+}: MultisigProposalCardType) => {
   const { multisig } = useMultisig();
   const { quorumSize } = useContext();
 
@@ -80,4 +80,4 @@ const ProposalCard = ({
   );
 };
 
-export default ProposalCard;
+export default MultisigProposalCard;
