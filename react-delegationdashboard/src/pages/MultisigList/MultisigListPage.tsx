@@ -10,6 +10,7 @@ import { useDeployContract } from 'contracts/DeployContract';
 import { useManagerContract } from 'contracts/ManagerContract';
 import { hexToAddress, hexToString } from 'helpers/converters';
 import { tryParseTransactionParameter } from 'helpers/urlparameters';
+import { useConfirmModal } from 'components/ConfirmModal/ConfirmModalPayload';
 
 const MultisigListPage = () => {
   const { loggedIn, address, dapp, multisigDeployerContract, multisigManagerContract } = useContext();
@@ -17,6 +18,8 @@ const MultisigListPage = () => {
   const { managerContract } = useManagerContract();
   const [showAddMultisigModal, setShowAddMultisigModal] = React.useState(false);
   const [showDeployMultisigModal, setShowDeployMultisigModal] = React.useState(false);
+
+  const confirmModal = useConfirmModal();
 
   const [multisigContracts, setMultisigContracts] = useState<MultisigContractInfo[]>([]);
 
@@ -74,28 +77,31 @@ const MultisigListPage = () => {
     }
   };
 
-  const onDeployContract = (multisigAddress: Address) => {
+  const onDeployContract = async (multisigAddress: Address) => {
     sessionStorage.setItem('multisigAddressHex', multisigAddress.hex());
     let deployedMultisigName = sessionStorage.getItem('deployedMultisigName') ?? '';
     if (!deployedMultisigName) {
       return;
     }
 
-    setTimeout(() => managerContract.mutateRegisterMultisigContractName(multisigAddress, deployedMultisigName), 1000);
+    await confirmModal.show('Step 2: Registering multisig name', 'Sign transaction');
+
+    managerContract.mutateRegisterMultisigContractName(multisigAddress, deployedMultisigName);
   };
 
-  const onRegisterMultisigName = () => {
+  const onRegisterMultisigName = async () => {
     let multisigAddressHex = sessionStorage.getItem('multisigAddressHex');
     if (!multisigAddressHex) {
       return;
     }
 
     let multisigAddress = new Address(multisigAddressHex);
+    await confirmModal.show('Step 3: Attaching multisig to your account', 'Sign transaction');
 
-    setTimeout(() => managerContract.mutateRegisterMultisigContract(multisigAddress), 1000);
+    managerContract.mutateRegisterMultisigContract(multisigAddress);
   };
 
-  const onRegisterMultisigContract = () => {
+  const onRegisterMultisigContract = async () => {
     sessionStorage.removeItem('multisigAddressHex');
     sessionStorage.removeItem('deployedMultisigName');
   };

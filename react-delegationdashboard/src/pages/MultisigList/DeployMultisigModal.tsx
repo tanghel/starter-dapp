@@ -19,7 +19,7 @@ const DeployMultisigModal = ({ show, handleClose, handleDeploy }: DeployMultisig
       <div className="card">
         <div className="card-body p-spacer text-center">
           <p className="h6 mb-spacer" data-testid="delegateTitle">
-            Deploy Multisig
+            Step 1: Deploy Multisig
           </p>
 
           <div className="p-spacer">
@@ -40,7 +40,7 @@ const DeployMultisigModal = ({ show, handleClose, handleDeploy }: DeployMultisig
               onClick={onDeployClicked}
               className="btn btn-primary mb-3"
             >
-              Deploy
+              Start deployment
             </button>
           </div>
         </div>
