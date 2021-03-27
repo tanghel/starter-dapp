@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Address } from '@elrondnetwork/erdjs/out';
 import { useContext } from 'context';
 
-const Header = () => {
+const MultisigDetailsHeader = () => {
   const { pathname } = useLocation();
   const { address, currentMultisigAddress, contractOverview } = useContext();
 
@@ -22,4 +22,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default MultisigDetailsHeader;

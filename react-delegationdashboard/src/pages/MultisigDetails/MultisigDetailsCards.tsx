@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useContext } from 'context';
 import StatCard from 'components/StatCard';
 
-const Views = () => {
+const MultisigDetailsCards = () => {
   const {
     totalBoardMembers,
     totalProposers,
@@ -56,4 +56,4 @@ const Views = () => {
   );
 };
 
-export default Views;
+export default MultisigDetailsCards;

@@ -2,9 +2,10 @@ import React from 'react';
 import { useContext } from 'context';
 import Multisig from './Multisig';
 import { Redirect } from 'react-router-dom';
-import Overview from 'components/Overview';
+import MultisigDetailsHeader from 'pages/MultisigDetails/MultisigDetailsHeader';
+import MultisigDetailsCards from 'pages/MultisigDetails/MultisigDetailsCards';
 
-const MultisigListPage = () => {
+const MultisigDetailsPage = () => {
   const { currentMultisigAddress } = useContext();
 
   if (!currentMultisigAddress) {
@@ -14,7 +15,8 @@ const MultisigListPage = () => {
   return (
     <div className="dashboard w-100">
       <div className="card border-0">
-        <Overview />
+        <MultisigDetailsHeader />
+        <MultisigDetailsCards />
         <div className="card-body pt-0 px-spacer pb-spacer">
           <Multisig />
         </div>
@@ -23,4 +25,4 @@ const MultisigListPage = () => {
   );
 };
 
-export default MultisigListPage;
+export default MultisigDetailsPage;
