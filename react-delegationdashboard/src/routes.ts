@@ -1,5 +1,5 @@
 import React from 'react';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/MultisigList';
 import Home from './pages/Home';
 import withPageTitle from './components/PageTitle';
 import Owner from 'pages/Owner';

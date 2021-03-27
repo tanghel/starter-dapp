@@ -7,8 +7,8 @@ import MultisigCard from 'components/MultisigCard';
 import useSmartContractDeploy from 'helpers/useSmartContractDeploy';
 import useSmartContractManager from 'helpers/useSmartContractManager';
 import { MultisigContractInfo } from 'types/MultisigContractInfo';
-import AddMultisigModal from 'pages/Dashboard/Multisig/AddMultisigModal';
-import DeployMultisigModal from 'pages/Dashboard/Multisig/DeployMultisigModal';
+import AddMultisigModal from 'pages/MultisigList/Multisig/AddMultisigModal';
+import DeployMultisigModal from 'pages/MultisigList/Multisig/DeployMultisigModal';
 
 const Owner = () => {
   const { loggedIn, allMultisigContracts, address, dapp, multisigDeployerContract, multisigManagerContract } = useContext();

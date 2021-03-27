@@ -10,7 +10,7 @@ const Header = () => {
   return (
     <div className="header card-header d-flex align-items-center border-0 justify-content-between px-spacer">
       <div className="py-spacer text-truncate">
-        <p className="opacity-6 mb-0">Contract Address</p>
+        <p className="opacity-6 mb-0">Multisig Address</p>
         <span className="text-truncate">{currentMultisigAddress?.hex()}</span>
       </div>
       <div className="d-flex justify-content-center align-items-center justify-content-between">
