@@ -2,7 +2,7 @@ import React from 'react';
 import MultisigDetailsPage from './pages/MultisigDetails/MultisigDetailsPage';
 import Home from './pages/Home';
 import withPageTitle from './components/PageTitle';
-import Owner from 'pages/MultisigList/MultisigListPage';
+import MultisigListPage from 'pages/MultisigList/MultisigListPage';
 
 interface RouteType {
   path: string;
@@ -19,16 +19,16 @@ const routes: RouteType[] = [
     component: Home,
   },
   {
-    path: '/dashboard/:multisigAddressParam',
-    page: 'dashboard',
-    title: 'Dashboard',
+    path: '/multisig/:multisigAddressParam',
+    page: 'multisig',
+    title: 'Multisig',
     component: MultisigDetailsPage,
   },
   {
-    path: '/owner',
-    page: 'owner',
-    title: 'Owner',
-    component: Owner,
+    path: '/multisig',
+    page: 'multisig',
+    title: 'Multisig Details',
+    component: MultisigListPage,
   },
 ];
 

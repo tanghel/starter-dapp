@@ -18,7 +18,7 @@ const MultisigCard = ({
   const { managerContract } = useManagerContract();
 
   const onEnterClicked = () => {
-    history.push('/dashboard/' + address.bech32());
+    history.push('/multisig/' + address.bech32());
   };
 
   const onUnregisterClicked = async () => {

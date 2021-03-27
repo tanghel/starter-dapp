@@ -31,7 +31,7 @@ const MultisigDetailsPage = () => {
   };
 
   if (!parseMultisigAddress()) {
-    return <Redirect to="/owner" />;
+    return <Redirect to="/multisig" />;
   }
 
   const getDashboardInfo = async () => {
@@ -145,7 +145,7 @@ const MultisigDetailsPage = () => {
             <span className="text-truncate">{currentMultisigAddress?.bech32()}</span>
           </div>
           <div className="d-flex justify-content-center align-items-center justify-content-between">
-            <Link to="/owner" className="btn btn-primary btn-sm">
+            <Link to="/multisig" className="btn btn-primary btn-sm">
               Manage multisigs
             </Link>
           </div>
