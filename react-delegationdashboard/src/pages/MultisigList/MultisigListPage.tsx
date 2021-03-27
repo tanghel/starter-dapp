@@ -48,7 +48,7 @@ const MultisigListPage = () => {
   };
 
   const tryParseUrlParams = async () => {
-    let parameters = await tryParseTransactionParameter(dapp.apiUrl);
+    let parameters = await tryParseTransactionParameter(dapp);
     if (parameters === null) {
       return;
     }

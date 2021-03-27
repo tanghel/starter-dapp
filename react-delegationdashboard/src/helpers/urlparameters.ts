@@ -1,15 +1,17 @@
-import { Address } from '@elrondnetwork/erdjs/out';
+import { Address, Transaction, TransactionHash, TransactionOnNetwork, TransactionWatcher } from '@elrondnetwork/erdjs/out';
+import { DappState } from 'context/state';
 import TransactionParameter from 'types/TransactionParameter';
 
-export async function tryParseTransactionParameter(apiUrl: string): Promise<TransactionParameter | null> {
+export async function tryParseTransactionParameter(dapp: DappState): Promise<TransactionParameter | null> {
     let searchParams = new URLSearchParams(window.location.search);
     let txHash = searchParams.get('txHash');
     if (!txHash || txHash === '') {
       return null;
     }
 
-    let fetchResult = await fetch(`${apiUrl}/transactions/${txHash}`);
+    let fetchResult = await fetch(`${dapp.apiUrl}/transactions/${txHash}`);
     let json = await fetchResult.json();
+    console.log({json});
 
     let inputData = json.data;
     let inputDecoded = atob(inputData);
