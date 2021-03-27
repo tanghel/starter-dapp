@@ -129,8 +129,14 @@ const MultisigDetailsPage = () => {
   };
 
   React.useEffect(() => {
-    if (!currentMultisigAddress) {
-      dispatch({ type: 'setCurrentMultisigAddress', currentMultisigAddress: parseMultisigAddress() });
+    let multisigAddressParam = parseMultisigAddress();
+
+    let isCurrentMultisigAddressNotSet = !currentMultisigAddress;
+    let isCurrentMultisigAddressDiferentThanParam = currentMultisigAddress && multisigAddressParam && 
+      currentMultisigAddress.hex() !== multisigAddressParam.hex();
+
+    if (isCurrentMultisigAddressNotSet || isCurrentMultisigAddressDiferentThanParam) {
+      dispatch({ type: 'setCurrentMultisigAddress', currentMultisigAddress: multisigAddressParam });
     } else {
       getDashboardInfo();
     }
