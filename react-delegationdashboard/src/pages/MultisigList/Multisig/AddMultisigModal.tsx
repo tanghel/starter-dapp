@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { useMultisig } from 'helpers';
-import ProposeInputAddress from '../Actions/ProposeAction/ProposeInputAddress';
 import { Address } from '@elrondnetwork/erdjs/out';
+import ProposeInputAddress from '../ProposeInputAddress';
 
 interface AddMultisigModalType {
   show: boolean;

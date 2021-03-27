@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useContext, useDispatch } from 'context';
 import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 import State from 'components/State';
-import ProposeAction from '../Actions/ProposeAction/ProposeAction';
+import ProposeAction from '../ProposeAction';
 import ProposalCard from 'components/ProposalCard';
 import { Address } from '@elrondnetwork/erdjs/out';
 import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
