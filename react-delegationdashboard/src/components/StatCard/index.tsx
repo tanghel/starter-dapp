@@ -1,9 +1,19 @@
 import SVG from 'react-inlinesvg';
-import { StatCardType } from 'helpers/types';
 import React from 'react';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
+
+export interface StatCardType {
+  title?: string;
+  value?: string;
+  valueUnit?: string;
+  svg?: string;
+  color?: string;
+  percentage?: string;
+  tooltipText?: string;
+  children?: any;
+}
 
 const StatCard = ({
   title = '',

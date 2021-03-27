@@ -1,5 +1,4 @@
 import { IDappProvider, ProxyProvider, ApiProvider, WalletProvider, Address } from '@elrondnetwork/erdjs';
-import { ContractOverview } from 'helpers/contractDataDefinitions';
 import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
 import { MultisigContractInfo } from 'types/MultisigContractInfo';
 import { denomination, decimals, network, NetworkType } from '../config';
@@ -39,7 +38,6 @@ export interface StateType {
   multisigContract?: string;
   multisigDeployerContract?: string;
   multisigManagerContract?: string;
-  contractOverview: ContractOverview;
   totalBoardMembers: number;
   totalProposers: number;
   quorumSize: number;
@@ -48,13 +46,10 @@ export interface StateType {
   allMultisigContracts: MultisigContractInfo[];
   currentMultisigAddress?: Address;
 }
+
 export const emptyAccount: AccountType = {
   balance: '...',
   nonce: 0,
-};
-
-export const emptyContractOverview: ContractOverview = {
-  ownerAddress: ''
 };
 
 export const initialState = () => {
@@ -90,7 +85,6 @@ export const initialState = () => {
     multisigContract: sessionNetwork.multisigContract,
     multisigDeployerContract: sessionNetwork.multisigDeployerContract,
     multisigManagerContract: sessionNetwork.multisigManagerContract,
-    contractOverview: emptyContractOverview,
     totalBoardMembers: 0,
     totalProposers: 0,
     quorumSize: 0,

@@ -1,5 +1,4 @@
 import { object, string, boolean, InferType } from 'yup';
-import { ContractType } from './helpers/types';
 
 export const decimals: number = 2;
 export const denomination: number = 18;
