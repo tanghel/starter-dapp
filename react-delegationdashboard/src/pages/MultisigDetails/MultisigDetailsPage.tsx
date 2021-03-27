@@ -21,9 +21,9 @@ const MultisigDetailsPage = () => {
 
   const getDashboardInfo = async () => {
     const [
-      numBoardMembers,
-      numProposers,
-      quorum,
+      totalBoardMembers,
+      totalProposers,
+      quorumSize,
       userRole,
       allActions,
     ] = await Promise.all([
@@ -36,17 +36,17 @@ const MultisigDetailsPage = () => {
 
     dispatch({
       type: 'setTotalBoardMembers',
-      totalBoardMembers: numBoardMembers
+      totalBoardMembers: totalBoardMembers
     });
 
     dispatch({
       type: 'setTotalProposers',
-      totalProposers: numProposers
+      totalProposers: totalProposers
     });
 
     dispatch({
       type: 'setQuorumSize',
-      quorumSize: quorum
+      quorumSize: quorumSize
     }); 
 
     dispatch({
