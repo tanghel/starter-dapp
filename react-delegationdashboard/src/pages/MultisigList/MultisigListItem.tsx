@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'context';
 import { Address } from '@elrondnetwork/erdjs/out';
 import { useHistory } from 'react-router-dom';
-import useManagerContract from 'helpers/useManagerContract';
+import { useManagerContract } from 'contracts/ManagerContract';
 
 export interface MultisigCardType {
   address: Address;

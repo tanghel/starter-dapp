@@ -12,6 +12,7 @@ import {
   Argument,
 } from '@elrondnetwork/erdjs';
 import { Query } from '@elrondnetwork/erdjs/out/smartcontracts/query';
+import { useContext } from 'context';
 import { parseContractInfo } from 'helpers/converters';
 import { MultisigContractInfo } from 'types/MultisigContractInfo';
 
@@ -120,4 +121,10 @@ export class ManagerContract {
 
     return true;
   }
+}
+
+export function useManagerContract() {
+  const { dapp, address, multisigManagerContract } = useContext();
+  const managerContract = new ManagerContract(dapp, multisigManagerContract ?? '', dapp.provider, new Address(address));
+  return { managerContract };
 }

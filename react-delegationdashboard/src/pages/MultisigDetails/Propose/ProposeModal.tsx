@@ -11,7 +11,7 @@ import { MultisigIssueToken } from 'types/MultisigIssueToken';
 import ProposeIssueToken from './ProposeIssueToken';
 import { MultisigSendToken } from 'types/MultisigSendToken';
 import ProposeSendToken from './ProposeSendToken';
-import useMultisigContract from 'helpers/useMultisigContract';
+import { useMultisigContract } from 'contracts/MultisigContract';
 
 interface ProposeModalType {
   show: boolean;

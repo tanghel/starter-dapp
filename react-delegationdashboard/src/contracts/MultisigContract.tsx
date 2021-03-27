@@ -20,6 +20,7 @@ import { MultisigAction } from 'types/MultisigAction';
 import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
 import { MultisigIssueToken } from 'types/MultisigIssueToken';
 import { MultisigSendToken } from 'types/MultisigSendToken';
+import { useContext } from 'context';
 
 export class MultisigContract {
   private dapp: DappState;
@@ -286,4 +287,10 @@ export class MultisigContract {
 
     return true;
   }
+}
+
+export function useMultisigContract() {
+  const { dapp, currentMultisigAddress } = useContext();
+  const multisigContract = new MultisigContract(dapp, currentMultisigAddress, dapp.provider);
+  return { multisigContract };
 }

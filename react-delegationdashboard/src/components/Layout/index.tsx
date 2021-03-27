@@ -1,7 +1,7 @@
 import { Address } from '@elrondnetwork/erdjs/out';
 import { useContext, useDispatch } from 'context';
-import useManagerContract from 'helpers/useManagerContract';
-import useMultisigContract from 'helpers/useMultisigContract';
+import { useManagerContract } from 'contracts/ManagerContract';
+import { useMultisigContract } from 'contracts/MultisigContract';
 import React from 'react';
 import Footer from './Footer';
 import Navbar from './Navbar';

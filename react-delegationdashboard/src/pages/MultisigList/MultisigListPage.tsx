@@ -3,11 +3,11 @@ import { Address, Transaction, TransactionHash } from '@elrondnetwork/erdjs/out'
 import React, { useState } from 'react';
 import { useContext } from 'context';
 import MultisigListItem from 'pages/MultisigList/MultisigListItem';
-import useDeployContract from 'helpers/useDeployContract';
-import useManagerContract from 'helpers/useManagerContract';
 import { MultisigContractInfo } from 'types/MultisigContractInfo';
 import AddMultisigModal from './AddMultisigModal';
 import DeployMultisigModal from './DeployMultisigModal';
+import { useDeployContract } from 'contracts/DeployContract';
+import { useManagerContract } from 'contracts/ManagerContract';
 
 const MultisigListPage = () => {
   const { loggedIn, allMultisigContracts, address, dapp, multisigDeployerContract, multisigManagerContract } = useContext();

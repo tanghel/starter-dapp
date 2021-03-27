@@ -1,7 +1,7 @@
 import React from 'react';
 import { useContext } from 'context';
 import { Address } from '@elrondnetwork/erdjs/out';
-import useMultisigContract from 'helpers/useMultisigContract';
+import { useMultisigContract } from 'contracts/MultisigContract';
 
 export interface MultisigProposalCardType {
   actionId?: number;
