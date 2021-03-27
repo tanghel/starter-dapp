@@ -149,11 +149,11 @@ export class Multisig {
   }
 
   queryActionData(actionId: number): Promise<MultisigAction | null> {
-    return this.queryActionContainer('getActionData', [Argument.fromNumber(actionId)]);
+    return this.queryActionContainer('getActionData', Argument.fromNumber(actionId));
   }
 
   queryUserRole(userAddress: string): Promise<number> {
-    return this.queryNumber('userRole', [Argument.fromHex(userAddress)]);
+    return this.queryNumber('userRole', Argument.fromHex(userAddress));
   }
 
   queryBoardMemberAddresses(): Promise<Address[]> {
@@ -165,39 +165,39 @@ export class Multisig {
   }
 
   queryActionSignerAddresses(actionId: number): Promise<Address[]> {
-    return this.queryAddressArray('getActionSigners', [Argument.fromNumber(actionId)]);
+    return this.queryAddressArray('getActionSigners', Argument.fromNumber(actionId));
   }
 
   queryActionSignerCount(actionId: number): Promise<number> {
-    return this.queryNumber('getActionSignerCount', [Argument.fromNumber(actionId)]);
+    return this.queryNumber('getActionSignerCount', Argument.fromNumber(actionId));
   }
 
   queryActionValidSignerCount(actionId: number): Promise<number> {
-    return this.queryNumber('getActionValidSignerCount', [Argument.fromNumber(actionId)]);
+    return this.queryNumber('getActionValidSignerCount', Argument.fromNumber(actionId));
   }
 
   queryActionIsQuorumReached(actionId: number): Promise<boolean> {
-    return this.queryBoolean('quorumReached', [Argument.fromNumber(actionId)]);
+    return this.queryBoolean('quorumReached', Argument.fromNumber(actionId));
   }
 
   queryActionIsSignedByAddress(userAddress: Address, actionId: number): Promise<boolean> {
-    return this.queryBoolean('signed', [Argument.fromHex(userAddress.hex()), Argument.fromNumber(actionId)]);
+    return this.queryBoolean('signed', Argument.fromHex(userAddress.hex()), Argument.fromNumber(actionId));
   }
 
-  private async queryNumber(functionName: string, args: Array<any> = []): Promise<number> {
-    let result = await this.query(functionName, args);
+  private async queryNumber(functionName: string, ...args: Array<Argument>): Promise<number> {
+    let result = await this.query(functionName, ...args);
 
     return result.returnData[0].asNumber;
   }
 
-  private async queryBoolean(functionName: string, args: Array<any> = []): Promise<boolean> {
-    let result = await this.query(functionName, args);
+  private async queryBoolean(functionName: string, ...args: Array<Argument>): Promise<boolean> {
+    let result = await this.query(functionName, ...args);
 
     return result.returnData[0].asBool;
   }
 
-  private async queryActionContainer(functionName: string, args: Array<any> = []): Promise<MultisigAction | null> {
-    let result = await this.query(functionName, args);
+  private async queryActionContainer(functionName: string, ...args: Array<Argument>): Promise<MultisigAction | null> {
+    let result = await this.query(functionName, ...args);
 
     if (result.returnData.length === 0) {
       return null;
@@ -207,8 +207,8 @@ export class Multisig {
     return action;
   }
 
-  private async queryActionContainerArray(functionName: string, args: Array<any> = []): Promise<MultisigActionDetailed[]> {
-    let result = await this.query(functionName, args);
+  private async queryActionContainerArray(functionName: string, ...args: Array<Argument>): Promise<MultisigActionDetailed[]> {
+    let result = await this.query(functionName, ...args);
 
     let actions = [];
     for (let returnData of result.returnData) {
@@ -223,13 +223,13 @@ export class Multisig {
     return actions;
   }
 
-  private async queryAddressArray(functionName: string, args: Array<any> = []): Promise<Address[]> {
-    let result = await this.query(functionName, args);
+  private async queryAddressArray(functionName: string, ...args: Array<Argument>): Promise<Address[]> {
+    let result = await this.query(functionName, ...args);
 
     return result.returnData.map(x => new Address(x.asHex));
   }
 
-  private async query(functionName: string, args: Array<any> = []) {
+  private async query(functionName: string, ...args: Array<Argument>) {
     const query = new Query({
       address: this.contract.getAddress(),
       func: new ContractFunction(functionName),

@@ -1,6 +1,5 @@
-import { Address } from '@elrondnetwork/erdjs/out';
 import { useContext } from 'context';
-import { Multisig } from 'contracts';
+import { Multisig } from 'contracts/Multisig';
 
 export default function useMultisig() {
   const { dapp, currentMultisigAddress } = useContext();

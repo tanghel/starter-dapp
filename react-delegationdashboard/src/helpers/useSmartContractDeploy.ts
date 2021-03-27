@@ -1,6 +1,6 @@
 import { Address } from '@elrondnetwork/erdjs/out';
 import { useContext } from 'context';
-import { SmartContractDeploy } from 'contracts';
+import { SmartContractDeploy } from 'contracts/SmartContractDeploy';
 
 export default function useSmartContractDeploy() {
   const { dapp, address, multisigDeployerContract } = useContext();
