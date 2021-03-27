@@ -4,7 +4,7 @@ import Multisig from './Multisig';
 import { Redirect } from 'react-router-dom';
 import Overview from 'components/Overview';
 
-const Dashboard = () => {
+const MultisigListPage = () => {
   const { currentMultisigAddress } = useContext();
 
   if (!currentMultisigAddress) {
@@ -23,4 +23,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default MultisigListPage;

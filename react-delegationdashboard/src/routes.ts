@@ -1,5 +1,5 @@
 import React from 'react';
-import Dashboard from './pages/MultisigList';
+import MultisigListPage from './pages/MultisigList/MultisigListPage';
 import Home from './pages/Home';
 import withPageTitle from './components/PageTitle';
 import Owner from 'pages/Owner';
@@ -22,7 +22,7 @@ const routes: RouteType[] = [
     path: '/dashboard',
     page: 'dashboard',
     title: 'Dashboard',
-    component: Dashboard,
+    component: MultisigListPage,
   },
   {
     path: '/owner',
