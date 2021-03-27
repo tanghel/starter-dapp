@@ -1,8 +1,7 @@
-import { StatCardType } from 'helpers/types';
 import React from 'react';
-import { useMultisig } from 'helpers';
 import { useContext } from 'context';
 import { Address } from '@elrondnetwork/erdjs/out';
+import useMultisigContract from 'helpers/useMultisigContract';
 
 export interface MultisigProposalCardType {
   actionId?: number;
@@ -25,23 +24,23 @@ const MultisigProposalCard = ({
   canDiscardAction = false,
   signers = []
 }: MultisigProposalCardType) => {
-  const { multisig } = useMultisig();
+  const { multisigContract } = useMultisigContract();
   const { quorumSize } = useContext();
 
   let sign = () => {
-    multisig.mutateSign(actionId);
+    multisigContract.mutateSign(actionId);
   };
 
   let unsign = () => {
-    multisig.mutateUnsign(actionId);
+    multisigContract.mutateUnsign(actionId);
   };
 
   let performAction = () => {
-    multisig.mutatePerformAction(actionId);
+    multisigContract.mutatePerformAction(actionId);
   };
 
   let discardAction = () => {
-    multisig.mutateDiscardAction(actionId);
+    multisigContract.mutateDiscardAction(actionId);
   };
 
   return (

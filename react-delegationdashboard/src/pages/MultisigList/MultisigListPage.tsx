@@ -3,16 +3,16 @@ import { Address, Transaction, TransactionHash } from '@elrondnetwork/erdjs/out'
 import React, { useState } from 'react';
 import { useContext } from 'context';
 import MultisigListItem from 'pages/MultisigList/MultisigListItem';
-import useSmartContractDeploy from 'helpers/useSmartContractDeploy';
-import useSmartContractManager from 'helpers/useSmartContractManager';
+import useDeployContract from 'helpers/useDeployContract';
+import useManagerContract from 'helpers/useManagerContract';
 import { MultisigContractInfo } from 'types/MultisigContractInfo';
 import AddMultisigModal from './AddMultisigModal';
 import DeployMultisigModal from './DeployMultisigModal';
 
 const MultisigListPage = () => {
   const { loggedIn, allMultisigContracts, address, dapp, multisigDeployerContract, multisigManagerContract } = useContext();
-  const { scDeploy } = useSmartContractDeploy();
-  const { scManager } = useSmartContractManager();
+  const { deployContract } = useDeployContract();
+  const { managerContract } = useManagerContract();
   const [showAddMultisigModal, setShowAddMultisigModal] = React.useState(false);
   const [showDeployMultisigModal, setShowDeployMultisigModal] = React.useState(false);
 
@@ -28,7 +28,7 @@ const MultisigListPage = () => {
   };
 
   const onAddMultisigFinished = async (address: Address) => {
-    await scManager.mutateRegisterMultisigContract(address);
+    await managerContract.mutateRegisterMultisigContract(address);
 
     setShowAddMultisigModal(false);
   };
@@ -36,11 +36,11 @@ const MultisigListPage = () => {
   const onDeployMultisigFinished = async (name: string) => {
     localStorage.setItem('deployedMultisigName', name);
 
-    await scDeploy.mutateDeploy(1, [ new Address(address) ]);
+    await deployContract.mutateDeploy(1, [ new Address(address) ]);
   };
 
   const readMultisigContracts = async () => {
-    let contracts = await scManager.queryContracts();
+    let contracts = await managerContract.queryContracts();
 
     console.log({contracts});
 
@@ -76,7 +76,7 @@ const MultisigListPage = () => {
             localStorage.setItem('multisigAddressHex', resultParams[1]);
 
             setTimeout(() => {
-              scManager.mutateRegisterMultisigContract(multisigAddress);
+              managerContract.mutateRegisterMultisigContract(multisigAddress);
             }, 1000);
           }
         } else if (json.receiver === multisigManagerContract) {
@@ -96,7 +96,7 @@ const MultisigListPage = () => {
               if (multisigAddressHex && deployedMultisigName) {
                 let multisigAddress = new Address(multisigAddressHex);
 
-                setTimeout(() => scManager.mutateRegisterMultisigContractName(multisigAddress, deployedMultisigName), 1000);
+                setTimeout(() => managerContract.mutateRegisterMultisigContractName(multisigAddress, deployedMultisigName), 1000);
               }
             }
           }

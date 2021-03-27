@@ -21,7 +21,7 @@ import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
 import { MultisigIssueToken } from 'types/MultisigIssueToken';
 import { MultisigSendToken } from 'types/MultisigSendToken';
 
-export class Multisig {
+export class MultisigContract {
   private dapp: DappState;
   private contract: SmartContract;
   private signerProvider?: IDappProvider;

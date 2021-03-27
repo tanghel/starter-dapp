@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'context';
 import { Address } from '@elrondnetwork/erdjs/out';
 import { useHistory } from 'react-router-dom';
-import useSmartContractManager from 'helpers/useSmartContractManager';
+import useManagerContract from 'helpers/useManagerContract';
 
 export interface MultisigCardType {
   address: Address;
@@ -15,7 +15,7 @@ const MultisigCard = ({
 }: MultisigCardType) => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { scManager } = useSmartContractManager();
+  const { managerContract } = useManagerContract();
 
   const onEnterClicked = () => {
     dispatch({
@@ -27,7 +27,7 @@ const MultisigCard = ({
   };
 
   const onUnregisterClicked = async () => {
-    await scManager.mutateUnregisterMultisigContract(address);
+    await managerContract.mutateUnregisterMultisigContract(address);
   };
 
   return (

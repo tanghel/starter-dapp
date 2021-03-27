@@ -1,5 +1,5 @@
-import useMultisig from './useMultisig';
+import useMultisigContract from './useMultisigContract';
 import * as types from './types';
 
 export { types };
-export { useMultisig };
+export { useMultisigContract as useMultisig };

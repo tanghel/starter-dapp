@@ -3,7 +3,6 @@ import { Modal } from 'react-bootstrap';
 import Select from 'react-select';
 import ProposeChangeQuorum from './ProposeChangeQuorum';
 import ProposeInputAddressType from './ProposeInputAddress';
-import { useMultisig } from 'helpers';
 import { Address, Balance } from '@elrondnetwork/erdjs/out';
 import ProposeSendEgld from './ProposeSendEgld';
 import { MultisigSendEgld } from 'types/MultisigSendEgld';
@@ -12,6 +11,7 @@ import { MultisigIssueToken } from 'types/MultisigIssueToken';
 import ProposeIssueToken from './ProposeIssueToken';
 import { MultisigSendToken } from 'types/MultisigSendToken';
 import ProposeSendToken from './ProposeSendToken';
+import useMultisigContract from 'helpers/useMultisigContract';
 
 interface ProposeModalType {
   show: boolean;
@@ -19,7 +19,7 @@ interface ProposeModalType {
 }
 
 const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
-  const { multisig } = useMultisig();
+  const { multisigContract } = useMultisigContract();
 
   const [selectedOption, setSelectedOption] = useState('');
   const [selectedNumericParam, setSelectedNumericParam] = useState(0);
@@ -44,28 +44,28 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
 
   const onProposeClicked = () => {
     if (selectedProposal instanceof MultisigSendEgld) {
-      multisig.mutateSendEgld(selectedProposal.address, selectedProposal.amount, selectedProposal.data);
+      multisigContract.mutateSendEgld(selectedProposal.address, selectedProposal.amount, selectedProposal.data);
       return;
     } else if (selectedProposal instanceof MultisigIssueToken) {
-      multisig.mutateEsdtIssueToken(selectedProposal as MultisigIssueToken);
+      multisigContract.mutateEsdtIssueToken(selectedProposal as MultisigIssueToken);
       return;
     } else if (selectedProposal instanceof MultisigSendToken) {
-      multisig.mutateEsdtSendToken(selectedProposal as MultisigSendToken);
+      multisigContract.mutateEsdtSendToken(selectedProposal as MultisigSendToken);
       return;
     }
 
     switch (selectedOption) {
       case 'change_quorum':
-        multisig.mutateProposeChangeQuorum(selectedNumericParam);
+        multisigContract.mutateProposeChangeQuorum(selectedNumericParam);
         break;
       case 'add_proposer':
-        multisig.mutateProposeAddProposer(selectedAddressParam);
+        multisigContract.mutateProposeAddProposer(selectedAddressParam);
         break;
       case 'add_board_member':
-        multisig.mutateProposeAddBoardMember(selectedAddressParam);
+        multisigContract.mutateProposeAddBoardMember(selectedAddressParam);
         break;
       case 'remove_user':
-        multisig.mutateProposeRemoveUser(selectedAddressParam);
+        multisigContract.mutateProposeRemoveUser(selectedAddressParam);
         break;
       default:
         console.error(`Unrecognized option ${selectedOption}`);

@@ -1,7 +1,7 @@
 import { Address } from '@elrondnetwork/erdjs/out';
 import { useContext, useDispatch } from 'context';
-import { useMultisig } from 'helpers';
-import useSmartContractManager from 'helpers/useSmartContractManager';
+import useManagerContract from 'helpers/useManagerContract';
+import useMultisigContract from 'helpers/useMultisigContract';
 import React from 'react';
 import Footer from './Footer';
 import Navbar from './Navbar';
@@ -9,8 +9,8 @@ import Navbar from './Navbar';
 const Layout = ({ children, page }: { children: React.ReactNode; page: string }) => {
   const dispatch = useDispatch();
   const { address, currentMultisigAddress } = useContext();
-  const { multisig } = useMultisig();
-  const { scManager } = useSmartContractManager();
+  const { multisigContract } = useMultisigContract();
+  const { managerContract } = useManagerContract();
 
   const getDashboardInfo = async () => {
     const [
@@ -21,12 +21,12 @@ const Layout = ({ children, page }: { children: React.ReactNode; page: string })
       allActions,
       contracts
     ] = await Promise.all([
-        multisig.queryBoardMembersCount(),
-        multisig.queryProposersCount(),
-        multisig.queryQuorumCount(),
-        multisig.queryUserRole(new Address(address).hex()),
-        multisig.queryAllActions(),
-        scManager.queryContracts()
+      multisigContract.queryBoardMembersCount(),
+      multisigContract.queryProposersCount(),
+      multisigContract.queryQuorumCount(),
+      multisigContract.queryUserRole(new Address(address).hex()),
+      multisigContract.queryAllActions(),
+      managerContract.queryContracts()
     ]);
 
     dispatch({

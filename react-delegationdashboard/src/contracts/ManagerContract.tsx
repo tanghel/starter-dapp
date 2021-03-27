@@ -17,7 +17,7 @@ import { MultisigContractInfo } from 'types/MultisigContractInfo';
 
 import { DappState } from '../context/state';
 
-export class SmartContractManager {
+export class ManagerContract {
   private address: Address;
   private dapp: DappState;
   private contract: SmartContract;

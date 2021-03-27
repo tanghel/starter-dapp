@@ -11,13 +11,10 @@ import {
   SmartContract,
   Argument,
 } from '@elrondnetwork/erdjs';
-import { Query } from '@elrondnetwork/erdjs/out/smartcontracts/query';
-import { parseContractInfo } from 'helpers/converters';
-import { MultisigContractInfo } from 'types/MultisigContractInfo';
 
 import { DappState } from '../context/state';
 
-export class SmartContractDeploy {
+export class DeployContract {
   private address: Address;
   private dapp: DappState;
   private contract: SmartContract;
