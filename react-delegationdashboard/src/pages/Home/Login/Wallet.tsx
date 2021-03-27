@@ -2,12 +2,14 @@ import { Address } from '@elrondnetwork/erdjs/out';
 import React, { useEffect } from 'react';
 import { useContext, useDispatch } from 'context';
 import { getItem, removeItem, setItem } from 'storage/session';
+import { useLoading } from 'helpers/loading';
 
 const WalletLogin = () => {
   const dispatch = useDispatch();
+  const loadingIndicator = useLoading();
   const { dapp } = useContext();
   const handleOnClick = () => {
-    dispatch({ type: 'loading', loading: true });
+    loadingIndicator.show();
     dapp.provider
       .init()
       .then(initialised => {
@@ -17,12 +19,12 @@ const WalletLogin = () => {
           setItem('wallet_login', {}, 60); // Set a 60s session only
           dapp.provider.login();
         } else {
-          dispatch({ type: 'loading', loading: true });
+          loadingIndicator.show();
           console.warn('Something went wrong trying to redirect to wallet login..');
         }
       })
       .catch(err => {
-        dispatch({ type: 'loading', loading: false });
+        loadingIndicator.hide();
         console.warn(err);
       });
   };
@@ -30,12 +32,14 @@ const WalletLogin = () => {
   // The wallet login component can check for the session and the address get param
   useEffect(() => {
     if (getItem('wallet_login')) {
-      dispatch({ type: 'loading', loading: true });
+      loadingIndicator.show();
       dapp.provider.init().then(initialised => {
         if (!initialised) {
-          dispatch({ type: 'loading', loading: false });
+          loadingIndicator.hide();
           return;
         }
+
+        loadingIndicator.hide();
 
         dapp.provider
           .getAddress()
@@ -51,7 +55,7 @@ const WalletLogin = () => {
           //     )
           // )
           .catch(err => {
-            dispatch({ type: 'loading', loading: false });
+            loadingIndicator.hide();
           });
       });
     }

@@ -9,55 +9,62 @@ import MultisigProposalCard from 'pages/MultisigDetails/MultisigProposalCard';
 import { Address } from '@elrondnetwork/erdjs/out';
 import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
 import { useMultisigContract } from 'contracts/MultisigContract';
+import { useLoading } from 'helpers/loading';
 
 const MultisigDetailsPage = () => {
   const { address, currentMultisigAddress, totalBoardMembers, totalProposers, quorumSize, userRole, loading, allActions } = useContext();
   const { multisigContract } = useMultisigContract();
   const dispatch = useDispatch();
+  const loadingIndicator = useLoading();
 
   if (!currentMultisigAddress) {
     return <Redirect to="/owner" />;
   }
 
   const getDashboardInfo = async () => {
-    const [
-      totalBoardMembers,
-      totalProposers,
-      quorumSize,
-      userRole,
-      allActions,
-    ] = await Promise.all([
-      multisigContract.queryBoardMembersCount(),
-      multisigContract.queryProposersCount(),
-      multisigContract.queryQuorumCount(),
-      multisigContract.queryUserRole(new Address(address).hex()),
-      multisigContract.queryAllActions(),
-    ]);
+    loadingIndicator.show();
+    try {
+      const [
+        totalBoardMembers,
+        totalProposers,
+        quorumSize,
+        userRole,
+        allActions,
+      ] = await Promise.all([
+        multisigContract.queryBoardMembersCount(),
+        multisigContract.queryProposersCount(),
+        multisigContract.queryQuorumCount(),
+        multisigContract.queryUserRole(new Address(address).hex()),
+        multisigContract.queryAllActions(),
+      ]);
 
-    dispatch({
-      type: 'setTotalBoardMembers',
-      totalBoardMembers: totalBoardMembers
-    });
-
-    dispatch({
-      type: 'setTotalProposers',
-      totalProposers: totalProposers
-    });
-
-    dispatch({
-      type: 'setQuorumSize',
-      quorumSize: quorumSize
-    }); 
-
-    dispatch({
-      type: 'setUserRole',
-      userRole: userRole
-    });
-
-    dispatch({
-      type: 'setAllActions',
-      allActions: allActions
-    });
+      dispatch({
+        type: 'setTotalBoardMembers',
+        totalBoardMembers: totalBoardMembers
+      });
+  
+      dispatch({
+        type: 'setTotalProposers',
+        totalProposers: totalProposers
+      });
+  
+      dispatch({
+        type: 'setQuorumSize',
+        quorumSize: quorumSize
+      }); 
+  
+      dispatch({
+        type: 'setUserRole',
+        userRole: userRole
+      });
+  
+      dispatch({
+        type: 'setAllActions',
+        allActions: allActions
+      });
+    } finally {
+      loadingIndicator.hide();
+    }
   };
 
   const userRoleAsString = () => {
@@ -110,7 +117,7 @@ const MultisigDetailsPage = () => {
 
   React.useEffect(() => {
     if (address === null || (currentMultisigAddress === null || currentMultisigAddress === undefined || currentMultisigAddress === Address.Zero())) {
-      dispatch({ type: 'loading', loading: false});
+      loadingIndicator.hide();
       return;
     }
 

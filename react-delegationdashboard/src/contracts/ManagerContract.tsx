@@ -125,6 +125,7 @@ export class ManagerContract {
 
 export function useManagerContract() {
   const { dapp, address, multisigManagerContract } = useContext();
+  console.log({address});
   const managerContract = new ManagerContract(dapp, multisigManagerContract ?? '', dapp.provider, new Address(address));
   return { managerContract };
 }
