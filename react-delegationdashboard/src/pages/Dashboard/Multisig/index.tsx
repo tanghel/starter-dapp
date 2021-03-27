@@ -6,6 +6,7 @@ import ProposeAction from '../Actions/ProposeAction/ProposeAction';
 import ProposalCard from 'components/ProposalCard';
 import { Address } from '@elrondnetwork/erdjs/out';
 import { MultisigActionDetailed } from 'types/MultisigActionDetailed';
+import AddMultisigModal from './AddMultisigModal';
 
 
 const MyMultisig = () => {

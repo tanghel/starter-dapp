@@ -7,16 +7,36 @@ import MultisigCard from 'components/MultisigCard';
 import useSmartContractDeploy from 'helpers/useSmartContractDeploy';
 import useSmartContractManager from 'helpers/useSmartContractManager';
 import { MultisigContractInfo } from 'types/MultisigContractInfo';
+import AddMultisigModal from 'pages/Dashboard/Multisig/AddMultisigModal';
+import DeployMultisigModal from 'pages/Dashboard/Multisig/DeployMultisigModal';
 
 const Owner = () => {
-  const { loggedIn, allMultisigContracts, address, dapp } = useContext();
+  const { loggedIn, allMultisigContracts, address, dapp, multisigDeployerContract, multisigManagerContract } = useContext();
   const { scDeploy } = useSmartContractDeploy();
   const { scManager } = useSmartContractManager();
+  const [showAddMultisigModal, setShowAddMultisigModal] = React.useState(false);
+  const [showDeployMultisigModal, setShowDeployMultisigModal] = React.useState(false);
 
   const initialMultisigContracts: MultisigContractInfo[] = [];
   const [multisigContracts, setMultisigContracts] = useState(initialMultisigContracts);
 
   const onDeployClicked = async () => {
+    setShowDeployMultisigModal(true);
+  };
+
+  const onAddMultisigClicked = async () => {
+    setShowAddMultisigModal(true);
+  };
+
+  const onAddMultisigFinished = async (address: Address) => {
+    await scManager.mutateRegisterMultisigContract(address);
+
+    setShowAddMultisigModal(false);
+  };
+
+  const onDeployMultisigFinished = async (name: string) => {
+    localStorage.setItem('deployedMultisigName', name);
+
     await scDeploy.mutateDeploy(1, [ new Address(address) ]);
   };
 
@@ -37,16 +57,50 @@ const Owner = () => {
       let result = await fetch(`${dapp.apiUrl}/transactions/${txHash}`);
       let json = await result.json();
       console.log({json});
-      
+
+      let inputData = json.data;
+      let inputDecoded = atob(inputData);
+      let inputParams = inputDecoded.split('@');
+
       let scResults = json.scResults;
       if (scResults.length > 0) {
-        let data = scResults[0].data;
-        let decoded = atob(data);
+        if (json.receiver === multisigDeployerContract) {
+          let outputData = scResults[0].data;
+          let outputDecoded = atob(outputData);
 
-        let resultParams = decoded.split('@').slice(1);
-        console.log({resultParams});
-        if (resultParams.length === 2 && resultParams[0] === '6f6b') {
-          console.log({address: new Address(resultParams[1]).bech32()});
+          let resultParams = outputDecoded.split('@').slice(1);
+          console.log({resultParams});
+          if (resultParams.length === 2 && resultParams[0] === '6f6b') {
+            let multisigAddress = new Address(resultParams[1]);
+            console.log({multisigAddress});
+
+            localStorage.setItem('multisigAddressHex', resultParams[1]);
+
+            setTimeout(() => {
+              scManager.mutateRegisterMultisigContract(multisigAddress);
+            }, 1000);
+          }
+        } else if (json.receiver === multisigManagerContract) {
+          let data = scResults[0].data;
+          let decoded = atob(data);
+
+          let functionName = inputParams[0];
+
+          let resultParams = decoded.split('@').slice(1);
+          if (resultParams.length === 1 && resultParams[0] === '6f6b') {
+            if (functionName === 'registerMultisigContract') {
+              console.log({resultParams});
+
+              let multisigAddressHex = localStorage.getItem('multisigAddressHex');
+              let deployedMultisigName = localStorage.getItem('deployedMultisigName') ?? '';
+
+              if (multisigAddressHex && deployedMultisigName) {
+                let multisigAddress = new Address(multisigAddressHex);
+
+                setTimeout(() => scManager.mutateRegisterMultisigContractName(multisigAddress, deployedMultisigName), 1000);
+              }
+            }
+          }
         }
       }
     }
@@ -74,6 +128,13 @@ const Owner = () => {
             >
               Deploy
             </button>
+
+            <button 
+              onClick={onAddMultisigClicked}
+              className="btn btn-primary mb-3"
+            >
+              Add Multisig
+            </button>
           </div>
           </div>
 
@@ -87,6 +148,20 @@ const Owner = () => {
             )
           }
         </div>
+
+        <AddMultisigModal
+          show={showAddMultisigModal}
+          handleClose={() => {
+              setShowAddMultisigModal(false);
+          }}
+          handleAdd={onAddMultisigFinished}
+        />
+
+        <DeployMultisigModal
+          show={showDeployMultisigModal}
+          handleClose={() => setShowDeployMultisigModal(false)}
+          handleDeploy={onDeployMultisigFinished}
+        />
       </div>
     </>
   );

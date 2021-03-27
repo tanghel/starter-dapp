@@ -39,6 +39,10 @@ export class SmartContractManager {
     this.sendTransaction(0, 'unregisterMultisigContract', Argument.fromPubkey(multisigAddress));
   }
 
+  public async mutateRegisterMultisigContractName(multisigAddress: Address, name: string) {
+    this.sendTransaction(0, 'registerMultisigName', Argument.fromPubkey(multisigAddress), Argument.fromUTF8(name));
+  }
+
   private async queryMultisigContractInfoArray(functionName: string, ...args: Argument[]): Promise<MultisigContractInfo[]> {
     let result = await this.query(functionName, ...args);
 
