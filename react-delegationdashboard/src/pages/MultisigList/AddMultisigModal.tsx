@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Modal } from 'react-bootstrap';
-import { useMultisig } from 'helpers';
 import { Address } from '@elrondnetwork/erdjs/out';
 import ProposeInputAddress from '../MultisigDetails/Propose/ProposeInputAddress';
 

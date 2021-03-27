@@ -1,6 +1,5 @@
 import React from 'react';
-import { useMultisig } from 'helpers';
-import { useContext, useDispatch } from 'context';
+import { useDispatch } from 'context';
 import { Address } from '@elrondnetwork/erdjs/out';
 import { useHistory } from 'react-router-dom';
 import useSmartContractManager from 'helpers/useSmartContractManager';
@@ -40,7 +39,7 @@ const MultisigCard = ({
       </div>
       <div className="d-flex flex-wrap align-items-center justify-content-between mb-2">
           <div>
-            <span className="opacity-6">{address.hex()}</span>
+            <span className="opacity-6">{address.bech32()}</span>
             <p className="h5 mb-0">
                 {name}
             </p>
