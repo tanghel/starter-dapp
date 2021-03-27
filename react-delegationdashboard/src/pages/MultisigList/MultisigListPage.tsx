@@ -107,7 +107,10 @@ const MultisigListPage = () => {
 
   React.useEffect(() => {
     tryParseUrlParams();
-    readMultisigContracts();
+
+    if (address !== '') {
+      readMultisigContracts();
+    }
   }, []);
 
   if (!loggedIn) {
