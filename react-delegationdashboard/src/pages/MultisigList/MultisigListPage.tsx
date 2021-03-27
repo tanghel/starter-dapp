@@ -7,9 +7,8 @@ import { MultisigContractInfo } from 'types/MultisigContractInfo';
 import AddMultisigModal from './AddMultisigModal';
 import DeployMultisigModal from './DeployMultisigModal';
 import { useDeployContract } from 'contracts/DeployContract';
-import { ManagerContract, useManagerContract } from 'contracts/ManagerContract';
+import { useManagerContract } from 'contracts/ManagerContract';
 import { hexToAddress, hexToString } from 'helpers/converters';
-import TransactionParameter from 'types/TransactionParameter';
 import { tryParseTransactionParameter } from 'helpers/urlparameters';
 
 const MultisigListPage = () => {
@@ -38,7 +37,7 @@ const MultisigListPage = () => {
   const onDeployMultisigFinished = async (name: string) => {
     sessionStorage.setItem('deployedMultisigName', name);
 
-    await deployContract.mutateDeploy(1, [ new Address(address) ]);
+    await deployContract.mutateDeploy(1, [new Address(address)]);
   };
 
   const readMultisigContracts = async () => {
@@ -116,41 +115,60 @@ const MultisigListPage = () => {
   return (
     <>
       <div className="owner w-100">
-        <div className="card border-0">
-          <div className="card-body pt-0 px-spacer pb-spacer">
+        <div className="card">
+          <div className="card-body">
 
-          <div className="p-spacer">
-            <button 
-              onClick={onDeployClicked}
-              className="btn btn-primary mb-3"
-            >
-              Deploy
-            </button>
+            <div className="p-spacer">
+              <button
+                onClick={onDeployClicked}
+                className="btn btn-primary mb-3 mr-2"
+              >
+                Deploy Multisig
+              </button>
 
-            <button 
-              onClick={onAddMultisigClicked}
-              className="btn btn-primary mb-3"
-            >
-              Add Multisig
-            </button>
+              <button
+                onClick={onAddMultisigClicked}
+                className="btn btn-primary mb-3"
+              >
+                Add Existing Multisig
+              </button>
+            </div>
+
+            <div className="card border-0">
+              <div className="card-body pt-0 px-spacer pb-spacer">
+              </div>
+
+              {multisigContracts.length > 0 ?
+                multisigContracts.map(contract =>
+                  <MultisigListItem
+                    key={contract.address.hex()}
+                    address={contract.address}
+                    name={contract.name}
+                  />
+                ) :
+                <div className="m-auto text-center py-spacer">
+                  <div className="state m-auto p-spacer text-center">
+                    <p className="h4 mt-2 mb-1">No Multisig Wallet Yet</p>
+                    <div className="mb-3">Welcome to our platform!</div>
+                    <div>
+                      <button
+                        onClick={onDeployClicked}
+                        className="btn btn-primary mb-3 mr-2"
+                      >
+                        Deploy Multisig
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
           </div>
-          </div>
-
-          {
-            multisigContracts.map(contract => 
-              <MultisigListItem 
-                key={contract.address.hex()}
-                address={contract.address}
-                name={contract.name}
-              />
-            )
-          }
         </div>
 
         <AddMultisigModal
           show={showAddMultisigModal}
           handleClose={() => {
-              setShowAddMultisigModal(false);
+            setShowAddMultisigModal(false);
           }}
           handleAdd={onAddMultisigFinished}
         />

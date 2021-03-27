@@ -26,7 +26,7 @@ const MultisigCard = ({
   };
 
   return (
-    <div className="statcard card-bg-red text-white py-3 px-4 mb-spacer ml-spacer rounded">
+    <div className="statcard card-bg-red text-white py-3 px-4 mb-spacer ml-spacer rounded mx-4">
       <div className="d-flex align-items-center justify-content-between mt-1 mb-2">
         <div className="icon my-1 fill-white">
           

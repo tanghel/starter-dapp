@@ -1,25 +1,25 @@
 import { useDispatch } from 'context';
-import { ActionType, DispatchType } from 'context/reducer';
+import { DispatchType } from 'context/reducer';
 
 export class Loading {
-    private dispatch: DispatchType;
+  private dispatch: DispatchType;
 
-    constructor(dispatch: DispatchType) {
-        this.dispatch = dispatch;
-    }
+  constructor(dispatch: DispatchType) {
+    this.dispatch = dispatch;
+  }
 
-    public show() {
-        this.dispatch({ type: 'loading', loading: true });
-    }
-    
-    public hide() {
-        this.dispatch({ type: 'loading', loading: false });
-    }
+  public show() {
+    this.dispatch({ type: 'loading', loading: true });
+  }
+  
+  public hide() {
+    this.dispatch({ type: 'loading', loading: false });
+  }
 }
 
 export function useLoading() {
-    const dispatch = useDispatch();
-    const loading = new Loading(dispatch);
-    return loading;
-  }
+  const dispatch = useDispatch();
+  const loading = new Loading(dispatch);
+  return loading;
+}
   

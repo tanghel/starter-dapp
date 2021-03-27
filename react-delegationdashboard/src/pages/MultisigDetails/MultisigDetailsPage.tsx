@@ -13,6 +13,7 @@ import { useLoading } from 'helpers/loading';
 import { tryParseTransactionParameter } from 'helpers/urlparameters';
 import { hexToNumber, hexToString } from 'helpers/converters';
 import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
+import { useConfirmModal } from 'components/ConfirmModal/ConfirmModalPayload';
 
 interface MultisigDetailsPageParams {
   multisigAddressParam: string
@@ -24,10 +25,7 @@ const MultisigDetailsPage = () => {
   const dispatch = useDispatch();
   const loadingIndicator = useLoading();
   let { multisigAddressParam } = useParams<MultisigDetailsPageParams>();
-
-  const [ showConfirmPerformAction, setShowConfirmPerformAction ] = React.useState(false);
-  const [ showConfirmDiscardAction, setShowConfirmDiscardAction ] = React.useState(false);
-  const [ pendingActionToConfirm, setPendingActionToConfirm ] = React.useState(0);
+  const confirmModal = useConfirmModal();
 
   const parseMultisigAddress = (): Address | undefined => {
     try {
@@ -173,8 +171,10 @@ const MultisigDetailsPage = () => {
     let realUserRole = await multisigContract.queryUserRole(new Address(address).hex());
 
     if (validSignerCount >= realQuorumSize && realUserRole === 2) {
-      setPendingActionToConfirm(actionId);
-      setShowConfirmPerformAction(true);
+      let success = await confirmModal.show('Confirm perform action', 'Perform action');
+      if (success) {
+        await multisigContract.mutatePerformAction(actionId);
+      }
     }
   };
 
@@ -183,23 +183,11 @@ const MultisigDetailsPage = () => {
     let realUserRole = await multisigContract.queryUserRole(new Address(address).hex());
 
     if (validSignerCount === 0 && realUserRole === 2) {
-      setPendingActionToConfirm(actionId);
-      setShowConfirmDiscardAction(true);
+      let success = await confirmModal.show('Confirm discard action', 'Discard action');
+      if (success) {
+        await multisigContract.mutateDiscardAction(actionId);
+      }
     }
-  };
-
-  const onConfirmPerformActionClicked = async () => {
-    setPendingActionToConfirm(0);
-    setShowConfirmPerformAction(false);
-
-    await multisigContract.mutatePerformAction(pendingActionToConfirm);
-  };
-
-  const onConfirmDiscardActionClicked = async () => {
-    setPendingActionToConfirm(0);
-    setShowConfirmDiscardAction(false);
-
-    await multisigContract.mutateDiscardAction(pendingActionToConfirm);
   };
 
   React.useEffect(() => {
@@ -301,22 +289,6 @@ const MultisigDetailsPage = () => {
           )}
         </div>
       </div>
-
-      <ConfirmModal 
-        title="Confirm perform action" 
-        confirmButtonTitle="Perform action" 
-        show={showConfirmPerformAction} 
-        handleClose={() => setShowConfirmPerformAction(false)} 
-        handleConfirm={onConfirmPerformActionClicked}
-      />
-
-      <ConfirmModal 
-        title="Confirm discard action" 
-        confirmButtonTitle="Discard action" 
-        show={showConfirmDiscardAction} 
-        handleClose={() => setShowConfirmDiscardAction(false)} 
-        handleConfirm={onConfirmDiscardActionClicked}
-      />
     </div>
   );
 };
