@@ -9,6 +9,8 @@ import { ReactComponent as DeleteUser } from '../../assets/images/delete-user.sv
 import { ReactComponent as Quorum } from '../../assets/images/quorum.svg';
 import { ReactComponent as Token } from '../../assets/images/token.svg';
 import { ReactComponent as Logo } from '../../assets/images/logo.svg';
+import { ReactComponent as Circle } from '../../assets/images/circle.svg';
+import { ReactComponent as Done } from '../../assets/images/done.svg';
 import { MultisigActionType } from 'types/MultisigActionType';
 
 export interface MultisigProposalCardType {
@@ -70,6 +72,16 @@ const MultisigProposalCard = ({
             type === MultisigActionType.SendEgld ?
             <Logo style={{ width:20, height: 20 }} /> :
             null
+          }
+              
+        </div>
+        <div>
+          {
+            signers.map((_, index) => (<Done key={index} style={{marginRight: index === signers.length - 1 ? 4 : 8}} />))
+          }
+
+          {
+            [...Array(quorumSize - signers.length)].map((index) => (<Circle key={index + signers.length} style={{width: 30, height: 30}} />))
           }
         </div>
       </div>
