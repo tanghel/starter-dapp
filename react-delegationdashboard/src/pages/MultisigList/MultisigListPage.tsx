@@ -5,26 +5,51 @@ import { useContext } from 'context';
 import MultisigListItem from 'pages/MultisigList/MultisigListItem';
 import { MultisigContractInfo } from 'types/MultisigContractInfo';
 import AddMultisigModal from './AddMultisigModal';
-import DeployMultisigModal from './DeployMultisigModal';
 import { useDeployContract } from 'contracts/DeployContract';
 import { useManagerContract } from 'contracts/ManagerContract';
 import { hexToAddress, hexToString } from 'helpers/converters';
 import { tryParseTransactionParameter } from 'helpers/urlparameters';
 import { useConfirmModal } from 'components/ConfirmModal/ConfirmModalPayload';
+import DeployStepsModal from './DeployStepsModal';
 
 const MultisigListPage = () => {
   const { loggedIn, address, dapp, multisigDeployerContract, multisigManagerContract } = useContext();
   const { deployContract } = useDeployContract();
   const { managerContract } = useManagerContract();
+
   const [showAddMultisigModal, setShowAddMultisigModal] = React.useState(false);
   const [showDeployMultisigModal, setShowDeployMultisigModal] = React.useState(false);
+  const [currentDeploymentStep, setCurrentDeploymentStep] = React.useState(0);
 
   const confirmModal = useConfirmModal();
 
   const [multisigContracts, setMultisigContracts] = useState<MultisigContractInfo[]>([]);
 
   const onDeployClicked = async () => {
+    setCurrentDeploymentStep(0);
     setShowDeployMultisigModal(true);
+  };
+
+  const onDeployStepConfirmed = async (name: string) => {
+    if (currentDeploymentStep === 0) {
+      await deployContract.mutateDeploy(1, [ new Address(address) ]);
+    } else if (currentDeploymentStep === 1) {
+      let multisigAddressHex = sessionStorage.getItem('multisigAddressHex');
+      if (!multisigAddressHex) {
+        return;
+      }
+
+      let multisigAddress = new Address(multisigAddressHex);
+      await managerContract.mutateRegisterMultisigContractName(multisigAddress, name);
+    } else if (currentDeploymentStep === 2) {
+      let multisigAddressHex = sessionStorage.getItem('multisigAddressHex');
+      if (!multisigAddressHex) {
+        return;
+      }
+
+      let multisigAddress = new Address(multisigAddressHex);
+      await managerContract.mutateRegisterMultisigContract(multisigAddress);
+    }
   };
 
   const onAddMultisigClicked = async () => {
@@ -35,12 +60,6 @@ const MultisigListPage = () => {
     await managerContract.mutateRegisterMultisigContract(address);
 
     setShowAddMultisigModal(false);
-  };
-
-  const onDeployMultisigFinished = async (name: string) => {
-    sessionStorage.setItem('deployedMultisigName', name);
-
-    await deployContract.mutateDeploy(1, [new Address(address)]);
   };
 
   const readMultisigContracts = async () => {
@@ -79,31 +98,18 @@ const MultisigListPage = () => {
 
   const onDeployContract = async (multisigAddress: Address) => {
     sessionStorage.setItem('multisigAddressHex', multisigAddress.hex());
-    let deployedMultisigName = sessionStorage.getItem('deployedMultisigName') ?? '';
-    if (!deployedMultisigName) {
-      return;
-    }
-
-    await confirmModal.show('Step 2: Registering multisig name', 'Sign transaction');
-
-    managerContract.mutateRegisterMultisigContractName(multisigAddress, deployedMultisigName);
+    
+    setCurrentDeploymentStep(1);
+    setShowDeployMultisigModal(true);
   };
 
   const onRegisterMultisigName = async () => {
-    let multisigAddressHex = sessionStorage.getItem('multisigAddressHex');
-    if (!multisigAddressHex) {
-      return;
-    }
-
-    let multisigAddress = new Address(multisigAddressHex);
-    await confirmModal.show('Step 3: Attaching multisig to your account', 'Sign transaction');
-
-    managerContract.mutateRegisterMultisigContract(multisigAddress);
+    setCurrentDeploymentStep(2);
+    setShowDeployMultisigModal(true);
   };
 
   const onRegisterMultisigContract = async () => {
     sessionStorage.removeItem('multisigAddressHex');
-    sessionStorage.removeItem('deployedMultisigName');
   };
 
   React.useEffect(() => {
@@ -121,6 +127,7 @@ const MultisigListPage = () => {
   return (
     <>
       <div className="owner w-100">
+   
         <div className="card">
           <div className="card-body">
 
@@ -180,10 +187,11 @@ const MultisigListPage = () => {
           handleAdd={onAddMultisigFinished}
         />
 
-        <DeployMultisigModal
+        <DeployStepsModal
           show={showDeployMultisigModal}
+          currentStep={currentDeploymentStep}
           handleClose={() => setShowDeployMultisigModal(false)}
-          handleDeploy={onDeployMultisigFinished}
+          handleStep={onDeployStepConfirmed}
         />
       </div>
     </>

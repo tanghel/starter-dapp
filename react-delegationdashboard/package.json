@@ -28,6 +28,7 @@
     "react-modal": "3.12.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
+    "react-stepper-horizontal": "^1.0.11",
     "reinspect": "^1.1.0",
     "yup": "^0.32.9"
   },
