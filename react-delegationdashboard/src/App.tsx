@@ -19,7 +19,7 @@ i18n
         translation: germanTranslations
       }
     },
-    lng: 'de',
+    lng: 'en',
     fallbackLng: 'en',
 
     interpolation: {
@@ -29,6 +29,13 @@ i18n
 
 
 function App() {
+  React.useEffect(() => {
+    let language = localStorage.getItem('language');
+    if (language) {
+      i18n.changeLanguage(language);
+    }
+  }, []);
+  
   return (
     <Router>
       <ContextProvider>

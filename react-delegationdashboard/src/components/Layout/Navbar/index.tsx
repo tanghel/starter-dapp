@@ -7,7 +7,7 @@ const Navbar = () => {
   const { t, i18n } = useTranslation();
   const { loggedIn, dapp, address } = useContext();
   const dispatch = useDispatch();
-  const [ languages, setLanguages ] = React.useState<string[]>([]);
+  const languages = [ 'en', 'de' ];
 
   const logOut = () => {
     dispatch({ type: 'logout', provider: dapp.provider });
@@ -15,11 +15,9 @@ const Navbar = () => {
 
   const onChangeLanguageClicked = (language: string) => {
     i18n.changeLanguage(language);
-  };
 
-  React.useEffect(() => {
-    setLanguages(i18n.languages);
-  }, []);
+    localStorage.setItem('language', language);
+  };
 
   return (
     <div className="navbar px-4 py-3 flex-nowrap">
