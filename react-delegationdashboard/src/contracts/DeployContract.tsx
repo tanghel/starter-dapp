@@ -83,7 +83,11 @@ export class DeployContract {
 }
 
 export function useDeployContract() {
-  const { dapp, address, multisigDeployerContract } = useContext();
+  const { dapp, address, multisigDeployerContracts } = useContext();
+
+  let randomInt = Math.floor(Math.random() * (multisigDeployerContracts.length) );
+  let multisigDeployerContract = multisigDeployerContracts[randomInt];
+
   const deployContract = new DeployContract(dapp, multisigDeployerContract ?? '', dapp.provider, new Address(address));
   return { deployContract };
 }

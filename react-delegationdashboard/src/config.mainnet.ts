@@ -1,4 +1,4 @@
-import { object, string, boolean, InferType } from 'yup';
+import { object, string, boolean, InferType, array } from 'yup';
 
 export const decimals: number = 2;
 export const denomination: number = 18;
@@ -12,8 +12,7 @@ export const networks: NetworkType[] = [
     apiAddress: 'https://api.elrond.com',
     gatewayAddress: 'https://gateway.elrond.com',
     explorerAddress: 'http://explorer.elrond.com/',
-    multisigContract: 'erd1qqqqqqqqqqqqqpgq8sxvjujwsa9865sw94tltgzvjpkyw7averms6qkjj7',
-    multisigDeployerContract: 'erd1qqqqqqqqqqqqqpgqh7hl7t5cy0g4td0mv8hp950qtumnagamermsx0aep5',
+    multisigDeployerContracts: [ 'erd1qqqqqqqqqqqqqpgqh7hl7t5cy0g4td0mv8hp950qtumnagamermsx0aep5' ],
     multisigManagerContract: 'erd1qqqqqqqqqqqqqpgqh7hl7t5cy0g4td0mv8hp950qtumnagamermsx0aep5',
   },
 ];
@@ -32,8 +31,7 @@ const networkSchema = object({
   apiAddress: string(),
   gatewayAddress: string(),
   explorerAddress: string(),
-  multisigContract: string(),
-  multisigDeployerContract: string(),
+  multisigDeployerContracts: array().of(string().defined().required()).defined().required(),
   multisigManagerContract: string(),
 }).required();
 

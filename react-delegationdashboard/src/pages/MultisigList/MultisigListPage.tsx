@@ -14,7 +14,7 @@ import DeployStepsModal from './DeployStepsModal';
 import { useTranslation } from 'react-i18next';
 
 const MultisigListPage = () => {
-  const { loggedIn, address, dapp, multisigDeployerContract, multisigManagerContract } = useContext();
+  const { loggedIn, address, dapp, multisigDeployerContracts, multisigManagerContract } = useContext();
   const { deployContract } = useDeployContract();
   const { managerContract } = useManagerContract();
   const { t } = useTranslation();
@@ -76,7 +76,7 @@ const MultisigListPage = () => {
       return;
     }
 
-    if (parameters.receiver.bech32() === multisigDeployerContract) {
+    if (multisigDeployerContracts.includes(parameters.receiver.bech32())) {
       if (parameters.functionName === 'deployContract') {
         if (parameters.outputParameters.length === 2 && hexToString(parameters.outputParameters[0]) === 'ok') {
           let multisigAddress = hexToAddress(parameters.outputParameters[1]);
