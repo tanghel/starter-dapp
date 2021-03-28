@@ -59,4 +59,6 @@ export const germanTranslations = {
   'Confirm Perform Action': 'Bestätigung Aktion ausführen',
   'Confirm Discard Action': 'Bestätigung Aktion verwerfen',
   'Access wallet': 'Brieftasche öffnen',
+  'No Multisig Wallet Yet': 'Sie haben noch keine Multisig-Brieftasche',
+  'Welcome to our platform!': 'Willkommen zu unserer Plattform!',
 };

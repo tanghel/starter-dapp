@@ -239,7 +239,7 @@ const MultisigDetailsPage = () => {
             title={t('Proposers')}
             value={totalProposers.toString()}
             valueUnit=""
-            color="purple"
+            color="orange"
             svg="clipboard-list.svg"
           />
           <StatCard

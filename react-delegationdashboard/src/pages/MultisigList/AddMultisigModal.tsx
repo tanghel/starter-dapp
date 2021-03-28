@@ -24,7 +24,7 @@ const AddMultisigModal = ({ show, handleClose, handleAdd }: AddMultisigModalType
   };
 
   return (
-    <Modal show={show} onHide={handleClose} className="modal-container" animation={false} centered>
+    <Modal size="lg" show={show} onHide={handleClose} className="modal-container" animation={false} centered>
       <div className="card">
         <div className="card-body p-spacer text-center">
           <p className="h6 mb-spacer" data-testid="delegateTitle">

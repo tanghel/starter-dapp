@@ -164,8 +164,8 @@ const MultisigListPage = () => {
                 ) :
                 <div className="m-auto text-center py-spacer">
                   <div className="state m-auto p-spacer text-center">
-                    <p className="h4 mt-2 mb-1">No Multisig Wallet Yet</p>
-                    <div className="mb-3">Welcome to our platform!</div>
+                    <p className="h4 mt-2 mb-1">{t('No Multisig Wallet Yet')}</p>
+                    <div className="mb-3">{t('Welcome to our platform!')}</div>
                     <div>
                       <button
                         onClick={onDeployClicked}
