@@ -12,6 +12,7 @@ import ProposeIssueToken from './ProposeIssueToken';
 import { MultisigSendToken } from 'types/MultisigSendToken';
 import ProposeSendToken from './ProposeSendToken';
 import { useMultisigContract } from 'contracts/MultisigContract';
+import { useTranslation } from 'react-i18next';
 
 interface ProposeModalType {
   show: boolean;
@@ -20,6 +21,7 @@ interface ProposeModalType {
 
 const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
   const { multisigContract } = useMultisigContract();
+  const { t } = useTranslation();
 
   const [selectedOption, setSelectedOption] = useState('');
   const [selectedNumericParam, setSelectedNumericParam] = useState(0);
@@ -27,13 +29,13 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
   const [selectedProposal, setSelectedProposal] = useState<MultisigAction | null>(null);
 
   const options = [
-    { value: 'change_quorum', label: 'Change quorum' },
-    { value: 'add_proposer', label: 'Add proposer' },
-    { value: 'add_board_member', label: 'Add board member' },
-    { value: 'remove_user', label: 'Remove user' },
-    { value: 'send_egld', label: 'Send Egld' },
-    { value: 'issue_token', label: 'Issue Token' },
-    { value: 'send_token', label: 'Send Token' },
+    { value: 'change_quorum', label: t('Change Quorum') },
+    { value: 'add_proposer', label: t('Add Proposer') },
+    { value: 'add_board_member', label: t('Add Board Member') },
+    { value: 'remove_user', label: t('Remove User') },
+    { value: 'send_egld', label: t('Send eGLD') },
+    { value: 'issue_token', label: t('Issue Token') },
+    { value: 'send_token', label: t('Send Token') },
   ];
 
   const handleOptionChange = (option: any, label: any) => {
@@ -90,10 +92,10 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
       <div className="card">
         <div className="card-body p-spacer text-center">
           <p className="h6 mb-spacer" data-testid="delegateTitle">
-            Propose
+            {t('Propose')}
           </p>
           <Select 
-
+            placeholder={t('Select') + '...'}
             options={options} 
             onChange={handleOptionChange}
             theme={theme => ({
@@ -129,7 +131,7 @@ const ProposeModal = ({ show, handleClose }: ProposeModalType) => {
               onClick={onProposeClicked}
               className="btn btn-primary mb-3"
             >
-              Propose
+              {t('Propose')}
             </button>
           </div>
         </div>

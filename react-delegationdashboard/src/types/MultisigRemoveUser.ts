@@ -1,6 +1,7 @@
 import { Address } from '@elrondnetwork/erdjs/out';
 import { MultisigAction } from './MultisigAction';
 import { MultisigActionType } from './MultisigActionType';
+import i18next from 'i18next';
 
 export class MultisigRemoveUser extends MultisigAction {
     address: Address;
@@ -11,7 +12,7 @@ export class MultisigRemoveUser extends MultisigAction {
     }
   
     title() {
-      return 'Remove User';
+      return i18next.t('Remove User');
     }
   
     description() {

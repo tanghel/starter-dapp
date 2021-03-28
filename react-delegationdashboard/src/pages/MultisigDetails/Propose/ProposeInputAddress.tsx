@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useContext } from 'context';
 import { Address } from '@elrondnetwork/erdjs/out';
+import { useTranslation } from 'react-i18next';
 
 interface ProposeInputAddressType {
   handleParamsChange: (params: Address) => void;
@@ -8,6 +9,7 @@ interface ProposeInputAddressType {
 
 const ProposeInputAddress = ({ handleParamsChange } : ProposeInputAddressType) => {
   const [address, setAddress] = useState('');
+  const { t } = useTranslation();
 
   const handleAddressChanged = (event: any) => {
     setAddress(event.target.value);
@@ -17,7 +19,7 @@ const ProposeInputAddress = ({ handleParamsChange } : ProposeInputAddressType) =
 
   return (
     <div className="modal-control-container">
-      <span>Address: </span>
+      <span>{t('Address')}: </span>
       <input 
         type="text"
         className='form-control'

@@ -1,5 +1,6 @@
 import { Address } from '@elrondnetwork/erdjs/out';
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MultisigSendToken } from 'types/MultisigSendToken';
 
 interface ProposeSendTokenType {
@@ -7,6 +8,8 @@ interface ProposeSendTokenType {
 }
 
 const ProposeSendToken = ({ handleChange } : ProposeSendTokenType) => {
+  const { t } = useTranslation();
+
   const [address, setAddress] = useState('');
   const [identifier, setIdentifier] = useState('');
   const [amount, setAmount] = useState('');
@@ -48,7 +51,7 @@ const ProposeSendToken = ({ handleChange } : ProposeSendTokenType) => {
   return (
     <div>
       <div className="modal-control-container">
-        <span>Address: </span>
+        <span>{t('Address')}: </span>
         <input 
           type="text"
           className='form-control'
@@ -58,7 +61,7 @@ const ProposeSendToken = ({ handleChange } : ProposeSendTokenType) => {
         />
       </div>
       <div className="modal-control-container">
-        <span>Identifier: </span>
+        <span>{t('Identifier')}: </span>
         <input 
           type="text"
           className='form-control'
@@ -68,7 +71,7 @@ const ProposeSendToken = ({ handleChange } : ProposeSendTokenType) => {
         />
       </div>
       <div className="modal-control-container">
-        <span>Amount: </span>
+        <span>{t('Amount')}: </span>
         <input 
           type="number"
           className='form-control'

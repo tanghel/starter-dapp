@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MultisigIssueToken } from 'types/MultisigIssueToken';
 
 interface ProposeIssueTokenType {
@@ -6,6 +7,8 @@ interface ProposeIssueTokenType {
 }
 
 const ProposeIssueToken = ({ handleChange } : ProposeIssueTokenType) => {
+  const { t } = useTranslation();
+
   const [name, setName] = useState('');
   const [identifier, setIdentifier] = useState('');
   const [amount, setAmount] = useState('');
@@ -71,7 +74,7 @@ const ProposeIssueToken = ({ handleChange } : ProposeIssueTokenType) => {
   return (
     <div>
       <div className="modal-control-container">
-        <span>Name: </span>
+        <span>{t('Name')}: </span>
         <input 
           type="text"
           className='form-control'
@@ -81,7 +84,7 @@ const ProposeIssueToken = ({ handleChange } : ProposeIssueTokenType) => {
         />
       </div>
       <div className="modal-control-container">
-        <span>Identifier: </span>
+        <span>{t('Identifier')}: </span>
         <input 
           type="text"
           className='form-control'
@@ -91,7 +94,7 @@ const ProposeIssueToken = ({ handleChange } : ProposeIssueTokenType) => {
         />
       </div>
       <div className="modal-control-container">
-        <span>Mint Amount: </span>
+        <span>{t('Mint Amount')}: </span>
         <input 
           type="number"
           className='form-control'
@@ -101,7 +104,7 @@ const ProposeIssueToken = ({ handleChange } : ProposeIssueTokenType) => {
         />
       </div>
       <div className="modal-control-container">
-        <span>Decimals: </span>
+        <span>{t('Decimals')}: </span>
         <input 
           type="number"
           className='form-control'
@@ -114,49 +117,49 @@ const ProposeIssueToken = ({ handleChange } : ProposeIssueTokenType) => {
         <span></span>
         <div className="form-check form-check-inline">
           <input className="form-check-input" type="checkbox" id="canFreezeCheckBox" checked={canFreeze} onChange={(e) => setCanFreeze(e.target.checked)}></input>
-          <label className="form-check-label" htmlFor="canFreezeCheckBox">Can Freeze</label>
+          <label className="form-check-label" htmlFor="canFreezeCheckBox">{t('Can Freeze')}</label>
         </div>
       </div>
       <div className="modal-control-container">
         <span></span>
         <div className="form-check form-check-inline">
           <input className="form-check-input" type="checkbox" id="canWipeCheckBox" checked={canWipe} onChange={(e) => setCanWipe(e.target.checked)}></input>
-          <label className="form-check-label" htmlFor="canWipeCheckBox">Can Wipe</label>
+          <label className="form-check-label" htmlFor="canWipeCheckBox">{t('Can Wipe')}</label>
         </div>
       </div>
       <div className="modal-control-container">
         <span></span>
         <div className="form-check form-check-inline">
           <input className="form-check-input" type="checkbox" id="canPauseCheckBox" checked={canPause} onChange={(e) => setCanPause(e.target.checked)}></input>
-          <label className="form-check-label" htmlFor="canPauseCheckBox">Can Pause</label>
+          <label className="form-check-label" htmlFor="canPauseCheckBox">{t('Can Pause')}</label>
         </div>
       </div>
       <div className="modal-control-container">
         <span></span>
         <div className="form-check form-check-inline">
           <input className="form-check-input" type="checkbox" id="canMintCheckBox" checked={canMint} onChange={(e) => setCanMint(e.target.checked)}></input>
-          <label className="form-check-label" htmlFor="canMintCheckBox">Can Mint</label>
+          <label className="form-check-label" htmlFor="canMintCheckBox">{t('Can Mint')}</label>
         </div>
       </div>
       <div className="modal-control-container">
         <span></span>
         <div className="form-check form-check-inline">
           <input className="form-check-input" type="checkbox" id="canBurnCheckBox" checked={canBurn} onChange={(e) => setCanBurn(e.target.checked)}></input>
-          <label className="form-check-label" htmlFor="canBurnCheckBox">Can Burn</label>
+          <label className="form-check-label" htmlFor="canBurnCheckBox">{t('Can Burn')}</label>
         </div>
       </div>
       <div className="modal-control-container">
         <span></span>
         <div className="form-check form-check-inline">
           <input className="form-check-input" type="checkbox" id="canChangeOwnerCheckBox" checked={canChangeOwner} onChange={(e) => setCanChangeOwner(e.target.checked)}></input>
-          <label className="form-check-label" htmlFor="canChangeOwnerCheckBox">Can Change Owner</label>
+          <label className="form-check-label" htmlFor="canChangeOwnerCheckBox">{t('Can Change Owner')}</label>
         </div>
       </div>
       <div className="modal-control-container">
         <span></span>
         <div className="form-check form-check-inline">
           <input className="form-check-input" type="checkbox" id="canUpgradeCheckBox" checked={canUpgrade} onChange={(e) => setCanUpgrade(e.target.checked)}></input>
-          <label className="form-check-label" htmlFor="canUpgradeCheckBox">Can Upgrade</label>
+          <label className="form-check-label" htmlFor="canUpgradeCheckBox">{t('Can Upgrade')}</label>
         </div>
       </div>
     </div>

@@ -12,6 +12,7 @@ import { ReactComponent as Logo } from '../../assets/images/logo.svg';
 import { ReactComponent as Circle } from '../../assets/images/circle.svg';
 import { ReactComponent as Done } from '../../assets/images/done.svg';
 import { MultisigActionType } from 'types/MultisigActionType';
+import { useTranslation } from 'react-i18next';
 
 export interface MultisigProposalCardType {
   type: number;
@@ -40,6 +41,7 @@ const MultisigProposalCard = ({
 }: MultisigProposalCardType) => {
   const { multisigContract } = useMultisigContract();
   const { quorumSize } = useContext();
+  const { t } = useTranslation();
 
   let sign = () => {
     multisigContract.mutateSign(actionId);
@@ -98,19 +100,19 @@ const MultisigProposalCard = ({
           </div>
           <div className="d-flex align-items-center">
             { canSign &&
-                <button onClick={sign} className="btn btn-primary mb-3 mr-2">Sign</button>
+                <button onClick={sign} className="btn btn-primary mb-3 mr-2">{t('Sign')}</button>
             }
 
             { canUnsign &&
-                <button onClick={unsign} className="btn btn-primary mb-3 mr-2">Unsign</button>
+                <button onClick={unsign} className="btn btn-primary mb-3 mr-2">{t('Unsign')}</button>
             }  
 
             { canPerformAction &&
-                <button style={{whiteSpace: 'nowrap'}} onClick={performAction} className="btn btn-primary mb-3 mr-2">Perform action</button>
+                <button style={{whiteSpace: 'nowrap'}} onClick={performAction} className="btn btn-primary mb-3 mr-2">{t('Perform Action')}</button>
             }  
 
             { canDiscardAction &&
-                <button style={{whiteSpace: 'nowrap'}} onClick={discardAction} className="btn btn-primary mb-3 mr-2">Discard action</button>
+                <button style={{whiteSpace: 'nowrap'}} onClick={discardAction} className="btn btn-primary mb-3 mr-2">{t('Discard Action')}</button>
             }  
           </div>
       </div>

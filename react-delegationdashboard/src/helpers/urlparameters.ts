@@ -14,6 +14,10 @@ export async function tryParseTransactionParameter(dapp: DappState): Promise<Tra
     console.log({json});
 
     let inputData = json.data;
+    if (!inputData) {
+      return null;
+    }
+
     let inputDecoded = atob(inputData);
     let inputParameters = inputDecoded.split('@');
     if (inputParameters.length === 0) {

@@ -2,6 +2,7 @@ import { Address, Balance } from '@elrondnetwork/erdjs/out';
 import { BigUIntValue } from '@elrondnetwork/erdjs/out/smartcontracts/typesystem';
 import { MultisigAction } from './MultisigAction';
 import { MultisigActionType } from './MultisigActionType';
+import i18next from 'i18next';
 
 export class MultisigSendEgld extends MultisigAction {
     address: Address;
@@ -16,7 +17,7 @@ export class MultisigSendEgld extends MultisigAction {
     }
   
     title() {
-      return 'Send eGLD';
+      return i18next.t('Send eGLD');
     }
   
     description() {

@@ -4,6 +4,7 @@ import { Address } from '@elrondnetwork/erdjs/out';
 import { useHistory } from 'react-router-dom';
 import { useManagerContract } from 'contracts/ManagerContract';
 import { ReactComponent as Wallet } from '../../assets/images/wallet.svg';
+import { useTranslation } from 'react-i18next';
 
 export interface MultisigCardType {
   address: Address;
@@ -14,7 +15,7 @@ const MultisigCard = ({
   address = Address.Zero(),
   name = ''
 }: MultisigCardType) => {
-  const dispatch = useDispatch();
+  const { t } = useTranslation();
   const history = useHistory();
   const { managerContract } = useManagerContract();
 
@@ -39,8 +40,8 @@ const MultisigCard = ({
             <div className="h5 mb-0">{name}</div>
           </div>
           <div>
-            <button onClick={onEnterClicked} className="btn btn-primary mb-3 mr-2">Enter</button>
-            <button onClick={onUnregisterClicked} className="btn btn-primary mb-3 mr-2">Unregister</button>
+            <button onClick={onEnterClicked} className="btn btn-primary mb-3 mr-2">{t('Enter')}</button>
+            <button onClick={onUnregisterClicked} className="btn btn-primary mb-3 mr-2">{t('Unregister')}</button>
           </div>
       </div>
     </div>

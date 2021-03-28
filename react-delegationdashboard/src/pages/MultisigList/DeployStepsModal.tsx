@@ -3,6 +3,7 @@ import { Modal } from 'react-bootstrap';
 import { Address } from '@elrondnetwork/erdjs/out';
 import ProposeInputAddress from '../MultisigDetails/Propose/ProposeInputAddress';
 import Stepper from 'react-stepper-horizontal';
+import { useTranslation } from 'react-i18next';
 
 interface DeployStepsModalType {
   show: boolean;
@@ -12,10 +13,12 @@ interface DeployStepsModalType {
 }
 
 const DeployStepsModal = ({ show, handleClose, handleStep, currentStep }: DeployStepsModalType) => {
+  const { t } = useTranslation();
+
   const steps = [
-    {title: 'Deploy' }, 
-    {title: 'Register Name'}, 
-    {title: 'Attach'}
+    {title: t('Deploy') }, 
+    {title: t('Register Name') }, 
+    {title: t('Attach') }
   ];
 
   const [ name, setName ] = useState('');
@@ -33,7 +36,7 @@ const DeployStepsModal = ({ show, handleClose, handleStep, currentStep }: Deploy
       <div className="card">
         <div className="card-body p-spacer text-center">
           <p className="h6 mb-spacer" data-testid="delegateTitle">
-            Multisig Deployment
+            {t('Multisig Deployment')}
           </p>
 
           <div className="pb-5">
@@ -53,7 +56,7 @@ const DeployStepsModal = ({ show, handleClose, handleStep, currentStep }: Deploy
 
           { currentStep === 1 ?
             <div className="modal-control-container pb-3">
-              <span>Name: </span>
+              <span>{t('Name')}: </span>
               <input 
                 style={{ width: 280 }}
                 type="text"

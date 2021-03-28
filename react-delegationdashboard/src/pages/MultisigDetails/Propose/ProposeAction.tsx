@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import ProposeModal from './ProposeModal';
 
 const ProposeAction = () => {
   const [showProposeModal, setShowProposeModal] = useState(false);
+  const { t } = useTranslation();
   
   return (
     <div>
@@ -12,7 +14,7 @@ const ProposeAction = () => {
         }}
         className="btn btn-primary mb-3"
       >
-        Propose
+        {t('Propose')}
       </button>
       <ProposeModal
         show={showProposeModal}

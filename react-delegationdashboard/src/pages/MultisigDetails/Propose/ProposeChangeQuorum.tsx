@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useContext } from 'context';
+import { useTranslation } from 'react-i18next';
 
 interface ProposeChangeQuorumType {
   handleParamsChange: (params: number) => void;
@@ -7,6 +8,7 @@ interface ProposeChangeQuorumType {
 
 const ProposeChangeQuorum = ({ handleParamsChange } : ProposeChangeQuorumType) => {
   const { quorumSize } = useContext();
+  const { t } = useTranslation();
 
   const [newQuorumSize, setNewQuorumSize] = useState(0);
 
@@ -22,7 +24,7 @@ const ProposeChangeQuorum = ({ handleParamsChange } : ProposeChangeQuorumType) =
 
   return (
     <div className="modal-control-container">
-      <span>Quorum size: </span>
+      <span>{t('Quorum Size')}: </span>
       <input 
         style={{width: 250}}
         type="number"

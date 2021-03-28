@@ -3,6 +3,7 @@ import { BigUIntValue } from '@elrondnetwork/erdjs/out/smartcontracts/typesystem
 import { hexToBigInt, hexToNumber, hexToString } from 'helpers/converters';
 import { MultisigAction } from './MultisigAction';
 import { MultisigActionType } from './MultisigActionType';
+import i18next from 'i18next';
 
 export class MultisigSmartContractCall extends MultisigAction {
     address: Address;
@@ -21,12 +22,12 @@ export class MultisigSmartContractCall extends MultisigAction {
     title() {
       switch (this.endpointName) {
         case 'issue':
-          return 'Issue Token';
+          return i18next.t('Issue Token');
         case 'ESDTTransfer':
-          return 'Send Token';
+          return i18next.t('Send Token');
       }
 
-      return 'Smart Contract Call';
+      return i18next.t('Smart Contract Call');
     }
   
     description() {
@@ -66,7 +67,7 @@ export class MultisigSmartContractCall extends MultisigAction {
       let identifier = hexToString(this.args[0].valueOf()) ?? 'Unknown';
       let amount = hexToBigInt(this.args[1].valueOf()) ?? BigInt(0);
 
-      return `Identifier: ${identifier}, amount: ${amount}`;
+      return `${i18next.t('Identifier')}: ${identifier}, ${i18next.t('Amount')}: ${amount}`;
     }
 
     getIssueTokenDescription(): string {
@@ -77,6 +78,6 @@ export class MultisigSmartContractCall extends MultisigAction {
 
       let amountString = amount.toString().slice(0, amount.toString().length - decimals);
 
-      return `Name: ${name}, Identifier: ${identifier}, Amount: ${amountString}, Decimals: ${decimals}`;
+      return `${i18next.t('Name')}: ${name}, ${i18next.t('Identifier')}: ${identifier}, ${i18next.t('Amount')}: ${amountString}, ${i18next.t('Decimals')}: ${decimals}`;
     }
   }

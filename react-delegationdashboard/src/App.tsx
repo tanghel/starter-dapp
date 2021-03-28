@@ -3,6 +3,30 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Layout from './components/Layout';
 import routes from './routes';
 import { ContextProvider } from './context';
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import { englishTranslations } from 'i18n/en';
+import { germanTranslations } from 'i18n/de';
+
+i18n
+  .use(initReactI18next) // passes i18n down to react-i18next
+  .init({
+    resources: {
+      en: {
+        translation: englishTranslations
+      },
+      de: {
+        translation: germanTranslations
+      }
+    },
+    lng: 'de',
+    fallbackLng: 'en',
+
+    interpolation: {
+      escapeValue: false
+    }
+  });
+
 
 function App() {
   return (

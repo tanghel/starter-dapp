@@ -1,6 +1,7 @@
 import { Address } from '@elrondnetwork/erdjs/out';
 import { MultisigAction } from './MultisigAction';
 import { MultisigActionType } from './MultisigActionType';
+import i18next from 'i18next';
 
 export class MultisigAddBoardMember extends MultisigAction {
     address: Address;
@@ -11,7 +12,7 @@ export class MultisigAddBoardMember extends MultisigAction {
     }
   
     title() {
-      return 'Add Board Member';
+      return i18next.t('Add Board Member');
     }
   
     description() {

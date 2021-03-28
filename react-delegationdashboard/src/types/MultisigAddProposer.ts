@@ -1,6 +1,7 @@
 import { Address } from '@elrondnetwork/erdjs/out';
 import { MultisigAction } from './MultisigAction';
 import { MultisigActionType } from './MultisigActionType';
+import i18next from 'i18next';
 
 export class MultisigAddProposer extends MultisigAction {
   address: Address;
@@ -11,7 +12,7 @@ export class MultisigAddProposer extends MultisigAction {
   }
 
   title() {
-    return 'Add Proposer';
+    return i18next.t('Add Proposer');
   }
 
   description() {

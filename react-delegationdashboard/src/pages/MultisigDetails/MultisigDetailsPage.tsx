@@ -14,6 +14,7 @@ import { tryParseTransactionParameter } from 'helpers/urlparameters';
 import { hexToNumber, hexToString } from 'helpers/converters';
 import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
 import { useConfirmModal } from 'components/ConfirmModal/ConfirmModalPayload';
+import { useTranslation } from 'react-i18next';
 
 interface MultisigDetailsPageParams {
   multisigAddressParam: string
@@ -26,6 +27,7 @@ const MultisigDetailsPage = () => {
   const loadingIndicator = useLoading();
   let { multisigAddressParam } = useParams<MultisigDetailsPageParams>();
   const confirmModal = useConfirmModal();
+  const { t } = useTranslation();
 
   const parseMultisigAddress = (): Address | undefined => {
     try {
@@ -96,7 +98,7 @@ const MultisigDetailsPage = () => {
       case 1:
         return 'Proposer';
       case 2:
-        return 'Proposer/Signer';
+        return 'Proposer / Signer';
       default:
         return 'Unknown';
     }
@@ -175,7 +177,7 @@ const MultisigDetailsPage = () => {
     let realUserRole = await multisigContract.queryUserRole(new Address(address).hex());
 
     if (validSignerCount >= realQuorumSize && realUserRole === 2) {
-      let success = await confirmModal.show('Confirm perform action', 'Perform action');
+      let success = await confirmModal.show(t('Confirm Perform Action'), t('Perform Action'));
       if (success) {
         await multisigContract.mutatePerformAction(actionId);
       }
@@ -187,7 +189,7 @@ const MultisigDetailsPage = () => {
     let realUserRole = await multisigContract.queryUserRole(new Address(address).hex());
 
     if (validSignerCount === 0 && realUserRole === 2) {
-      let success = await confirmModal.show('Confirm discard action', 'Discard action');
+      let success = await confirmModal.show(t('Confirm Discard Action'), t('Discard Action'));
       if (success) {
         await multisigContract.mutateDiscardAction(actionId);
       }
@@ -215,12 +217,12 @@ const MultisigDetailsPage = () => {
       <div className="card border-0">
         <div className="header card-header d-flex align-items-center border-0 justify-content-between px-spacer">
           <div className="py-spacer text-truncate">
-            <p className="opacity-6 mb-0">Multisig Address</p>
+            <p className="opacity-6 mb-0">{t('Multisig Address')}</p>
             <span className="text-truncate">{currentMultisigAddress?.bech32()}</span>
           </div>
           <div className="d-flex justify-content-center align-items-center justify-content-between">
             <Link to="/multisig" className="btn btn-primary btn-sm">
-              Manage multisigs
+              {t('Manage Multisigs')}
             </Link>
           </div>
         </div>
@@ -228,28 +230,28 @@ const MultisigDetailsPage = () => {
 
         <div className="cards d-flex flex-wrap mr-spacer">
           <StatCard
-            title="Board Members"
+            title={t('Board Members')}
             value={totalBoardMembers.toString()}
             color="orange"
             svg="clipboard-check.svg"
           />
           <StatCard
-            title="Proposers"
+            title={t('Proposers')}
             value={totalProposers.toString()}
             valueUnit=""
             color="purple"
             svg="clipboard-list.svg"
           />
           <StatCard
-            title="Quorum size"
+            title={t('Quorum Size')}
             value={quorumSize.toString()}
             valueUnit=""
             color="orange"
             svg="quorum.svg"
           />
           <StatCard
-            title="User role"
-            value={userRoleAsString()}
+            title={t('User Role')}
+            value={t(userRoleAsString())}
             valueUnit=""
             color="orange"
             svg="user.svg"
@@ -264,7 +266,7 @@ const MultisigDetailsPage = () => {
             <div className="card mt-spacer">
               <div className="card-body p-spacer">
                 <div className="d-flex flex-wrap align-items-center justify-content-between">
-                  <p className="h6 mb-3">Proposals</p>
+                  <p className="h6 mb-3">{t('Proposals')}</p>
                   <div className="d-flex flex-wrap">
                     { isProposer() ? 
                       <ProposeAction /> : null

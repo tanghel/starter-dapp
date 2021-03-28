@@ -11,11 +11,13 @@ import { hexToAddress, hexToString } from 'helpers/converters';
 import { tryParseTransactionParameter } from 'helpers/urlparameters';
 import { useConfirmModal } from 'components/ConfirmModal/ConfirmModalPayload';
 import DeployStepsModal from './DeployStepsModal';
+import { useTranslation } from 'react-i18next';
 
 const MultisigListPage = () => {
   const { loggedIn, address, dapp, multisigDeployerContract, multisigManagerContract } = useContext();
   const { deployContract } = useDeployContract();
   const { managerContract } = useManagerContract();
+  const { t } = useTranslation();
 
   const [showAddMultisigModal, setShowAddMultisigModal] = React.useState(false);
   const [showDeployMultisigModal, setShowDeployMultisigModal] = React.useState(false);
@@ -136,20 +138,20 @@ const MultisigListPage = () => {
                 onClick={onDeployClicked}
                 className="btn btn-primary mb-3 mr-2"
               >
-                Deploy Multisig
+                {t('Deploy Multisig')}
               </button>
 
               <button
                 onClick={onAddMultisigClicked}
                 className="btn btn-primary mb-3"
               >
-                Add Existing Multisig
+                {t('Add Existing Multisig')}
               </button>
             </div>
 
             <div className="card border-0">
               <div className="card-body pt-0 px-spacer pb-spacer">
-                <h2 className="text-center my-5">Your Multisig wallets</h2>
+                <h2 className="text-center my-5">{t('Your Multisig Wallets')}</h2>
               </div>
 
               {multisigContracts.length > 0 ?
@@ -169,7 +171,7 @@ const MultisigListPage = () => {
                         onClick={onDeployClicked}
                         className="btn btn-primary mb-3 mr-2"
                       >
-                        Deploy Multisig
+                        {t('Deploy Multisig')}
                       </button>
                     </div>
                   </div>

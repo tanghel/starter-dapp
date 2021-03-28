@@ -3,6 +3,7 @@ import { useContext } from 'context';
 import { Address, Balance } from '@elrondnetwork/erdjs/out';
 import { MultisigSendEgld } from 'types/MultisigSendEgld';
 import { BigUIntValue } from '@elrondnetwork/erdjs/out/smartcontracts/typesystem';
+import { useTranslation } from 'react-i18next';
 
 interface ProposeSendEgldType {
   handleChange: (proposal: MultisigSendEgld) => void;
@@ -12,6 +13,7 @@ const ProposeSendEgld = ({ handleChange } : ProposeSendEgldType) => {
   const [address, setAddress] = useState('');
   const [amount, setAmount] = useState('');
   const [data, setData] = useState('');
+  const { t } = useTranslation();
 
   const { egldLabel } = useContext();
 
@@ -54,7 +56,7 @@ const ProposeSendEgld = ({ handleChange } : ProposeSendEgldType) => {
   return (
     <div>
       <div className="modal-control-container">
-        <span>Address: </span>
+        <span>{t('Address')}: </span>
         <input 
           type="text"
           className='form-control'
@@ -64,7 +66,7 @@ const ProposeSendEgld = ({ handleChange } : ProposeSendEgldType) => {
         />
       </div>
       <div className="modal-control-container">
-        <span>Amount: </span>
+        <span>{t('Amount')}: </span>
         <input 
           type="text"
           className='form-control'
@@ -74,7 +76,7 @@ const ProposeSendEgld = ({ handleChange } : ProposeSendEgldType) => {
         />
       </div>
       <div className="modal-control-container">
-        <span>Data: </span>
+        <span>{t('Data')}: </span>
         <input 
           type="text"
           className='form-control'

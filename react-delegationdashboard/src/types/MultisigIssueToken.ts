@@ -1,6 +1,7 @@
 import { Address, Balance } from '@elrondnetwork/erdjs/out';
 import { MultisigAction } from './MultisigAction';
 import { MultisigActionType } from './MultisigActionType';
+import i18next from 'i18next';
 
 export class MultisigIssueToken extends MultisigAction {
     name: string;
@@ -24,7 +25,7 @@ export class MultisigIssueToken extends MultisigAction {
     }
   
     title() {
-      return 'Issue Token';
+      return i18next.t('Issue Token');
     }
   
     description() {
